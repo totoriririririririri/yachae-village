@@ -79,10 +79,10 @@ body{margin:0; background:#2a8af0; font:12px/1.4 var(--ui); color:#000; overflow
 .row{display:flex; gap:10px; align-items:flex-start}
 .toplogo{display:block; margin:0 auto 4px; width:760px; height:auto}
 .lcol{width:170px; flex:none; display:flex; flex-direction:column; gap:22px; margin-top:40px}
-.skyad{width:100%; margin-top:0; padding:2px; box-sizing:border-box}
-.skyad .go{position:relative; display:block; width:100%; padding:0; border:0; margin:2px 0 0; cursor:pointer; background:#000}
-.skyad canvas{display:block; width:100%; height:auto}
-.skyad .cl{position:absolute; left:50%; bottom:16px; transform:translateX(-50%); font:800 16px var(--gulim); color:#fff; background:#e00010; border:2px solid #fff; padding:2px 10px; animation:pulse 1s steps(1) infinite; white-space:nowrap}
+.ycside{width:100%; margin-top:0; padding:2px; box-sizing:border-box}
+.ycside .go{position:relative; display:block; width:100%; padding:0; border:0; margin:2px 0 0; cursor:pointer; background:#000}
+.ycside canvas{display:block; width:100%; height:auto}
+.ycside .cl{position:absolute; left:50%; bottom:16px; transform:translateX(-50%); font:800 16px var(--gulim); color:#fff; background:#e00010; border:2px solid #fff; padding:2px 10px; animation:pulse 1s steps(1) infinite; white-space:nowrap}
 .out{border:2px solid; border-color:var(--lt) var(--dk) var(--dk) var(--lt); box-shadow:inset 1px 1px 0 var(--hi), inset -1px -1px 0 var(--sh); background:var(--face)}
 .in{border:2px solid; border-color:var(--sh) var(--hi) var(--hi) var(--sh); box-shadow:inset 1px 1px 0 var(--dk)}
 canvas{image-rendering:pixelated}
@@ -158,17 +158,17 @@ canvas{image-rendering:pixelated}
 .fb:hover,.fb:focus-visible{background:linear-gradient(180deg,#ffe24a,#f5b800); color:#000; outline:none}
 
 /* 가짜 광고 */
-.ad{display:flex; align-items:stretch; background:#000; border-bottom:2px solid #000}
-.ad .tag{writing-mode:vertical-rl; font:700 9px var(--ui); padding:2px; background:#222; color:#aaa}
-.ad .msg{flex:1; display:flex; align-items:center; justify-content:center; gap:12px; padding:5px 10px; border:0; cursor:pointer; color:#fff;
+.ycstrip{display:flex; align-items:stretch; background:#000; border-bottom:2px solid #000}
+.ycstrip .tag{writing-mode:vertical-rl; font:700 9px var(--ui); padding:2px; background:#222; color:#aaa}
+.ycstrip .msg{flex:1; display:flex; align-items:center; justify-content:center; gap:12px; padding:5px 10px; border:0; cursor:pointer; color:#fff;
   background:linear-gradient(180deg,#ff4a1a,#e01000 55%,#b00000); font:800 22px/1.2 var(--gulim); text-shadow:2px 2px 0 #500}
-.ad .msg canvas{width:40px; height:40px}
-.ad .click{background:var(--yellow); color:var(--red); border:2px solid #fff; padding:1px 10px; font-size:15px; text-shadow:none; animation:pulse 1s steps(1) infinite}
+.ycstrip .msg canvas{width:40px; height:40px}
+.ycstrip .click{background:var(--yellow); color:var(--red); border:2px solid #fff; padding:1px 10px; font-size:15px; text-shadow:none; animation:pulse 1s steps(1) infinite}
 @keyframes pulse{50%{background:#fff; color:var(--blue)}}
-.ad2{display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; font:800 14px/1.35 var(--gulim); color:#000;
+.pz2{display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; font:800 14px/1.35 var(--gulim); color:#000;
   background:repeating-linear-gradient(45deg,#fff36a 0 8px,#ffe000 8px 16px)}
-.ad2 .big{font:800 22px/1 var(--serif); color:var(--red); text-shadow:1px 1px 0 #fff}
-.ad2 .get{font:800 13px var(--gulim); color:#fff; background:linear-gradient(180deg,#5fd35f,#1a8a1a); border:2px outset #9f9; padding:3px 12px; cursor:pointer; animation:pulse2 .8s steps(1) infinite}
+.pz2 .big{font:800 22px/1 var(--serif); color:var(--red); text-shadow:1px 1px 0 #fff}
+.pz2 .get{font:800 13px var(--gulim); color:#fff; background:linear-gradient(180deg,#5fd35f,#1a8a1a); border:2px outset #9f9; padding:3px 12px; cursor:pointer; animation:pulse2 .8s steps(1) infinite}
 @keyframes pulse2{50%{background:linear-gradient(180deg,#ff6a6a,#c00000)}}
 /* 오른쪽 바탕화면 */
 .rcol{width:270px; flex:none; display:flex; flex-direction:column; gap:16px; margin-top:40px}
@@ -439,7 +439,7 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
 .task .app{flex:0 1 200px; min-width:0; padding:2px 6px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:repeating-conic-gradient(#fff 0 25%,#c0c0c0 0 50%) 0 0/2px 2px}
 .task .sp{flex:1}
 .tray{padding:2px 8px; font-variant-numeric:tabular-nums}
-@media (prefers-reduced-motion:reduce){.skyad .cl,.blink,.ad .click,.ad2 .get{animation:none}}
+@media (prefers-reduced-motion:reduce){.ycside .cl,.blink,.ycstrip .click,.pz2 .get{animation:none}}
 </style>
 
 <div class="wrap">
@@ -447,9 +447,9 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
 <canvas class="toplogo" id="toplogo" width="760" height="150" role="img" aria-label="야채마을 - 야채의 홈페이지에 오신 것을 환영합니다"></canvas>
 <div class="row">
 <div class="lcol">
-<aside class="skyad out" aria-label="광고">
+<aside class="ycside out" aria-label="광고">
   <div class="tbar"><span class="t">야채의 효능 - 광고</span><button class="cap out" aria-label="닫기">×</button></div>
-  <button class="go" id="ad3"><canvas id="sky" width="160" height="540" role="img" aria-label="야채의 효능! 당신도 야채를 먹어라! 비타민 1000%"></canvas><span class="cl">지금 클릭!</span></button>
+  <button class="go" id="pz3"><canvas id="sky" width="160" height="540" role="img" aria-label="야채의 효능! 당신도 야채를 먹어라! 비타민 1000%"></canvas><span class="cl">지금 클릭!</span></button>
 </aside>
 </div>
 <div class="win out">
@@ -470,12 +470,12 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
   <div class="loc"><b>주소(D)</b><div class="box in">http://www.yachae.co.kr/~home/index.htm</div></div>
 
   <div class="view in" id="top">
-    <div class="ad"><div class="tag">AD</div><button class="msg" id="ad1"><canvas data-ic="carrot" width="32" height="32"></canvas>신선한 야채 무료 배달!! 오늘만 공짜 <span class="click">지금 클릭!</span></button></div>
+    <div class="ycstrip"><div class="tag">AD</div><button class="msg" id="pz1"><canvas data-ic="carrot" width="32" height="32"></canvas>신선한 야채 무료 배달!! 오늘만 공짜 <span class="click">지금 클릭!</span></button></div>
     <div class="head">
       <div class="logo">야채마을<b>YACHAE VILLAGE</b></div>
       <div class="crumb">&gt; 야채의 홈페이지</div>
       <div class="sp"></div>
-      <canvas id="adbox" width="80" height="40" aria-label="야채마을 연결"></canvas>
+      <canvas id="netbadge" width="80" height="40" aria-label="야채마을 연결"></canvas>
     </div>
     <nav class="tabs">
       <button data-go="top">홈</button><button data-go="w-me">주인장</button><button data-go="w-likes">게시판</button><button data-go="w-proj">만드는 중</button><button data-go="w-pc">내 컴퓨터</button><button data-go="w-guest">방명록</button><button data-go="w-link">링크</button>
@@ -553,10 +553,10 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
           [ <button class="lk" id="ring-prev">◀ 이전</button> | 채소 웹링 | <button class="lk" id="ring-next">다음 ▶</button> ]
           <div class="badges"><canvas data-badge="0" width="88" height="31"></canvas><canvas data-badge="1" width="88" height="31"></canvas><canvas data-badge="2" width="88" height="31"></canvas></div>
         </div></section>
-        <section class="mw out"><div class="tbar"><span class="t">광고</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in ad2">
+        <section class="mw out"><div class="tbar"><span class="t">광고</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in pz2">
           <div class="big">축하합니다!!</div>
           <div>당신은 오늘의<br><span style="color:#e00010">999,999번째</span> 방문자입니다!</div>
-          <button class="get" id="ad2">상품 받기 ▶</button>
+          <button class="get" id="pz2">상품 받기 ▶</button>
         </div></section>
       </div>
       <div class="copy">Copyright ⓒ 1998-2026 야채의 홈페이지. All rights reserved.</div>
@@ -1060,7 +1060,7 @@ function enterPlace(id){
   if(id==='bus'){msg('버스 정류장','다음 버스: 곧 도착 (1998년부터 곧 도착 중)\n\n오늘은 버스가 오지 않는 것 같아요.');return;}
   go(id);}
 /* ---------- 기타 그림 ---------- */
-(function(){const c=document.getElementById('adbox'),x=c.getContext('2d');x.fillStyle=lg(x,0,0,0,40,[[0,'#fff'],[1,'#c8d8ff']]);x.fillRect(0,0,80,40);x.strokeStyle='#000';x.strokeRect(.5,.5,79,39);
+(function(){const c=document.getElementById('netbadge'),x=c.getContext('2d');x.fillStyle=lg(x,0,0,0,40,[[0,'#fff'],[1,'#c8d8ff']]);x.fillRect(0,0,80,40);x.strokeStyle='#000';x.strokeRect(.5,.5,79,39);
   const ic=mk(32,32);icon(ic,'globe');x.drawImage(ic,4,6,28,28);x.fillStyle='#000080';x.font='bold 11px '+GUL;x.fillText('야채마을',34,17);x.fillStyle='#c00';x.fillText('연결',36,31);gifify(c);})();
 (function(){const W=460,H=20,c=mk(W,H),x=c.getContext('2d');let px=4;
   while(px<W-8){const rw=9+R()*9,rh=5+R()*3,cy=10+(R()-.5)*3;
@@ -1153,7 +1153,7 @@ function drawSky(){const c=document.getElementById('sky'),x=c.getContext('2d'),W
   T('비타민',460,15,'#c00010');T('1000%',481,22,'#c00010','#fff',3);
   x.strokeStyle='#000';x.lineWidth=3;x.strokeRect(1.5,1.5,W-3,H-3);
   gifify(c);}
-document.getElementById('ad3').onclick=()=>msg('야채의 효능','야채를 먹으면 비타민이 1000% 충전됩니다!\n...라는 건 과학적 근거가 전혀 없는 가짜 광고예요.\n그래도 야채는 몸에 좋아요.');
+document.getElementById('pz3').onclick=()=>msg('야채의 효능','야채를 먹으면 비타민이 1000% 충전됩니다!\n...라는 건 과학적 근거가 전혀 없는 가짜 광고예요.\n그래도 야채는 몸에 좋아요.');
 
 /* 큰 로고 */
 const FUN='"HY헤드라인M","HYHeadLine-Medium","Black Han Sans","Gulim",sans-serif';
@@ -1693,7 +1693,7 @@ document.addEventListener('pointerdown',e=>{if(!tip.hidden&&!tip.contains(e.targ
 let ty=null,vx=0,vy=0,onFloor=false,plat=null,tplat=null;
 const menuOpen=()=>!tip.hidden&&tip.querySelector('.hb');
 /* 까끌이가 올라설 수 있는 곳 (요소 윗변/아랫변) */
-const PLATS=[['.win','top'],['.skyad','top'],['.msgr','top'],['.rcol #w-guest','top'],['.footbar','top'],['.cols .mw','top'],['.cols .player','top'],['.tank .st','top'],['.tank','bottom'],['#toplogo','bottom']];
+const PLATS=[['.win','top'],['.ycside','top'],['.msgr','top'],['.rcol #w-guest','top'],['.footbar','top'],['.cols .mw','top'],['.cols .player','top'],['.tank .st','top'],['.tank','bottom'],['#toplogo','bottom']];
 const FOOT=79;
 function plats(){const fy=floorY(),out=[];PLATS.forEach(([sel,edge])=>document.querySelectorAll(sel).forEach(el=>{if(el.closest('[hidden]'))return;const r=el.getBoundingClientRect();if(r.width<60)return;
   const y=(edge==='top'?r.top:r.bottom)+scrollY-FOOT;if(y<scrollY+4||y>fy-10)return;out.push({el,edge,y,x0:r.left-24,x1:r.right-72});}));return out;}
@@ -2104,8 +2104,8 @@ function msg(t,m){document.getElementById('dlg-t').textContent=t;document.getEle
 ['dlg-ok','dlg-x'].forEach(i=>document.getElementById(i).onclick=()=>dlg.hidden=true);
 document.querySelectorAll('.ico').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.ic2==='trash'&&ARG.trash())return;msg(b.querySelector('span').textContent,b.dataset.msg);}));
 document.getElementById('ring-prev').onclick=document.getElementById('ring-next').onclick=()=>msg('채소 웹링','웹링에 가입한 다른 홈페이지를 찾을 수 없습니다.\n나중에 다시 시도해 주세요.');
-document.getElementById('ad1').onclick=()=>msg('야채마을 광고','축하합니다! 신선한 야채가 배달될 예정입니다.\n...는 농담이고, 이건 가짜 광고예요. 속지 마세요!');
-document.getElementById('ad2').onclick=()=>msg('경고','상품을 받으려면 주민등록번호를 입력하세요.\n...라고 하면 절대 입력하면 안 돼요! 이것도 가짜 광고랍니다.');
+document.getElementById('pz1').onclick=()=>msg('야채마을 광고','축하합니다! 신선한 야채가 배달될 예정입니다.\n...는 농담이고, 이건 가짜 광고예요. 속지 마세요!');
+document.getElementById('pz2').onclick=()=>msg('경고','상품을 받으려면 주민등록번호를 입력하세요.\n...라고 하면 절대 입력하면 안 돼요! 이것도 가짜 광고랍니다.');
 
 /* 검색 */
 const SEARCH=[
