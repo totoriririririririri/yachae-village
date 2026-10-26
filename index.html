@@ -1699,7 +1699,7 @@ function say(html,btns,dur=6000){tip.textContent='';const b=document.createEleme
 const TIPS=['왼쪽 게임 폴더에 핀볼이랑 야채팡이 있어요. 저는 핀볼 공이 무서워요.','어항을 누르면 먹이가 떨어져요. 저도 먹고 싶어요...','메신저에서 양파한테 말 걸어 봤어요? 맨날 울어요.','방명록에 한마디 남겨 주세요! 저는 손이 짧아서 못 써요.','분수 근처에서 뭔가 반짝이는 걸 봤어요. 그게 뭘까요?','저를 너무 많이 누르면 따가워요. 진짜로요.','밤 10시가 넘으면 저는 잠옷 고깔을 써요.'];
 let ckN=0;const CK=['쿠키요? 무슨 쿠키요? 저는 쿠키라는 말 처음 들어봐요.','...초코칩이었어요. 아, 아니 그냥 추측이에요. 냄새로요.','솔직히 말할게요. 세 개 먹었어요. ...아니 다섯 개.','"쿠키는 거짓말이야" 낙서도 사실 제가 썼어요. 혼자 다 먹고 싶어서요. 죄송해요...','다음엔 꼭 남겨 둘게요. 아마도요.','진짜 쿠키는 주인장님한테 받으세요! 암호, 기억하죠?'];
 const cookieTalk=()=>{say(CK[ckN%CK.length],null,7000);ckN++;};
-const wardrobe=()=>{const w=BAG.wear();const opts=[['기본 까끌이'+(w?'':' ✔'),()=>{BAG.setWear('');say('역시 기본이 최고죠!',null,2500);}]];BAG.own().forEach(k=>opts.push([BAG.COS[k].n+(w===k?' ✔':''),()=>{BAG.setWear(k);say({armor:'에헴! 풍차는 어디 있나요? 돌진!',detective:'흠... 단서의 냄새가 나는군요.',bunny:'깡총! 첫 번째 명예 탐정님, 축하드려요! 🥇',crumbs:'...이거 왜 묻어 있죠? 전 모르는 일이에요.'}[k],null,3000);}]));opts.push(['닫기',()=>{tip.hidden=true;}]);say('옷장을 열었어요! 뭘 입을까요?',opts,0);};
+const wardrobe=()=>{const w=BAG.wear();const opts=[['기본 까끌이'+(w?'':' ✔'),()=>{BAG.setWear('');say('역시 기본이 최고죠!',null,2500);}]];BAG.own().forEach(k=>opts.push([BAG.COS[k].n+(w===k?' ✔':''),()=>{BAG.setWear(k);say({armor:'에헴! 풍차는 어디 있나요? 돌진!',detective:'흠... 단서의 냄새가 나는군요.',bunny:'깡총! OYA님, 첫 번째 클리어 축하해요! 끝까지 와 줘서 고마워요 🥇',crumbs:'...이거 왜 묻어 있죠? 전 모르는 일이에요.'}[k],null,3000);}]));opts.push(['닫기',()=>{tip.hidden=true;}]);say('옷장을 열었어요! 뭘 입을까요?',opts,0);};
 const menu=()=>say('안녕하세요! 저는 까끌이예요.\n무엇을 도와드릴까요?',[['팁 알려줘',()=>say(TIPS[Math.floor(Math.random()*TIPS.length)],null,7000)],['같이 놀자',()=>{tip.hidden=true;roll();}],...(BAG.own().length?[['옷장',()=>wardrobe()]]:[]),...(ARG.has('done')?[['쿠키에 대하여...',()=>cookieTalk()]]:[]),['탐정 수첩 보기',()=>{tip.hidden=true;go('w-note');}],['힌트 줘',()=>say(ARG.hint(),null,9000)],['저리 가',()=>goAway()],['괜찮아요 (닫기)',()=>say(['네! 필요하면 또 불러 주세요.','알겠어요! 저는 근처에 있을게요.','좋은 하루 보내세요~'][Math.floor(Math.random()*3)],null,2500)]],0);
 function roll(){state='roll';stT=0;plat=null;rollV=dir*(4+Math.random()*2);vy=(Math.random()-.5)*5;onFloor=false;say('데굴데굴~!',null,1500);}
 function goAway(){say('흥... 알겠어요.',null,1500);setTimeout(()=>{away=true;el.hidden=true;tip.hidden=true;
@@ -1831,7 +1831,7 @@ window.CC=CC;
 const BAG=(function(){
   let own=[],wear='';try{own=JSON.parse(localStorage.getItem('yachae-cos')||'[]');wear=localStorage.getItem('yachae-wear')||'';}catch(e){}
   const save=()=>{try{localStorage.setItem('yachae-cos',JSON.stringify(own));localStorage.setItem('yachae-wear',wear);}catch(e){}};
-  const COS={armor:{n:'돈키호테 갑옷',d:'반짝이는 투구와 작은 방패. 풍차를 보면 돌진하고 싶어져요.'},detective:{n:'탐정 모자와 외눈안경',d:'체크무늬 헌팅캡과 동그란 외눈안경. 단서가 더 잘 보이는 기분!'},crumbs:{n:'쿠키 도둑 부스러기',d:'입가에 묻은 쿠키 가루. 범인은 언제나 현장에 흔적을 남겨요.'},bunny:{n:'토끼 모자와 금메달',d:'「익명의 제보」를 가장 먼저 푼 첫 번째 명예 탐정님을 위해 주인장이 만든 특별한 꼬까옷.'}};
+  const COS={armor:{n:'돈키호테 갑옷',d:'반짝이는 투구와 작은 방패. 풍차를 보면 돌진하고 싶어져요.'},detective:{n:'탐정 모자와 외눈안경',d:'체크무늬 헌팅캡과 동그란 외눈안경. 단서가 더 잘 보이는 기분!'},crumbs:{n:'쿠키 도둑 부스러기',d:'입가에 묻은 쿠키 가루. 범인은 언제나 현장에 흔적을 남겨요.'},bunny:{n:'토끼 모자와 금메달',d:'「익명의 제보」를 가장 먼저 푼 첫 번째 명예 탐정 OYA님을 위해 주인장이 만든 특별한 꼬까옷. 축하해요, 그리고 고마워요!'}};
   const ARGI=[['stool','받침대','오락실 게임기가 돌려준 나무 받침대. 밟고 올라가면 높은 곳에 손이 닿아요.'],['shelf','모스 부호표','먼지 쌓인 책에서 찾은 표. 탐정 수첩 옆 메모장에 베껴 뒀어요.'],['mail5','반송된 편지','우체통에서 나온 편지. 받는 곳: "집, 책상 서랍"']];
   function items(){const a=ARGI.filter(([k])=>ARG.has(k)).map(([k,n,d])=>({k,n,d,cos:false}));if(CC.has())a.unshift({k:'cyber',n:'사이버 쿠키',d:'주인장 유채가 직접 구운 쿠키(의 사이버 버전). 눌러서 먹어 보세요!',cos:false,eat:true});own.forEach(k=>COS[k]&&a.push({k,n:COS[k].n,d:COS[k].d,cos:true}));return a;}
   function refresh(){const b=document.getElementById('bagicon');if(b)b.hidden=!items().length;render();}
@@ -1840,6 +1840,7 @@ const BAG=(function(){
     it.forEach(o=>{const b=document.createElement('button');b.className='bagslot';const c=document.createElement('canvas');c.width=c.height=48;itemIcon(c,o.k);const sp=document.createElement('span');sp.textContent=o.n+(o.cos&&wear===o.k?' (입는 중)':'');
       b.append(c,sp);b.onclick=()=>{if(o.eat){document.getElementById('bagdesc').textContent=o.n+' — '+CC.bite(c);return;}document.getElementById('bagdesc').textContent=o.n+' — '+o.d+(o.cos?'  (까끌이를 눌러 "옷장"에서 입힐 수 있어요)':'');};g.appendChild(b);});}
   function gain(k){if(own.includes(k)){msg('까끌이 옷장','이미 가지고 있는 옷이에요!\n까끌이를 눌러 "옷장"에서 입혀 보세요.');return;}own.push(k);save();refresh();
+    if(k==='bunny'){msg('🥇 축하합니다, OYA님!','「익명의 제보」 첫 번째 클리어를 진심으로 축하해요!\n끝까지 풀어 줘서 정말 고마워요.\n\n고마운 마음을 담아\n[토끼 모자와 금메달] 을 선물로 드려요!\n\n까끌이를 누르면 나오는 메뉴에서\n"옷장"을 골라 입혀 보세요.\n\n- 주인장 유채 드림');return;}
     msg('🎁 아이템 획득','['+COS[k].n+'] 을(를) 얻었다!\n\n까끌이를 누르면 나오는 메뉴에서\n"옷장"을 골라 입혀 보세요.');}
   function setWear(k){wear=k;save();render();}
   return {COS,own:()=>own,wear:()=>wear,gain,setWear,refresh,items};
@@ -2182,7 +2183,7 @@ const SEARCH=[
  {k:['쿠키','cookie'],t:'쿠키는 거짓말이야',u:'www.yachae.co.kr/~home/???',d:'이 검색 결과는 삭제되었습니다. (삭제한 사람: 까*이)',weird:true},
  {k:['돈키호테'],t:'돈키호테 - 라 만차의 기사',u:'야채마을 도서관',d:'풍차를 향해 돌진한 용감한 기사 이야기. 결과를 누르면 까끌이용 갑옷을 받을 수 있어요!',fn:()=>BAG.gain('armor')},
  {k:['탐정'],t:'명탐정의 필수품',u:'야채마을 소품 가게',d:'체크무늬 헌팅캡과 외눈안경. 결과를 누르면 까끌이용 탐정 모자를 받을 수 있어요!',fn:()=>BAG.gain('detective')},
- {k:['토끼금메달'],secret:true,t:'🥇 첫 번째 명예 탐정님께',u:'야채마을 주인장의 선물 상자',d:'「익명의 제보」를 가장 먼저 풀어 준 분을 위해 주인장이 직접 구상한 꼬까옷이에요. 결과를 누르면 받을 수 있어요!',fn:()=>BAG.gain('bunny')},
+ {k:['oya','오야'],secret:true,t:'🥇 첫 번째 명예 탐정 OYA님께',u:'야채마을 주인장의 선물 상자',d:'OYA님, 「익명의 제보」 첫 번째 클리어 정말 축하해요! 끝까지 풀어 줘서 진심으로 고마워요. 주인장이 직접 구상한 꼬까옷을 선물로 드려요. 결과를 누르면 받을 수 있어요!',fn:()=>BAG.gain('bunny')},
  {k:['쿠키도둑','쿠키 도둑'],t:'쿠키 도둑을 찾습니다',u:'야채마을 게시판',d:'현장엔 쿠키 가루만 남아 있었다... 결과를 누르면 까끌이를 범인처럼 꾸밀 수 있어요.',weird:true,fn:()=>BAG.gain('crumbs')},
  {k:['수첩'],t:'탐정 수첩',u:'까끌이의 수첩',d:'지금까지 찾은 단서를 볼 수 있어요.',go:'w-note'},
  {k:['1998'],t:'야채마을 (1998)',u:'www.yachae.co.kr/~old/',d:'ⓒ 1998 … 이 페이지는 더 이상 업데이트되지 않습니다.',weird:true,fn:()=>msg('오류','페이지를 표시할 수 없습니다.\n서버가 응답하지 않습니다. (1998)')},
