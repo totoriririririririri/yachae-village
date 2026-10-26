@@ -1651,9 +1651,9 @@ function draw(){x.clearRect(0,0,192,168);x.save();
     else{x.beginPath();x.arc(ex,ey,3.6,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(ex-1.1,ey-1.2,1.1,0,7);x.fill();}};
   eye(cx-46,cy+2);eye(cx-24,cy+4);
   // 볼
-  x.fillStyle='rgba(255,130,150,.35)';x.beginPath();x.ellipse(cx-50,cy+16,5,3,0,0,7);x.fill();x.beginPath();x.ellipse(cx-18,cy+18,5,3,0,0,7);x.fill();
-  // 소품
   const cos=window.BAG?BAG.wear():'';
+  x.fillStyle=cos==='bunny'?'rgba(255,214,90,.85)':'rgba(255,130,150,.35)';const ck=cos==='bunny'?1.5:1;x.beginPath();x.ellipse(cx-50,cy+16,5*ck,3*ck,0,0,7);x.fill();x.beginPath();x.ellipse(cx-18,cy+18,5*ck,3*ck,0,0,7);x.fill();
+  // 소품
   if(cos==='crumbs'){x.fillStyle='#b8702a';[[-66,20],[-60,24],[-54,22],[-70,26],[-62,30],[-50,28],[-56,32],[-46,24],[-40,30],[-30,34]].forEach(([a,b])=>{x.fillRect(cx+a,cy+b,5,4);});
     x.fillStyle='#e8b070';[[-64,26],[-52,30],[-44,33]].forEach(([a,b])=>x.fillRect(cx+a,cy+b,4,3));
     x.save();x.translate(cx-40,cy+40);x.fillStyle=rg(x,-3,-3,1,0,0,12,[[0,'#f0c070'],[1,'#b0702a']]);x.beginPath();x.arc(0,0,11,.9,Math.PI*2+.1);x.lineTo(4,2);x.closePath();x.fill();x.strokeStyle='#5a3a22';x.lineWidth=2;x.stroke();
@@ -1672,6 +1672,17 @@ function draw(){x.clearRect(0,0,192,168);x.save();
     x.fillStyle='#8a5a22';x.beginPath();x.moveTo(-30,10);x.quadraticCurveTo(-36,18,-28,22);x.lineTo(-22,12);x.fill();x.stroke();x.restore();
     x.strokeStyle='#d8a020';x.lineWidth=2.5;x.beginPath();x.arc(cx-46,cy+2,7.5,0,7);x.stroke();x.fillStyle='rgba(200,230,255,.3)';x.fill();
     x.strokeStyle='#d8a020';x.lineWidth=1.2;x.beginPath();x.moveTo(cx-40,cy+7);x.quadraticCurveTo(cx-30,cy+28,cx-14,cy+30);x.stroke();}
+  if(cos==='bunny'){
+    // 금메달 (목걸이)
+    x.strokeStyle='#1a2ad8';x.lineWidth=4;x.lineCap='round';x.beginPath();x.moveTo(cx-52,cy+30);x.quadraticCurveTo(cx-40,cy+48,cx-28,cy+50);x.quadraticCurveTo(cx-14,cy+46,cx-6,cy+28);x.stroke();
+    x.save();x.translate(cx-28,cy+54);x.fillStyle=rg(x,-3,-3,1,0,0,10,[[0,'#fff6a0'],[.5,'#ffd820'],[1,'#d89a00']]);x.beginPath();x.arc(0,0,9,0,7);x.fill();x.strokeStyle='#a87000';x.lineWidth=1.8;x.stroke();
+    x.fillStyle='#fff8c0';x.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r=i%2?2.4:5.4;x.lineTo(Math.cos(a)*r,Math.sin(a)*r);}x.closePath();x.fill();x.restore();
+    // 토끼 귀 모자
+    x.save();x.translate(cx-22,cy-34);x.lineWidth=2.5;x.strokeStyle='#1a2ad8';x.lineJoin='round';
+    const ear=(ex,ey,r)=>{x.save();x.translate(ex,ey);x.rotate(r);x.fillStyle='#fff';x.beginPath();x.ellipse(0,-20,11,22,0,0,7);x.fill();x.stroke();x.fillStyle='#b8dc50';x.beginPath();x.ellipse(0,-20,4.5,13,0,0,7);x.fill();x.restore();};
+    ear(-14,-6,-.3);ear(12,-8,.22);
+    x.fillStyle='#fff';x.beginPath();x.ellipse(0,6,34,17,-.08,Math.PI*1.02,Math.PI*1.98);x.quadraticCurveTo(10,14,-34,10);x.closePath();x.fill();x.stroke();
+    x.restore();}
   if(night()&&!sleep&&!cos){x.save();x.translate(cx+4,cy-48);x.rotate(-.35);x.fillStyle=lg(x,-14,0,14,0,[[0,'#6a9aff'],[1,'#2a4ad8']]);x.beginPath();x.moveTo(-16,8);x.lineTo(16,8);x.lineTo(-2,-26);x.closePath();x.fill();
     x.fillStyle='#fff';x.beginPath();x.arc(-3,-27,5,0,7);x.fill();x.fillRect(-17,5,34,6);x.restore();}
   if(sleep){x.fillStyle='#3a6aff';x.font='bold 22px "Arial Black",sans-serif';const zz=(t/12)%30;x.globalAlpha=1-zz/30;x.fillText('z',cx-60,cy-40-zz);x.globalAlpha=1;}
@@ -1688,7 +1699,7 @@ function say(html,btns,dur=6000){tip.textContent='';const b=document.createEleme
 const TIPS=['왼쪽 게임 폴더에 핀볼이랑 야채팡이 있어요. 저는 핀볼 공이 무서워요.','어항을 누르면 먹이가 떨어져요. 저도 먹고 싶어요...','메신저에서 양파한테 말 걸어 봤어요? 맨날 울어요.','방명록에 한마디 남겨 주세요! 저는 손이 짧아서 못 써요.','분수 근처에서 뭔가 반짝이는 걸 봤어요. 그게 뭘까요?','저를 너무 많이 누르면 따가워요. 진짜로요.','밤 10시가 넘으면 저는 잠옷 고깔을 써요.'];
 let ckN=0;const CK=['쿠키요? 무슨 쿠키요? 저는 쿠키라는 말 처음 들어봐요.','...초코칩이었어요. 아, 아니 그냥 추측이에요. 냄새로요.','솔직히 말할게요. 세 개 먹었어요. ...아니 다섯 개.','"쿠키는 거짓말이야" 낙서도 사실 제가 썼어요. 혼자 다 먹고 싶어서요. 죄송해요...','다음엔 꼭 남겨 둘게요. 아마도요.','진짜 쿠키는 주인장님한테 받으세요! 암호, 기억하죠?'];
 const cookieTalk=()=>{say(CK[ckN%CK.length],null,7000);ckN++;};
-const wardrobe=()=>{const w=BAG.wear();const opts=[['기본 까끌이'+(w?'':' ✔'),()=>{BAG.setWear('');say('역시 기본이 최고죠!',null,2500);}]];BAG.own().forEach(k=>opts.push([BAG.COS[k].n+(w===k?' ✔':''),()=>{BAG.setWear(k);say({armor:'에헴! 풍차는 어디 있나요? 돌진!',detective:'흠... 단서의 냄새가 나는군요.',crumbs:'...이거 왜 묻어 있죠? 전 모르는 일이에요.'}[k],null,3000);}]));opts.push(['닫기',()=>{tip.hidden=true;}]);say('옷장을 열었어요! 뭘 입을까요?',opts,0);};
+const wardrobe=()=>{const w=BAG.wear();const opts=[['기본 까끌이'+(w?'':' ✔'),()=>{BAG.setWear('');say('역시 기본이 최고죠!',null,2500);}]];BAG.own().forEach(k=>opts.push([BAG.COS[k].n+(w===k?' ✔':''),()=>{BAG.setWear(k);say({armor:'에헴! 풍차는 어디 있나요? 돌진!',detective:'흠... 단서의 냄새가 나는군요.',bunny:'깡총! 첫 번째 명예 탐정님, 축하드려요! 🥇',crumbs:'...이거 왜 묻어 있죠? 전 모르는 일이에요.'}[k],null,3000);}]));opts.push(['닫기',()=>{tip.hidden=true;}]);say('옷장을 열었어요! 뭘 입을까요?',opts,0);};
 const menu=()=>say('안녕하세요! 저는 까끌이예요.\n무엇을 도와드릴까요?',[['팁 알려줘',()=>say(TIPS[Math.floor(Math.random()*TIPS.length)],null,7000)],['같이 놀자',()=>{tip.hidden=true;roll();}],...(BAG.own().length?[['옷장',()=>wardrobe()]]:[]),...(ARG.has('done')?[['쿠키에 대하여...',()=>cookieTalk()]]:[]),['탐정 수첩 보기',()=>{tip.hidden=true;go('w-note');}],['힌트 줘',()=>say(ARG.hint(),null,9000)],['저리 가',()=>goAway()],['괜찮아요 (닫기)',()=>say(['네! 필요하면 또 불러 주세요.','알겠어요! 저는 근처에 있을게요.','좋은 하루 보내세요~'][Math.floor(Math.random()*3)],null,2500)]],0);
 function roll(){state='roll';stT=0;plat=null;rollV=dir*(4+Math.random()*2);vy=(Math.random()-.5)*5;onFloor=false;say('데굴데굴~!',null,1500);}
 function goAway(){say('흥... 알겠어요.',null,1500);setTimeout(()=>{away=true;el.hidden=true;tip.hidden=true;
@@ -1820,7 +1831,7 @@ window.CC=CC;
 const BAG=(function(){
   let own=[],wear='';try{own=JSON.parse(localStorage.getItem('yachae-cos')||'[]');wear=localStorage.getItem('yachae-wear')||'';}catch(e){}
   const save=()=>{try{localStorage.setItem('yachae-cos',JSON.stringify(own));localStorage.setItem('yachae-wear',wear);}catch(e){}};
-  const COS={armor:{n:'돈키호테 갑옷',d:'반짝이는 투구와 작은 방패. 풍차를 보면 돌진하고 싶어져요.'},detective:{n:'탐정 모자와 외눈안경',d:'체크무늬 헌팅캡과 동그란 외눈안경. 단서가 더 잘 보이는 기분!'},crumbs:{n:'쿠키 도둑 부스러기',d:'입가에 묻은 쿠키 가루. 범인은 언제나 현장에 흔적을 남겨요.'}};
+  const COS={armor:{n:'돈키호테 갑옷',d:'반짝이는 투구와 작은 방패. 풍차를 보면 돌진하고 싶어져요.'},detective:{n:'탐정 모자와 외눈안경',d:'체크무늬 헌팅캡과 동그란 외눈안경. 단서가 더 잘 보이는 기분!'},crumbs:{n:'쿠키 도둑 부스러기',d:'입가에 묻은 쿠키 가루. 범인은 언제나 현장에 흔적을 남겨요.'},bunny:{n:'토끼 모자와 금메달',d:'「익명의 제보」를 가장 먼저 푼 첫 번째 명예 탐정님을 위해 주인장이 만든 특별한 꼬까옷.'}};
   const ARGI=[['stool','받침대','오락실 게임기가 돌려준 나무 받침대. 밟고 올라가면 높은 곳에 손이 닿아요.'],['shelf','모스 부호표','먼지 쌓인 책에서 찾은 표. 탐정 수첩 옆 메모장에 베껴 뒀어요.'],['mail5','반송된 편지','우체통에서 나온 편지. 받는 곳: "집, 책상 서랍"']];
   function items(){const a=ARGI.filter(([k])=>ARG.has(k)).map(([k,n,d])=>({k,n,d,cos:false}));if(CC.has())a.unshift({k:'cyber',n:'사이버 쿠키',d:'주인장 유채가 직접 구운 쿠키(의 사이버 버전). 눌러서 먹어 보세요!',cos:false,eat:true});own.forEach(k=>COS[k]&&a.push({k,n:COS[k].n,d:COS[k].d,cos:true}));return a;}
   function refresh(){const b=document.getElementById('bagicon');if(b)b.hidden=!items().length;render();}
@@ -1841,6 +1852,9 @@ function itemIcon(c,k){const x=c.getContext('2d');x.clearRect(0,0,48,48);if(k===
   if(k==='armor'){x.fillStyle=lg(x,10,0,38,0,[[0,'#8a92a0'],[.5,'#f4f6fa'],[1,'#7a828e']]);x.beginPath();x.arc(24,26,14,Math.PI,0);x.lineTo(38,32);x.lineTo(10,32);x.closePath();x.fill();x.stroke();x.fillStyle='#222';x.fillRect(14,26,20,3);x.fillStyle='#e00010';x.beginPath();x.ellipse(28,10,5,9,.5,0,7);x.fill();}
   if(k==='detective'){x.fillStyle='#8a5a2a';x.beginPath();x.ellipse(24,24,17,9,0,Math.PI,0);x.fill();x.stroke();x.strokeStyle='#5a3a10';x.lineWidth=1;for(let i=10;i<40;i+=5){x.beginPath();x.moveTo(i,16);x.lineTo(i,24);x.stroke();}x.beginPath();x.moveTo(8,20);x.lineTo(40,20);x.stroke();
     x.lineWidth=2;x.strokeStyle='#3a2410';x.fillStyle='#6a4018';x.beginPath();x.ellipse(24,25,20,4,0,0,7);x.fill();x.stroke();x.strokeStyle='#d8a020';x.lineWidth=2.5;x.beginPath();x.arc(30,36,6,0,7);x.stroke();}
+  if(k==='bunny'){x.strokeStyle='#1a2ad8';x.lineWidth=2;[[16,-.25],[30,.2]].forEach(([ex,r])=>{x.save();x.translate(ex,22);x.rotate(r);x.fillStyle='#fff';x.beginPath();x.ellipse(0,-9,6,12,0,0,7);x.fill();x.stroke();x.fillStyle='#b8dc50';x.beginPath();x.ellipse(0,-9,2.4,7,0,0,7);x.fill();x.restore();});
+    x.fillStyle='#fff';x.beginPath();x.ellipse(23,26,16,8,0,Math.PI,0);x.closePath();x.fill();x.stroke();x.beginPath();x.moveTo(14,30);x.quadraticCurveTo(23,40,32,30);x.stroke();
+    x.fillStyle='#ffd820';x.beginPath();x.arc(23,41,6,0,7);x.fill();x.strokeStyle='#a87000';x.lineWidth=1.5;x.stroke();}
   if(k==='crumbs'){x.fillStyle=rg(x,20,20,2,24,24,16,[[0,'#f0c070'],[1,'#b0702a']]);x.beginPath();x.arc(24,24,15,0,7);x.fill();x.stroke();x.fillStyle='#4a2a10';[[18,18],[28,20],[22,28],[30,29],[16,27]].forEach(([a,b])=>{x.beginPath();x.arc(a,b,2,0,7);x.fill();});x.fillStyle='#c8803a';[[40,36],[44,40],[38,42]].forEach(([a,b])=>x.fillRect(a,b,3,3));}
 }
 
@@ -2168,13 +2182,14 @@ const SEARCH=[
  {k:['쿠키','cookie'],t:'쿠키는 거짓말이야',u:'www.yachae.co.kr/~home/???',d:'이 검색 결과는 삭제되었습니다. (삭제한 사람: 까*이)',weird:true},
  {k:['돈키호테'],t:'돈키호테 - 라 만차의 기사',u:'야채마을 도서관',d:'풍차를 향해 돌진한 용감한 기사 이야기. 결과를 누르면 까끌이용 갑옷을 받을 수 있어요!',fn:()=>BAG.gain('armor')},
  {k:['탐정'],t:'명탐정의 필수품',u:'야채마을 소품 가게',d:'체크무늬 헌팅캡과 외눈안경. 결과를 누르면 까끌이용 탐정 모자를 받을 수 있어요!',fn:()=>BAG.gain('detective')},
+ {k:['토끼금메달'],secret:true,t:'🥇 첫 번째 명예 탐정님께',u:'야채마을 주인장의 선물 상자',d:'「익명의 제보」를 가장 먼저 풀어 준 분을 위해 주인장이 직접 구상한 꼬까옷이에요. 결과를 누르면 받을 수 있어요!',fn:()=>BAG.gain('bunny')},
  {k:['쿠키도둑','쿠키 도둑'],t:'쿠키 도둑을 찾습니다',u:'야채마을 게시판',d:'현장엔 쿠키 가루만 남아 있었다... 결과를 누르면 까끌이를 범인처럼 꾸밀 수 있어요.',weird:true,fn:()=>BAG.gain('crumbs')},
  {k:['수첩'],t:'탐정 수첩',u:'까끌이의 수첩',d:'지금까지 찾은 단서를 볼 수 있어요.',go:'w-note'},
  {k:['1998'],t:'야채마을 (1998)',u:'www.yachae.co.kr/~old/',d:'ⓒ 1998 … 이 페이지는 더 이상 업데이트되지 않습니다.',weird:true,fn:()=>msg('오류','페이지를 표시할 수 없습니다.\n서버가 응답하지 않습니다. (1998)')},
 ];
 function doSearch(q){q=(q||'').trim();go('w-search');document.getElementById('q2').value=q;const res=document.getElementById('sres'),info=document.getElementById('sinfo');res.textContent='';
   if(!q){info.textContent='검색어를 입력해 주세요.';return;}
-  const ql=q.toLowerCase(),sc=e=>Math.max(...e.k.map(k=>ql.includes(k)?k.length:(k.includes(ql)&&ql.length>=2?ql.length*.5:0))),hits=SEARCH.filter(e=>sc(e)>0).sort((a,b)=>sc(b)-sc(a));
+  const ql=q.toLowerCase(),sc=e=>e.secret?(e.k.includes(ql.replace(/\s/g,''))?99:0):Math.max(...e.k.map(k=>ql.includes(k)?k.length:(k.includes(ql)&&ql.length>=2?ql.length*.5:0))),hits=SEARCH.filter(e=>sc(e)>0).sort((a,b)=>sc(b)-sc(a));
   info.textContent=hits.length?`"${q}" 검색 결과 ${hits.length}건 (0.0${Math.floor(Math.random()*9)+1}초)`:`"${q}"에 대한 검색 결과가 없습니다. 맞춤법을 확인하거나 다른 단어로 검색해 보세요. (예: 핀볼, 방명록, 까끌이)`;
   hits.forEach(h=>{const li=document.createElement('li');if(h.weird)li.className='weird';const a=document.createElement('button');a.className='st';a.textContent=h.t;
     a.onclick=()=>{if(h.go)go(h.go);else{popwrap.hidden=true;h.fn&&h.fn();}};
