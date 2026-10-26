@@ -498,7 +498,7 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
         <div class="dicons">
     <button class="dico" data-ic2="carrot" data-msg="야채마을에 오신 것을 환영합니다!&#10;신선한 홈페이지가 매일 배달됩니다."><canvas width="48" height="48"></canvas><span>야채마을</span></button>
     <button class="dico" data-ic2="pc" data-msg="야채 95&#10;펜티엄 133MHz · 램 16MB"><canvas width="48" height="48"></canvas><span>내 컴퓨터</span></button>
-    <button class="dico" data-ic2="music" data-msg="야채송.mp3 (3.2MB)&#10;오른쪽 아래 야채 플레이어에서 재생 중이에요."><canvas width="48" height="48"></canvas><span>야채송.mp3</span></button>
+    <button class="dico" data-ic2="music" data-msg="Bossa Nova des Jeux.mp3 (2.9MB)&#10;야채마을 BGM이에요! 야채 플레이어에서 ▶를 눌러 들어 보세요."><canvas width="48" height="48"></canvas><span>야채마을 BGM.mp3</span></button>
     <button class="dico" data-ic2="gamefolder" data-run="w-games"><canvas width="48" height="48"></canvas><span>게임</span></button>
     <button class="dico" data-ic2="photo" data-msg="유채꽃밭.jpg&#10;파일이 손상되어 열 수 없습니다."><canvas width="48" height="48"></canvas><span>유채꽃밭.jpg</span></button>
     <button class="dico" data-ic2="trash" data-msg="휴지통에 시든 상추가 1개 있습니다."><canvas width="48" height="48"></canvas><span>휴지통</span></button>
@@ -550,7 +550,7 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
         </div></section>
         <section class="player out"><div class="tbar"><span class="t">야채 플레이어</span><button class="cap out" aria-label="닫기">×</button></div>
     <div class="bd in">
-      <div class="lcd" id="lcd"><span>♪ 01. 야채송 (유채꽃 리믹스) - 야채 ♪ 128kbps ♪</span></div>
+      <div class="lcd stop" id="lcd"><span>♪ 01. Bossa Nova des Jeux - 야채 ♪ 128kbps ♪</span></div><audio id="bgm" src="bgm.mp3" loop preload="none"></audio>
       <canvas id="eq" width="232" height="48" aria-hidden="true"></canvas>
       <div class="pctl"><button class="out" id="p-prev" aria-label="이전 곡">|◀◀</button><button class="out" id="p-play" aria-label="재생">▶</button><button class="out" id="p-stop" aria-label="정지">■</button><button class="out" id="p-next" aria-label="다음 곡">▶▶|</button></div>
     </div>
@@ -1215,17 +1215,20 @@ document.querySelectorAll('[data-buddy]').forEach(b=>b.addEventListener('click',
 document.querySelectorAll('.dico,.fico').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.ic2==='trash'&&ARG.trash())return;b.dataset.run?go(b.dataset.run):msg(b.querySelector('span').textContent,b.dataset.msg);}));
 
 /* 플레이어 */
-const eq=document.getElementById('eq'),ex=eq.getContext('2d'),lcd=document.getElementById('lcd');let playing=!still,lv=Array(16).fill(4);
-const SONGS=['♪ 01. 야채송 (유채꽃 리믹스) - 야채 ♪ 128kbps ♪','♪ 02. 당근은 주황색 - 야채와 친구들 ♪','♪ 03. 브로콜리 숲에서 - 야채 ♪ 96kbps ♪'];let song=0;
+const eq=document.getElementById('eq'),ex=eq.getContext('2d'),lcd=document.getElementById('lcd'),bgm=document.getElementById('bgm');let playing=false,lv=Array(16).fill(4);bgm.volume=.45;
+
 function drawEq(){ex.fillStyle='#10200a';ex.fillRect(0,0,232,48);
   for(let i=0;i<16;i++){if(playing)lv[i]=Math.max(1,Math.min(11,lv[i]+Math.round((Math.random()-.45)*5)));else lv[i]=Math.max(1,lv[i]-1);
     for(let j=0;j<lv[i];j++){ex.fillStyle=j>8?'#ff3a1a':j>5?'#ffe000':'#5aff3a';ex.fillRect(4+i*14,44-j*4,11,3);}}}
 setInterval(drawEq,110);drawEq();
-if(!playing)lcd.classList.add('stop');
-document.getElementById('p-play').onclick=()=>{playing=true;lcd.classList.remove('stop');};
-document.getElementById('p-stop').onclick=()=>{playing=false;lcd.classList.add('stop');};
-const setSong=d=>{song=(song+d+SONGS.length)%SONGS.length;lcd.querySelector('span').textContent=SONGS[song];};
-document.getElementById('p-next').onclick=()=>setSong(1);document.getElementById('p-prev').onclick=()=>setSong(-1);
+const pbtn=document.getElementById('p-play');
+const setUI=on=>{playing=on;lcd.classList.toggle('stop',!on);pbtn.textContent=on?'❚❚':'▶';pbtn.setAttribute('aria-label',on?'일시정지':'재생');};
+bgm.addEventListener('play',()=>setUI(true));bgm.addEventListener('pause',()=>setUI(false));
+bgm.addEventListener('error',()=>{setUI(false);lcd.querySelector('span').textContent='♪ 음악 파일을 불러오지 못했어요 ♪';});
+pbtn.onclick=()=>{if(bgm.paused){const r=bgm.play();if(r&&r.catch)r.catch(()=>setUI(false));}else bgm.pause();};
+document.getElementById('p-stop').onclick=()=>{bgm.pause();bgm.currentTime=0;};
+const restart=()=>{bgm.currentTime=0;if(bgm.paused)pbtn.click();};
+document.getElementById('p-next').onclick=restart;document.getElementById('p-prev').onclick=restart;
 
 /* 어항 */
 function star(x,cx,cy,R,r,fill,line){x.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,q=i%2?r:R;x.lineTo(cx+Math.cos(a)*q,cy+Math.sin(a)*q);}x.closePath();x.fillStyle=fill;x.fill();if(line){x.strokeStyle=line;x.lineWidth=1.5;x.stroke();}}
