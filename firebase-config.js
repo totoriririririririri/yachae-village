@@ -1,13 +1,11 @@
-/* Firebase 설정값을 여기에 붙여 넣으세요. 비워 두면 게시판·방명록·명예의 전당만 "claude.ai에서만" 안내가 떠요. */
-window.YACHAE_FIREBASE = null;
-/* 예시:
+/* 야채마을 Firebase 설정 */
 window.YACHAE_FIREBASE = {
-  apiKey: "...",
-  authDomain: "...firebaseapp.com",
-  projectId: "...",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
+  apiKey: "AIzaSyA2xgF4vV1-BbmlDD_qTSMhIdNVMa1STnU",
+  authDomain: "yachae-village.firebaseapp.com",
+  projectId: "yachae-village",
+  storageBucket: "yachae-village.firebasestorage.app",
+  messagingSenderId: "59797835613",
+  appId: "1:59797835613:web:a9dcd1d9f8922037c222b4"
 };
-*/
-window.YACHAE_OWNER_EMAIL = "";  /* 주인장 구글 이메일 (게시판 글쓰기용) */
+window.YACHAE_DB = "hehecookies";                       /* Firestore 데이터베이스 이름 */
+window.YACHAE_OWNER_EMAIL = "tori09570957@gmail.com";  /* 주인장 (게시판 글쓰기) */
