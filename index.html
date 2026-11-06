@@ -559,11 +559,11 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
 
       <aside class="promo">
         <h3>★ 새 소식 ★</h3>
-        <button data-go="w-proj">핀볼 게임 60% 완성!</button>
+        <div data-edit="news"><button data-go="w-proj">핀볼 게임 60% 완성!</button>
         <p>공이 벽에 튕기는 부분을 고치는 중이에요.</p>
         <button data-go="w-pc">내 컴퓨터 코너 오픈</button>
         <p>아이콘을 눌러 보세요.</p>
-        <button data-go="w-guest">방명록 오픈!</button>
+        <button data-go="w-guest">방명록 오픈!</button></div>
         <canvas id="cons2" width="160" height="48" aria-label="공사중"></canvas>
       </aside>
     </div>
@@ -2330,8 +2330,9 @@ const YCblob=(function(){const C=new Map();
   const DEF={me:'닉네임: 유채\n하는 일: 학생 · 코딩\n관심: 파이썬, 레트로 웹, 게임\n한마디: 만들고 싶은 게 많아요!!',
     proj:'핀볼 게임: 60\n야채마을: 70\n수행평가: 30',
     todo:'1. 핀볼 공 튕기기 고치기\n2. 수행평가 준비하기\n3. 방명록 만들기',
-    mail:'새 편지가 없습니다.'};
-  const HINT={me:'한 줄에 하나씩 "항목: 내용" 으로 적어요. (예: 좋아하는 것: 당근)',proj:'한 줄에 하나씩 "이름: 숫자" 로 적으면 진행 막대가 그려져요. (예: 야채마을: 80)',todo:'자유롭게 적어요. 메모장처럼 보여요.',mail:'방문자들이 읽을 편지를 적어요. 여러 통이면 빈 줄로 나눠 주세요.'};
+    mail:'새 편지가 없습니다.',
+    news:'[만드는 중] 핀볼 게임 60% 완성!\n공이 벽에 튕기는 부분을 고치는 중이에요.\n\n[내 컴퓨터] 내 컴퓨터 코너 오픈\n아이콘을 눌러 보세요.\n\n[방명록] 방명록 오픈!'};
+  const HINT={me:'한 줄에 하나씩 "항목: 내용" 으로 적어요. (예: 좋아하는 것: 당근)',proj:'한 줄에 하나씩 "이름: 숫자" 로 적으면 진행 막대가 그려져요. (예: 야채마을: 80)',todo:'자유롭게 적어요. 메모장처럼 보여요.',mail:'방문자들이 읽을 편지를 적어요. 여러 통이면 빈 줄로 나눠 주세요.',news:'소식 하나는 첫 줄이 제목, 다음 줄부터 설명이에요. 소식끼리는 빈 줄로 나눠요. 제목 앞에 [게시판] [방명록] [만드는 중] [내 컴퓨터] [내 문서] [랭킹] [주인장] [지도] 를 붙이면 누르면 그 창이 열려요. 맨 위 소식이 제일 먼저 보여요.'};
   const vw=t=>[...t].reduce((a,c)=>a+(c.charCodeAt(0)>0x1100?2:1),0);
   const R={
     me:(el,t)=>{const tb=document.createElement('table');tb.className='old';t.split('\n').filter(l=>l.trim()).forEach(l=>{const tr=document.createElement('tr'),i=l.indexOf(':');
@@ -2340,6 +2341,11 @@ const YCblob=(function(){const C=new Map();
     proj:(el,t)=>{const tb=document.createElement('table');tb.className='prjt';t.split('\n').filter(l=>l.trim()).forEach(l=>{const m=l.match(/^(.*?)[\s:：]+(\d{1,3})\s*%?\s*$/),tr=document.createElement('tr');
         if(m){const p=Math.max(0,Math.min(100,+m[2])),k=Math.round(p/10);[m[1].trim(),'['+'■'.repeat(k)+'□'.repeat(10-k)+']',p+'%'].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td);});}
         else{const td=document.createElement('td');td.colSpan=3;td.textContent=l;tr.appendChild(td);}tb.appendChild(tr);});el.appendChild(tb);},
+    news:(el,t)=>{const L={'게시판':'w-likes','방명록':'w-guest','만드는 중':'w-proj','내 컴퓨터':'w-pc','내 문서':'w-docs','랭킹':'w-rank','주인장':'w-me','지도':'w-map','게임':'w-games'};
+      t.split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean).forEach((blk,i)=>{const ls=blk.split('\n');let ti=ls[0].trim(),to=null;const m=ti.match(/^\[([^\]]+)\]\s*/);if(m&&L[m[1].trim()]){to=L[m[1].trim()];ti=ti.slice(m[0].length);}
+        const b=document.createElement('button');b.type='button';b.textContent=ti;if(to)b.onclick=()=>go(to);else b.style.cursor='default';el.appendChild(b);
+        if(i===0&&ls.length){const n=document.createElement('span');n.className='blink';n.textContent=' NEW';n.style.cssText='color:#e00;font-weight:700;font-size:11px';b.appendChild(n);}
+        const d=ls.slice(1).join('\n').trim();if(d){const p=document.createElement('p');p.textContent=d;p.style.whiteSpace='pre-line';el.appendChild(p);}});},
     todo:(el,t)=>{const d=document.createElement('div');d.className='txtview';d.textContent=t;el.appendChild(d);},
     mail:(el,t)=>{const d=document.createElement('div');d.className='txtview';d.textContent=t||'새 편지가 없습니다.';el.appendChild(d);}};
   const boxes=[...document.querySelectorAll('[data-edit]')];
@@ -2348,7 +2354,7 @@ const YCblob=(function(){const C=new Map();
       const show=()=>{el.textContent='';R[k](el,text);};
       try{const d=await r.db.doc('site/'+k).get();if(d.exists&&typeof d.data().text==='string'){text=d.data().text;show();}}catch(e){}
       if(!r.owner)continue;
-      const b=document.createElement('button');b.className='btn out edbtn';b.textContent='✏️ 수정하기 (주인장)';el.after(b);
+      const b=document.createElement('button');b.className='btn out edbtn';b.textContent=k==='news'?'✏️ 소식 쓰기':'✏️ 수정하기 (주인장)';el.after(b);
       b.onclick=()=>{b.hidden=true;el.textContent='';const box=document.createElement('div');box.className='edbox';
         const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('aria-label','내용 고치기');ta.rows=Math.max(5,text.split('\n').length+1);
         const h=document.createElement('div');h.className='hint';h.textContent=HINT[k];
