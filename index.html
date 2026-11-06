@@ -1739,7 +1739,7 @@ function spikyPath(cx,cy,rx,ry,n,amp,ph){x.beginPath();for(let i=0;i<=n*2;i++){c
 function fluff(cx,cy,rx,ry,spin){
   spikyPath(cx,cy,rx,ry,14,.16,spin);x.fillStyle=rg(x,cx-rx*.3,cy-ry*.4,rx*.2,cx,cy,rx*1.1,[[0,'#c8946a'],[1,'#94643e']]);x.fill();
   x.strokeStyle='#5a3a22';x.lineWidth=3;x.lineJoin='round';x.stroke();}
-window.HOGPAINT=(ctx,o)=>{const sx=x,ss=state,sd=dir,sb=blinkT;x=ctx;state=o.sleep?'sleep':'idle';dir=o.face;blinkT=0;window.__hogCos=o.cos;try{draw();}finally{x=sx;state=ss;dir=sd;blinkT=sb;window.__hogCos=undefined;}};
+window.HOGPAINT=(ctx,o)=>{const sx=x,ss=state,sd=dir,sb=blinkT;x=ctx;state=o.sleep?'sleep':'idle';dir=o.face;blinkT=0;window.__hogCos=o.cos;window.__hogPanic=!!o.panic;try{draw();}finally{x=sx;state=ss;dir=sd;blinkT=sb;window.__hogCos=undefined;window.__hogPanic=false;}};
 function draw(){x.clearRect(0,0,192,168);x.save();
   if(dir>0){x.translate(192,0);x.scale(-1,1);}
   if(state==='curl'||state==='roll'){x.translate(96,104);x.rotate(ang);fluff(0,0,46,46,0);x.restore();return;}
@@ -1763,7 +1763,11 @@ function draw(){x.clearRect(0,0,192,168);x.save();
     if(sleep||blink){x.strokeStyle='#1a1210';x.lineWidth=2.4;x.lineCap='round';x.beginPath();x.arc(ex,ey-1,3.5,.2,Math.PI-.2);x.stroke();}
     else if(state==='ouch'){x.strokeStyle='#1a1210';x.lineWidth=2.2;x.beginPath();x.moveTo(ex-3,ey-3);x.lineTo(ex+2,ey);x.lineTo(ex-3,ey+3);x.stroke();}
     else{x.beginPath();x.arc(ex,ey,3.6,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(ex-1.1,ey-1.2,1.1,0,7);x.fill();}};
-  eye(cx-46,cy+2);eye(cx-24,cy+4);
+  if(window.__hogPanic){[[cx-46,cy+1],[cx-24,cy+3]].forEach(([ex,ey])=>{x.fillStyle='#fff';x.beginPath();x.arc(ex,ey,6.2,0,7);x.fill();x.strokeStyle='#1a1210';x.lineWidth=1.8;x.stroke();x.fillStyle='#1a1210';x.beginPath();x.arc(ex-1.5,ey+.5,2.4,0,7);x.fill();});
+    x.strokeStyle='#1a1210';x.lineWidth=2;x.lineCap='round';x.beginPath();x.moveTo(cx-53,cy-6);x.lineTo(cx-42,cy-11);x.moveTo(cx-29,cy-10);x.lineTo(cx-18,cy-5);x.stroke();
+    x.fillStyle='#8ad0ff';x.strokeStyle='#2a7ad8';x.lineWidth=1.5;x.beginPath();x.moveTo(cx-4,cy-22);x.quadraticCurveTo(cx+6,cy-8,cx-4,cy-4);x.quadraticCurveTo(cx-14,cy-8,cx-4,cy-22);x.fill();x.stroke();
+    x.save();x.translate(cx-30,cy-50);if(dir>0)x.scale(-1,1);x.fillStyle='#ff3a3a';x.font='bold 26px sans-serif';x.textAlign='center';x.fillText('!?',0,0);x.restore();}
+  else{eye(cx-46,cy+2);eye(cx-24,cy+4);}
   // 볼
   const cos=window.__hogCos!==undefined?window.__hogCos:(window.BAG?BAG.wear():'');
   x.fillStyle=cos==='bunny'?'rgba(255,214,90,.85)':'rgba(255,130,150,.35)';const ck=cos==='bunny'?1.5:1;x.beginPath();x.ellipse(cx-50,cy+16,5*ck,3*ck,0,0,7);x.fill();x.beginPath();x.ellipse(cx-18,cy+18,5*ck,3*ck,0,0,7);x.fill();
@@ -1976,7 +1980,7 @@ function itemIcon(c,k){const x=c.getContext('2d');x.clearRect(0,0,48,48);if(k===
 /* ===================== ARG 장면들 ===================== */
 (function(){
 const $=id=>document.getElementById(id);
-function hogSprite(x,cx,cy,s,face,crumbs){if(window.HOGPAINT){const o=hogSprite.c||(hogSprite.c=document.createElement('canvas'));o.width=192;o.height=168;window.HOGPAINT(o.getContext('2d'),{sleep:!!crumbs,face:face>0?-1:1,cos:crumbs?'crumbs':undefined});const k=.55*s,bx=face>0?100:92;x.drawImage(o,cx-bx*k,cy-96*k,192*k,168*k);return;}
+function hogSprite(x,cx,cy,s,face,crumbs){if(window.HOGPAINT){const o=hogSprite.c||(hogSprite.c=document.createElement('canvas'));o.width=192;o.height=168;window.HOGPAINT(o.getContext('2d'),{panic:!!crumbs,face:face>0?-1:1,cos:crumbs?'crumbs':undefined});const k=.55*s,bx=face>0?100:92;x.drawImage(o,cx-bx*k,cy-96*k,192*k,168*k);return;}
   x.save();x.translate(cx,cy);x.scale(s,s);
   x.fillStyle='rgba(0,0,0,.25)';x.beginPath();x.ellipse(0,26,30,6,0,0,7);x.fill();
   x.beginPath();for(let i=0;i<=28;i++){const a=i/28*Math.PI*2,r=i%2?26:31;x.lineTo(Math.cos(a)*r*1.08,Math.sin(a)*r);}x.closePath();
@@ -2127,8 +2131,8 @@ function drawWork(){const x=wx;x.fillStyle=lg(x,0,0,0,200,[[0,'#ffe8c8'],[1,'#f0
   x.fillStyle='#5a3a10';x.font='11px '+GUL;x.textAlign='left';x.fillText('주인장 작업실',14,20);}
 const WH2=[{l:'편지 뭉치',x:60,y:130,w:90,h:50,f:()=>{wmsg.textContent='다 쓴 편지 뭉치. 맨 위 편지에 "들켰다! 사실 다 내가 보냈어. 내 마을 구석구석 봐줬으면 해서. 약속한 쿠키도 준비해 뒀어!" — 주인장 유채';}},
   {l:'설계도',x:320,y:30,w:150,h:100,f:()=>{wmsg.textContent='벽에 붙은 설계도. "다음 업데이트: ???" 라고 적혀 있고, 그 아래엔 비밀이라고 크게 써 있어요.';}},
-  {l:'쿠키 통',x:215,y:110,w:70,h:65,f:()=>{if(!jar){jar=true;drawWork();wmsg.textContent='두근두근... 쿠키 통을 열었더니… 텅 비어 있어요. 부스러기만 남았어요.';setTimeout(()=>{kk=true;drawWork();wmsg.textContent='어? 쿠키 통 뒤에서 누가 졸고 있어요. 입가에 부스러기가 잔뜩...';},1600);}}},
-  {l:'졸고 있는 고슴도치',x:310,y:180,w:90,h:90,f:()=>{if(!kk)return;wmsg.textContent='까끌이: …아, 아니에요. 제가 먹은 거 아니에요. 진짜예요. (낙서도 제가 쓴 거 아니에요…)';setTimeout(()=>{ARG.note('done','[엔딩] 쿠키는 거짓말이 아니었다. 다만 까끌이가 먼저 도착했을 뿐.');go('w-end');showEnd();},2600);}}];
+  {l:'쿠키 통',x:215,y:110,w:70,h:65,f:()=>{if(!jar){jar=true;drawWork();wmsg.textContent='두근두근... 쿠키 통을 열었더니… 텅 비어 있어요. 부스러기만 남았어요.';setTimeout(()=>{kk=true;drawWork();wmsg.textContent='어? 쿠키 통 뒤에 누가 숨어 있어요! 입가에 부스러기가 잔뜩… 눈이 딱 마주쳤어요.';},1600);}}},
+  {l:'쿠키 통 뒤의 고슴도치',x:310,y:180,w:90,h:90,f:()=>{if(!kk)return;wmsg.textContent='까끌이: …아, 아니에요. 제가 먹은 거 아니에요. 진짜예요. (낙서도 제가 쓴 거 아니에요…)';setTimeout(()=>{ARG.note('done','[엔딩] 쿠키는 거짓말이 아니었다. 다만 까끌이가 먼저 도착했을 뿐.');go('w-end');showEnd();},2600);}}];
 const wh=$('workhots');WH2.forEach(h=>{const b=document.createElement('button');b.className='rh';b.setAttribute('aria-label',h.l);b.title=h.l;b.style.cssText=`left:${h.x/WW*100}%;top:${h.y/WH*100}%;width:${h.w/WW*100}%;height:${h.h/WH*100}%`;b.onclick=h.f;wh.appendChild(b);});
 drawWork();
 /* --- 엔딩 & 비석 --- */
