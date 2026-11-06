@@ -586,7 +586,6 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
             <button class="ico" data-ic2="folder" data-run="w-docs"><canvas width="32" height="32"></canvas><span>내 문서</span></button>
             <button class="ico" data-ic2="note" data-run="w-todo"><canvas width="32" height="32"></canvas><span>할 일.txt</span></button>
             <button class="ico" data-ic2="globe" data-msg="야채마을에 연결되었습니다.&#10;속도: 56.6Kbps"><canvas width="32" height="32"></canvas><span>인터넷</span></button>
-            <button class="ico" data-ic2="readme" data-run="w-log"><canvas width="32" height="32"></canvas><span>업데이트 기록.txt</span></button>
             <button class="ico" data-ic2="mail" data-run="w-mail"><canvas width="32" height="32"></canvas><span>편지함</span></button>
             <button class="ico" data-ic2="trash" data-msg="휴지통이 비어 있습니다."><canvas width="32" height="32"></canvas><span>휴지통</span></button>
           </div>
@@ -2410,14 +2409,15 @@ const YCblob=(function(){const C=new Map();
   function path(){const a=[];let c=cur;while(c&&c!=='root'){const f=byId(c);if(!f)break;a.unshift(f.name);c=f.parent||'root';}return 'C:\\야채마을\\내 문서'+(a.length?'\\'+a.join('\\'):'');}
   function render(){if(cur!=='root'&&!byId(cur))cur='root';
     pathEl.textContent=path();up.disabled=cur==='root';const ks=kids(cur);grid.textContent='';
-    if(!ks.length)grid.appendChild(el('div','empty',R&&R.owner?'폴더가 비어 있어요. 위의 버튼으로 폴더·메모·사진을 넣어 보세요!':'폴더가 비어 있습니다.'));
+    if(cur==='root'){const b=el('button','fico');b.type='button';const c=el('canvas');c.width=32;c.height=32;icon(c,'readme');b.append(c,el('span','','업데이트 기록.txt'));b.onclick=()=>go('w-log');grid.appendChild(b);}
+    if(!ks.length&&cur!=='root')grid.appendChild(el('div','empty',R&&R.owner?'폴더가 비어 있어요. 위의 버튼으로 폴더·메모·사진을 넣어 보세요!':'폴더가 비어 있습니다.'));
     ks.forEach(f=>{const b=el('button','fico');b.type='button';
       if(f.kind==='photo'&&f.t){const im=el('img');im.src=f.t;im.alt='';b.appendChild(im);}
       else{const c=el('canvas');c.width=32;c.height=32;icon(c,f.kind==='folder'?'folder':f.kind==='photo'?'photo':'note');b.appendChild(c);}
       b.appendChild(el('span','',f.name+(f.kind==='memo'?'.txt':f.kind==='photo'?'.jpg':'')));
       b.onclick=()=>{if(f.kind==='folder'){cur=f.id;view.hidden=true;shown=null;render();}else open(f);};
       b.ondblclick=b.onclick;grid.appendChild(b);});
-    st.textContent='개체 '+ks.length+'개';
+    st.textContent='개체 '+(ks.length+(cur==='root'?1:0))+'개';
     if(R&&R.owner)rmdir.hidden=cur==='root'||ks.length>0;
     if(shown&&!byId(shown)){view.hidden=true;shown=null;}}
   function confirmBtn(t,f){const b=btn(t,()=>{if(b.dataset.sure!=='1'){b.dataset.sure='1';b.textContent='정말 지울까요? 한 번 더';return;}f();});return b;}
@@ -2447,7 +2447,8 @@ const YCblob=(function(){const C=new Map();
         await R.db.collection('files').add({kind:'photo',name:f.name.replace(/\.[^.]+$/,'').slice(0,40)||'사진',parent:cur,t,blob:b.id,text:'',at:Date.now(),by:R.me});}
       catch(e){msg('내 문서','사진을 올리지 못했어요: '+f.name);}st.textContent='사진 올리는 중... ('+(++i)+'/'+fs.length+')';}
     render();};
-  YCS.ready.then(r=>{R=r;if(!r){grid.textContent='';grid.appendChild(el('div','empty','내 문서는 인터넷에 연결된 야채마을에서만 열 수 있어요.'));return;}
+  render();
+  YCS.ready.then(r=>{R=r;if(!r)return;
     if(r.owner)own.hidden=false;
     try{r.db.collection('files').orderBy('at','asc').limit(1000).onSnapshot(sn=>{files=sn.docs.map(d=>({id:d.id,...d.data()}));render();},()=>{grid.textContent='';grid.appendChild(el('div','empty','내 문서를 불러오지 못했어요.'));});}catch(e){}
   });
