@@ -2553,7 +2553,7 @@ const YCblob=(function(){const C=new Map();
         for(let k=0;k<8&&i<n;k++,i++){const bw=8+(i*5)%4,bh=28+(i*7)%9;x.fillStyle=BC[(i*3)%BC.length];x.fillRect(bx,by-bh,bw,bh);x.fillStyle='rgba(255,255,255,.55)';x.fillRect(bx+2,by-bh+4,bw-4,2);x.fillRect(bx+2,by-8,bw-4,2);x.fillStyle='rgba(0,0,0,.18)';x.fillRect(bx+bw-1,by-bh,1,bh);bx+=bw+1;}
         x.fillStyle='#a8703a';x.fillRect(sx+4,by,sw-8,6);x.fillStyle='rgba(0,0,0,.2)';x.fillRect(sx+4,by+6,sw-8,2);}
       x.fillStyle='#c88a4a';x.fillRect(sx-4,sy-6,sw+8,8);x.fillStyle='#7a4a1a';x.fillRect(sx+4,sy+sh-6,10,8);x.fillRect(sx+sw-14,sy+sh-6,10,8);
-      x.fillStyle='rgba(0,0,0,.55)';x.font='10px '+GUL;x.textAlign='center';x.fillText((P.books||0)+'권',sx+sw/2,sy+sh+14);}
+      x.fillStyle='#5a3410';x.font='bold 9px '+GUL;x.textAlign='center';x.fillText('📚 '+(P.books||0)+'권',sx+sw/2,sy+1);}
     // 창턱 화분 (방울토마토)
     {const pl=P.plant,px=POT.x,py=POT.y,s=pl.s,wet=Date.now()-(pl.w||0)<DRY,droop=pl.w&&Date.now()-pl.w>3*864e5,lf=droop?'#a8b84a':'#4aa83a',lf2=droop?'#8a9a3a':'#2a8a2a';x.save();x.translate(px,py);x.scale(POT.k,POT.k);x.translate(-px,-py);
       if(s>=1){x.strokeStyle=lf2;x.lineWidth=3;x.lineCap='round';const top=py-[0,12,24,40,48,52][s];x.beginPath();x.moveTo(px,py-2);x.quadraticCurveTo(px+(droop?6:2),(py+top)/2,px+(droop?8:0),top);x.stroke();
@@ -2574,11 +2574,11 @@ const YCblob=(function(){const C=new Map();
     x.strokeStyle='rgba(150,110,60,.35)';x.lineWidth=1;[214,234,254].forEach(v=>{x.beginPath();x.moveTo(24,v);x.lineTo(56,v);x.stroke();});
     STAR(40,224,7,'#f0c030');
     x.fillStyle='#d2ac74';x.fillRect(30,280,168,12);x.fillStyle='#b8925a';x.fillRect(30,290,168,2);x.fillRect(32,292,8,8);x.fillRect(186,292,8,8);
-    x.fillStyle='#fdfdfb';x.beginPath();x.roundRect?x.roundRect(52,254,140,28,6):x.rect(52,254,140,28);x.fill();x.strokeStyle='#c8c4b8';x.lineWidth=1.5;x.stroke();
-    [['#e8604a',270],['#6ab86a',273],['#f0b840',276]].forEach(([c,v])=>{x.strokeStyle=c;x.lineWidth=1.2;x.beginPath();x.moveTo(56,v);x.lineTo(114,v);x.stroke();});
+    x.fillStyle='#fbefc8';x.beginPath();x.roundRect?x.roundRect(52,254,140,28,6):x.rect(52,254,140,28);x.fill();x.save();x.clip();x.fillStyle='#f2d88a';for(let i=0;i<18;i++)x.fillRect(54+i*8,254,3,28);x.fillStyle='#9ac0a8';x.fillRect(52,276,140,6);x.restore();x.beginPath();x.roundRect?x.roundRect(52,254,140,28,6):x.rect(52,254,140,28);x.strokeStyle='#c8b480';x.lineWidth=1.5;x.stroke();
+    
     x.fillStyle=lg(x,184,0,202,0,[[0,'#ecd2a4'],[1,'#d2ac74']]);x.beginPath();x.moveTo(186,298);x.lineTo(186,246);x.quadraticCurveTo(186,240,192,240);x.lineTo(196,240);x.quadraticCurveTo(202,240,202,246);x.lineTo(202,298);x.closePath();x.fill();x.strokeStyle='#a8844e';x.lineWidth=2;x.stroke();
-    x.save();x.beginPath();x.ellipse(84,250,25,11,-.08,0,7);x.clip();x.fillStyle='#fff';x.fillRect(56,236,58,28);x.fillStyle='#c4d0de';for(let a=0;a<15;a++)for(let b=0;b<7;b++)if((a+b)%2)x.fillRect(58+a*4,238+b*4,4,4);
-    STAR(72,246,4,'#e8402a');STAR(92,252,4,'#4a7ad8');STAR(98,242,3.5,'#f0a030');x.restore();x.strokeStyle='#a8b4c4';x.lineWidth=1.5;x.beginPath();x.ellipse(84,250,25,11,-.08,0,7);x.stroke();
+    x.save();x.beginPath();x.ellipse(80,250,28,12,-.08,0,7);x.clip();x.fillStyle='#fff';x.fillRect(56,236,58,28);x.fillStyle='#c4d0de';for(let a=0;a<15;a++)for(let b=0;b<7;b++)if((a+b)%2)x.fillRect(58+a*4,238+b*4,4,4);
+    STAR(72,246,4,'#e8402a');STAR(92,252,4,'#4a7ad8');STAR(98,242,3.5,'#f0a030');x.restore();x.strokeStyle='#a8b4c4';x.lineWidth=1.5;x.beginPath();x.ellipse(80,250,28,12,-.08,0,7);x.stroke();
     x.restore();x.save();x.translate(TX,DY);
     // 식탁 + 밥그릇
     x.fillStyle='rgba(0,0,0,.16)';x.beginPath();x.ellipse(452,300,40,7,0,0,7);x.fill();
@@ -2591,14 +2591,25 @@ const YCblob=(function(){const C=new Map();
     x.fillStyle=lg(x,0,214,0,232,[[0,'#ff9a9a'],[1,'#d83a3a']]);x.beginPath();x.moveTo(430,216);x.lineTo(474,216);x.lineTo(468,232);x.lineTo(436,232);x.closePath();x.fill();
     x.fillStyle='#ffd8d8';x.beginPath();x.ellipse(452,216,22,5,0,0,7);x.fill();x.fillStyle='#fff';x.font='bold 8px '+GUL;x.textAlign='center';x.fillText('까끌이',452,229);
     x.restore();
-    // 카펫 (한글 자음 무늬)
-    {const poly=()=>{x.beginPath();x.moveTo(256,328);x.lineTo(566,328);x.lineTo(600,394);x.lineTo(222,394);x.closePath();};
-      x.fillStyle='rgba(0,0,0,.12)';x.beginPath();x.moveTo(256,331);x.lineTo(568,331);x.lineTo(603,397);x.lineTo(222,397);x.closePath();x.fill();
-      poly();x.fillStyle='#f2e4c0';x.fill();x.save();poly();x.clip();
-      const RC=['#8a3446','#3a7a86','#2c3a5c','#c8868a','#d8a040','#7a9a72'],L='ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ';
-      x.font='bold 46px '+GUL;x.textAlign='center';x.textBaseline='middle';
-      for(let i=0;i<L.length;i++){const row=i<6?0:1,col=row?i-6:i,cx=row?226+col*50:262+col*56,cy=row?382:346;x.save();x.translate(cx,cy);x.scale(1.05,.5);x.rotate(((i*37)%11-5)*.05);const rc=RC[(i*5)%RC.length];x.fillStyle=rc;x.strokeStyle=rc;x.lineWidth=7;x.lineJoin='round';x.lineCap='round';x.strokeText(L[i],0,0);x.fillText(L[i],0,0);x.restore();}
-      x.textBaseline='alphabetic';x.restore();poly();x.strokeStyle='#d8c494';x.lineWidth=2;x.stroke();}
+    // 카펫 (우주 무늬)
+    {const cx=410,cy=361,rx=196,ry=34,oval=(dx=0,dy=0)=>{x.beginPath();x.ellipse(cx+dx,cy+dy,rx,ry,0,0,7);};
+      oval(0,3);x.fillStyle='rgba(0,0,0,.14)';x.fill();
+      oval();x.fillStyle=lg(x,0,cy-ry,0,cy+ry,[[0,'#2a2f6a'],[1,'#141a44']]);x.fill();x.save();oval();x.clip();
+      x.fillStyle='rgba(140,120,220,.25)';x.beginPath();x.ellipse(cx-40,cy+4,120,14,-.05,0,7);x.fill();
+      x.fillStyle='#fff';for(let i=0;i<46;i++){const a=cx-rx+((i*83)%(rx*2)),b=cy-ry+((i*37)%(ry*2));x.globalAlpha=.4+(i%3)*.25;x.fillRect(a,b,i%4?1.5:2.5,i%4?1:1.6);}x.globalAlpha=1;
+      const sq=(fn)=>{x.save();x.scale(1,.5);fn();x.restore();};
+      // 고리 행성
+      {const px=300,py=354;sq(()=>{const Y=py*2;x.fillStyle=lg(x,px-18,Y-18,px+18,Y+18,[[0,'#ffb070'],[1,'#d8603a']]);x.beginPath();x.arc(px,Y,18,0,7);x.fill();x.strokeStyle='#ffe0a0';x.lineWidth=3;x.beginPath();x.ellipse(px,Y,32,9,-.35,0,7);x.stroke();x.fillStyle='rgba(120,40,20,.35)';x.fillRect(px-17,Y-4,34,3);});}
+      // 파란 행성
+      {const px=520,py=372;sq(()=>{const Y=py*2;x.fillStyle=lg(x,px-14,Y-14,px+14,Y+14,[[0,'#8ad0ff'],[1,'#2a6ac8']]);x.beginPath();x.arc(px,Y,14,0,7);x.fill();x.fillStyle='rgba(120,220,140,.8)';x.beginPath();x.ellipse(px-4,Y-3,6,4,.4,0,7);x.ellipse(px+5,Y+6,4,3,0,0,7);x.fill();});}
+      // 달
+      sq(()=>{const px=420,Y=343*2,r=13;x.fillStyle='#f4d460';x.beginPath();x.arc(px,Y,r,Math.PI*.5,Math.PI*1.5,false);x.quadraticCurveTo(px-r*.3,Y,px,Y+r);x.closePath();x.fill();});
+      // 로켓
+      sq(()=>{const px=384,Y=381*2;x.save();x.translate(px,Y);x.rotate(-.9);x.fillStyle='#f0f0f4';x.beginPath();x.moveTo(0,-16);x.quadraticCurveTo(7,-6,6,10);x.lineTo(-6,10);x.quadraticCurveTo(-7,-6,0,-16);x.fill();x.fillStyle='#e84a3a';x.beginPath();x.moveTo(-6,4);x.lineTo(-11,13);x.lineTo(-6,11);x.fill();x.beginPath();x.moveTo(6,4);x.lineTo(11,13);x.lineTo(6,11);x.fill();x.fillStyle='#4a9ae8';x.beginPath();x.arc(0,-3,3,0,7);x.fill();x.fillStyle='#ffb030';x.beginPath();x.moveTo(-4,11);x.lineTo(0,20);x.lineTo(4,11);x.fill();x.restore();});
+      // 별똥별
+      x.strokeStyle='rgba(255,240,180,.7)';x.lineWidth=1.5;x.beginPath();x.moveTo(460,350);x.lineTo(500,342);x.stroke();
+      sq(()=>{STAR(500,342*2,6,'#ffe066');STAR(250,372*2,5,'#ffe066');STAR(560,352*2,4,'#fff');STAR(350,336*2,4,'#ff9ab8');STAR(470,384*2,5,'#8ae0ff');});
+      x.restore();oval();x.strokeStyle='#d8c890';x.lineWidth=3;x.stroke();oval();x.strokeStyle='#8a7a40';x.lineWidth=1;x.stroke();}
     // 먼지
     dirt().forEach(([a,b,r])=>{x.fillStyle='rgba(110,80,50,.55)';x.beginPath();x.arc(a,b,r,0,7);x.arc(a+r*.8,b+1,r*.7,0,7);x.arc(a-r*.7,b+1,r*.6,0,7);x.fill();x.fillStyle='#000';x.fillRect(a-2,b-1,1.5,1.5);x.fillRect(a+1.5,b-1,1.5,1.5);});
     // 전등 (왼쪽 위)
@@ -2611,13 +2622,17 @@ const YCblob=(function(){const C=new Map();
   // 별 무늬 (침구, 카펫에 같이 씀)
   function STAR(a,b,r,col){x.fillStyle=col;x.beginPath();for(let i=0;i<20;i++){const q=i*Math.PI/10,rr=i%2?r*.5:r;x.lineTo(a+Math.cos(q)*rr,b+Math.sin(q)*rr);}x.closePath();x.fill();}
   function drawBlanket(){x.save();x.translate(0,DY);
-    const shape=()=>{x.beginPath();x.moveTo(118,256);x.quadraticCurveTo(158,248,196,256);x.lineTo(198,290);x.quadraticCurveTo(156,296,114,290);x.quadraticCurveTo(108,272,118,256);x.closePath();};
-    shape();x.save();x.clip();x.fillStyle='#f6f8fa';x.fillRect(104,244,100,56);x.fillStyle='#c8d4e2';for(let a=0;a<20;a++)for(let b=0;b<11;b++)if((a+b)%2)x.fillRect(106+a*5,246+b*5,5,5);
-    const SC=['#e8402a','#f08a2a','#f0c030','#4a7ad8','#e8402a','#6ab86a'];[[128,268],[146,280],[164,266],[182,282],[136,288],[176,270],[154,288],[190,262],[122,280]].forEach(([a,b],i)=>STAR(a,b,4.2,SC[i%SC.length]));x.restore();
+    const shape=()=>{x.beginPath();x.moveTo(98,256);x.quadraticCurveTo(148,247,196,256);x.lineTo(198,290);x.quadraticCurveTo(146,297,94,290);x.quadraticCurveTo(86,272,98,256);x.closePath();};
+    shape();x.save();x.clip();x.fillStyle='#f6f8fa';x.fillRect(84,244,120,56);x.fillStyle='#c8d4e2';for(let a=0;a<24;a++)for(let b=0;b<11;b++)if((a+b)%2)x.fillRect(86+a*5,246+b*5,5,5);
+    const SC=['#e8402a','#f08a2a','#f0c030','#4a7ad8','#e8402a','#6ab86a'];[[108,276],[124,286],[132,268],[148,280],[164,266],[182,282],[140,290],[176,270],[158,290],[190,262],[116,266],[100,286]].forEach(([a,b],i)=>STAR(a,b,4.2,SC[i%SC.length]));x.restore();
     shape();x.strokeStyle='#8a9ab0';x.lineWidth=1.5;x.stroke();
-    x.fillStyle='#fff';x.beginPath();x.moveTo(118,256);x.quadraticCurveTo(158,248,196,256);x.lineTo(196,263);x.quadraticCurveTo(158,256,116,263);x.closePath();x.fill();x.strokeStyle='#e8604a';x.lineWidth=1;x.beginPath();for(let i=0;i<=26;i++){const a=118+i*3;x.lineTo(a,259.5+(i%2?1.2:-1.2)+(a<158?-(a-118)*.1:-(196-a)*.1));}x.stroke();
+    x.fillStyle='#fff';x.beginPath();x.moveTo(98,256);x.quadraticCurveTo(148,247,196,256);x.lineTo(196,263);x.quadraticCurveTo(148,255,96,263);x.closePath();x.fill();
+    x.strokeStyle='#e8604a';x.lineWidth=1;x.beginPath();for(let i=0;i<=32;i++){const a=98+i*3,t=(a-98)/98;x.lineTo(a,259.5+(i%2?1.2:-1.2)-Math.sin(t*Math.PI)*4.5);}x.stroke();
+    // 노란 달 쿠션
+    {const cx=182,cy=250,r=13;x.fillStyle='#f4c440';x.beginPath();x.arc(cx,cy,r,Math.PI*.5,Math.PI*1.5,false);x.quadraticCurveTo(cx-r*.3,cy,cx,cy+r);x.closePath();x.fill();x.strokeStyle='#c89620';x.lineWidth=1.2;x.stroke();
+      x.fillStyle='rgba(255,255,255,.5)';x.beginPath();x.ellipse(cx-r*.7,cy-r*.3,2,4,.3,0,7);x.fill();}
     x.restore();}
-  function drawHog(){if(!light){const k=.6;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:'sleep',face:-1});x.drawImage(hogImg,118-100*k,266+DY-96*k,192*k,168*k);return;}const st=!light?'sleep':hog.st;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:st,face:hog.dir,panic:hog.act==='startle'});
+  function drawHog(){if(!light){const k=.6;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:'sleep',face:-1});x.drawImage(hogImg,96-100*k,266+DY-96*k,192*k,168*k);return;}const st=!light?'sleep':hog.st;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:st,face:hog.dir,panic:hog.act==='startle'});
     const jy=hog.jump>0?-Math.sin(hog.jump/18*Math.PI)*40:0,by=(hog.st==='idle'&&light)?Math.sin(T/12)*1.2:0,k=.72;
     const bx=hog.dir>0?92:100;x.drawImage(hogImg,hog.x-bx*k,hog.y-150*k+jy+by,192*k,168*k);}
   function emoji(t,a,b,s){x.font=s+'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,a,b);x.textBaseline='alphabetic';}
