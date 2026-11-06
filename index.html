@@ -394,7 +394,7 @@ canvas{image-rendering:pixelated}
 /* 내 문서 */
 .popwrap .docwin{width:600px}
 .lockbox{white-space:normal; margin:4px 0 8px; padding:6px 8px; background:repeating-linear-gradient(45deg,#fff4c8 0 8px,#ffeaa0 8px 16px); border:2px dashed #c88a00; font:12px/1.6 var(--gulim)}
-.lockbox b{display:block; color:#a05a00} .lockbox form{display:flex; gap:4px; align-items:center; margin-top:4px; flex-wrap:wrap}
+.lockbox b{display:block; color:#a05a00} .lockbox form{display:flex; gap:6px; align-items:center; flex-wrap:wrap} .lockbox form b{display:inline}
 .lockbox input{font:12px var(--gulim); border:2px inset #ddd; padding:2px 4px; width:120px} .lockbox .btn{min-width:0; padding:1px 10px}
 .lockbox .lkerr{color:#c00; font-size:11px}
 .lockbox.open{background:#f0f8ff; border:2px dashed #6a9ad8} .lockbox.open b{color:#2a5ab8} .lockbox.open div{white-space:pre-wrap}
@@ -2391,11 +2391,11 @@ const YCblob=(function(){const C=new Map();
       const ls=t.split('\n');let buf=[],sec=[];
       const flush=()=>{if(buf.length){d.appendChild(document.createTextNode(buf.join('\n')+'\n'));buf=[];}};
       const flushS=()=>{if(!sec.length)return;const lines=sec;sec=[];const bx=document.createElement('div');bx.className='lockbox';
-        const unlock=()=>{bx.className='lockbox open';bx.textContent='';const h=document.createElement('b');h.textContent='🔓 탐정 전용 기록';bx.appendChild(h);const p=document.createElement('div');p.textContent=lines.join('\n');bx.appendChild(p);};
-        if(open())unlock();else{const h=document.createElement('b');h.textContent='🔒 탐정 전용 기록';const m=document.createElement('div');m.textContent='「익명의 제보」 스포일러가 있어요. 클리어하면 받는 비밀번호로 열 수 있어요.';
-          const f=document.createElement('form');const i=document.createElement('input');i.placeholder='비밀번호';i.setAttribute('aria-label','비밀번호');i.maxLength=20;const ok=document.createElement('button');ok.className='btn out';ok.textContent='열기';const er=document.createElement('span');er.className='lkerr';f.append(i,ok,er);
+        const unlock=()=>{bx.className='lockbox open';bx.textContent='';const h=document.createElement('b');h.textContent='🔓 스포일러';bx.appendChild(h);const p=document.createElement('div');p.textContent=lines.join('\n');bx.appendChild(p);};
+        if(open())unlock();else{const h=document.createElement('b');h.textContent='🔒 스포일러';
+          const f=document.createElement('form');const i=document.createElement('input');i.placeholder='비밀번호';i.setAttribute('aria-label','비밀번호');i.maxLength=20;const ok=document.createElement('button');ok.className='btn out';ok.textContent='열기';const er=document.createElement('span');er.className='lkerr';f.prepend(h);f.append(i,ok,er);
           f.onsubmit=e=>{e.preventDefault();if(i.value.replace(/\s/g,'')==='쿠키도둑까끌이'){try{localStorage.setItem('yc-secret','1');}catch(e){}document.querySelectorAll('.lockbox:not(.open)').forEach(x=>x.__unlock&&x.__unlock());}else{er.textContent=' 비밀번호가 달라요!';i.select();}};
-          bx.append(h,m,f);bx.__unlock=unlock;}
+          bx.append(f);bx.__unlock=unlock;}
         d.appendChild(bx);};
       ls.forEach(l=>{const m=l.match(/^\s*\[비밀\]\s?(.*)$/);if(m){flush();sec.push(m[1]);}else{flushS();buf.push(l);}});flush();flushS();},
     todo:(el,t)=>{const d=document.createElement('div');d.className='txtview';d.textContent=t;el.appendChild(d);},
