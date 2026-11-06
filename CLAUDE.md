@@ -1,0 +1,44 @@
+# 야채마을 (yachae-village)
+
+주인장 **유채**(별명 야채)의 레트로(윈도우 98/XP · 2000년대 어린이 포털 느낌) 개인 홈페이지.
+PC 전용(폭 1280px 고정 레이아웃을 화면에 맞춰 축소). 사이트: https://totoriririririririri.github.io/yachae-village/
+
+주인장과는 **한국어 반말**로 편하게 대화한다. 주인장은 직접 그림·아이디어를 주고, 수정은 Claude가 한다.
+
+## 파일 구조
+- `src/homepage.html` — **원본(여기를 고친다).** `<head>` 없이 스타일·마크업·스크립트가 한 파일에 다 들어 있다.
+- `src/build.py` — 원본을 감싸서 저장소 루트의 `index.html`을 만든다. 문서 머리, `firebase-config.js` 불러오기, Firebase 연결 코드(`window.claude.use('db'|'user')` 흉내)를 붙인다.
+- `index.html` — **배포되는 완성본.** 직접 고치지 말고 `python3 src/build.py`로 다시 만든다.
+- `firebase-config.js` — Firebase 웹 설정(공개해도 되는 값). DB 이름은 `hehecookies`, 주인장 이메일이 들어 있다.
+- `firestore.rules` — Firestore 보안 규칙 사본. **바꾸면 주인장이 Firebase 콘솔 → Firestore → hehecookies → "보안" 탭에 직접 붙여넣고 게시해야 한다** (Claude는 콘솔에 접근 못 함).
+- `bgm.mp3` — 야채 플레이어 BGM 「Bossa Nova des Jeux」.
+- `src/test/mockdb.js`, `src/test/smoke.py` — 가짜 DB로 페이지를 띄워 오류·화면을 확인하는 도구.
+
+## 작업 순서
+1. `src/homepage.html` 수정
+2. `python3 src/build.py`
+3. `python3 src/test/smoke.py` (방문자 화면은 `--visitor`) → 스크린샷 확인
+4. main에 커밋·푸시 → GitHub Pages가 1~5분 뒤 반영. 주인장에게 **Ctrl+F5** 새로고침을 안내한다.
+   반영 상태: `gh api repos/totoriririririririri/yachae-village/actions/runs --jq '.workflow_runs[0]|.status+" "+(.conclusion//"")'`
+
+## 데이터 (Firestore, DB `hehecookies`)
+- 모든 방문자는 익명 로그인, 주인장은 맨 아래 저작권 줄 옆 🔑 버튼으로 구글 로그인(`tori09570957@gmail.com`).
+- 주인장만 쓰기: `posts`(게시판), `blobs`(사진 원본, 줄인 JPEG dataURL), `files`(내 문서: 폴더·메모·사진), `site/{me,proj,todo,mail,news,log}`(편집 칸).
+- 누구나: `guestbook`, `comments`, `names/{uid}`(닉네임), `honor/{uid}`(ARG 명예의 전당), `scores_pin/{uid}`·`scores_bub/{uid}`(게임 최고 점수, 한 사람당 하나), `stats/visits`(방문자 수, +1만 허용).
+- 새 컬렉션을 쓰면 `firestore.rules`에도 추가하고, 주인장에게 규칙 붙여넣기를 부탁한다.
+- 브라우저 저장(localStorage): ARG 진행(`yachae-arg`), 가방·옷장(`yachae-cos`,`yachae-wear`), 까끌이집 돌보기(`yc-pet`), 음량(`yc-vol`), 잠금 해제(`yc-secret`), 플레이어 이름(`yachae-pin-name`).
+
+## 주요 구성
+- 메뉴·지도(집, 우체국, 공방, 오락실, 연못, 분수, 버스 정류장, 명예의 전당), 팝업 창은 `go('w-…')`로 연다(`POPS` 목록).
+- 도우미 고슴도치 **까끌이**: 화면을 돌아다니고 클릭하면 메뉴. `window.HOGPAINT`로 다른 장면에도 같은 그림을 그린다. `window.HOGCTL`로 까끌이집에 들어가고 나온다.
+- **까끌이 돌보기(까끌이집)**: 밥 주기·청소·책·공놀이·쓰다듬기, 전등, 침대, 식탁. 필수 아님(혼자서도 밥 먹고 청소함).
+- 게임: 3D 핀볼 야채농장, 야채팡(버블슈터), 전체 랭킹.
+- 숨겨진 ARG 「익명의 제보」(탐정 수첩, 가방, 코스튬, 엔딩). 특별 꼬까옷: 검색창에 `OYA`/`오야` → 토끼 모자와 금메달(첫 클리어 OYA님 선물).
+- 업데이트 기록.txt(내 문서 맨 앞 고정): `[비밀]`로 시작하는 줄은 🔒 잠금 칸이 된다. 비밀번호는 엔딩 화면에 나온다.
+
+## 꼭 지킬 것
+- 사이트 어디에도 **가챠, AI로 만들었다는 말**을 쓰지 않는다. 주인장 이름은 **유채**. 다른 작품의 캐릭터 이름(예: 몽글이)은 쓰지 않는다.
+- **까끌이는 까만 점눈.** 흰자 있는 눈 등으로 바꾸지 않는다. 입은 없다(단순한 디자인 유지).
+- 스포일러(ARG 정답, 엔딩 내용)는 공개된 곳에 그대로 쓰지 않는다. 업데이트 기록에는 `[비밀]` 줄로 쓴다. ARG 답안지는 주인장이 물어볼 때만 대화로 알려 준다.
+- 레트로 느낌 유지: 굴림 계열 글꼴, 윈도우 98 창 테두리, 캔바 같은 매끈한 템플릿 느낌은 피한다.
+- 주인장이 직접 쓰는 칸(소개, 새 소식, 업데이트 기록 등)은 Firestore에 저장된 값이 기본 문구보다 우선한다. 기본 문구만 바꾸면 주인장 화면에는 안 보일 수 있으니 붙여넣을 글도 같이 준다.
