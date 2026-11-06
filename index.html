@@ -1727,7 +1727,7 @@ document.getElementById('gbmore').onclick=()=>go('w-gbook');
 
 /* ===== 고슴도치 도우미 까끌이 ===== */
 (function(){
-const el=document.getElementById('hog'),cv=document.getElementById('hogc'),x=cv.getContext('2d'),tip=document.getElementById('hogtip');
+const el=document.getElementById('hog'),cv=document.getElementById('hogc'),tip=document.getElementById('hogtip');let x=cv.getContext('2d');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let hx=innerWidth-200,hy=0,dir=-1,state='walk',t=0,stT=0,tx=null,clicks=0,clickT=0,away=false,drag=null,rollV=0,ang=0,lastAct=Date.now();
 const SY=()=>scrollY,floorY=()=>scrollY+innerHeight-34-84;hy=floorY();
@@ -1739,6 +1739,7 @@ function spikyPath(cx,cy,rx,ry,n,amp,ph){x.beginPath();for(let i=0;i<=n*2;i++){c
 function fluff(cx,cy,rx,ry,spin){
   spikyPath(cx,cy,rx,ry,14,.16,spin);x.fillStyle=rg(x,cx-rx*.3,cy-ry*.4,rx*.2,cx,cy,rx*1.1,[[0,'#c8946a'],[1,'#94643e']]);x.fill();
   x.strokeStyle='#5a3a22';x.lineWidth=3;x.lineJoin='round';x.stroke();}
+window.HOGPAINT=(ctx,o)=>{const sx=x,ss=state,sd=dir,sb=blinkT;x=ctx;state=o.sleep?'sleep':'idle';dir=o.face;blinkT=0;window.__hogCos=o.cos;try{draw();}finally{x=sx;state=ss;dir=sd;blinkT=sb;window.__hogCos=undefined;}};
 function draw(){x.clearRect(0,0,192,168);x.save();
   if(dir>0){x.translate(192,0);x.scale(-1,1);}
   if(state==='curl'||state==='roll'){x.translate(96,104);x.rotate(ang);fluff(0,0,46,46,0);x.restore();return;}
@@ -1764,7 +1765,7 @@ function draw(){x.clearRect(0,0,192,168);x.save();
     else{x.beginPath();x.arc(ex,ey,3.6,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(ex-1.1,ey-1.2,1.1,0,7);x.fill();}};
   eye(cx-46,cy+2);eye(cx-24,cy+4);
   // 볼
-  const cos=window.BAG?BAG.wear():'';
+  const cos=window.__hogCos!==undefined?window.__hogCos:(window.BAG?BAG.wear():'');
   x.fillStyle=cos==='bunny'?'rgba(255,214,90,.85)':'rgba(255,130,150,.35)';const ck=cos==='bunny'?1.5:1;x.beginPath();x.ellipse(cx-50,cy+16,5*ck,3*ck,0,0,7);x.fill();x.beginPath();x.ellipse(cx-18,cy+18,5*ck,3*ck,0,0,7);x.fill();
   // 소품
   if(cos==='crumbs'){x.fillStyle='#b8702a';[[-66,20],[-60,24],[-54,22],[-70,26],[-62,30],[-50,28],[-56,32],[-46,24],[-40,30],[-30,34]].forEach(([a,b])=>{x.fillRect(cx+a,cy+b,5,4);});
@@ -1975,7 +1976,8 @@ function itemIcon(c,k){const x=c.getContext('2d');x.clearRect(0,0,48,48);if(k===
 /* ===================== ARG 장면들 ===================== */
 (function(){
 const $=id=>document.getElementById(id);
-function hogSprite(x,cx,cy,s,face,crumbs){x.save();x.translate(cx,cy);x.scale(s,s);
+function hogSprite(x,cx,cy,s,face,crumbs){if(window.HOGPAINT){const o=hogSprite.c||(hogSprite.c=document.createElement('canvas'));o.width=192;o.height=168;window.HOGPAINT(o.getContext('2d'),{sleep:!!crumbs,face:face>0?-1:1,cos:crumbs?'crumbs':undefined});const k=.55*s,bx=face>0?100:92;x.drawImage(o,cx-bx*k,cy-96*k,192*k,168*k);return;}
+  x.save();x.translate(cx,cy);x.scale(s,s);
   x.fillStyle='rgba(0,0,0,.25)';x.beginPath();x.ellipse(0,26,30,6,0,0,7);x.fill();
   x.beginPath();for(let i=0;i<=28;i++){const a=i/28*Math.PI*2,r=i%2?26:31;x.lineTo(Math.cos(a)*r*1.08,Math.sin(a)*r);}x.closePath();
   x.fillStyle='#a8744a';x.fill();x.strokeStyle='#5a3a22';x.lineWidth=2.5;x.stroke();
@@ -2121,7 +2123,7 @@ function drawWork(){const x=wx;x.fillStyle=lg(x,0,0,0,200,[[0,'#ffe8c8'],[1,'#f0
   if(!jar){x.fillStyle='#e00010';x.fillRect(jx-34,jy-20,68,12);x.strokeRect(jx-34,jy-20,68,12);x.fillStyle='#fff';x.font='bold 10px '+GUL;x.fillText('쿠키',jx,jy-11);
     x.fillStyle='#e00010';x.beginPath();x.moveTo(jx-6,jy-22);x.lineTo(jx,jy-30);x.lineTo(jx+6,jy-22);x.fill();}
   else{x.save();x.translate(jx+44,jy+20);x.rotate(.4);x.fillStyle='#e00010';x.fillRect(-34,-6,68,12);x.restore();x.fillStyle='#c8803a';[[-20,22],[-6,24],[10,21],[18,25],[-14,26]].forEach(([a,b])=>x.fillRect(jx+a,jy+b,4,3));}
-  if(kk){hogSprite(x,jx+110,jy+90,1.1,-1,true);x.fillStyle='#3a6aff';x.font='bold 16px "Arial Black",sans-serif';x.fillText('z',jx+70,jy+40);}
+  if(kk){hogSprite(x,jx+110,jy+90,1.1,-1,true);}
   x.fillStyle='#5a3a10';x.font='11px '+GUL;x.textAlign='left';x.fillText('주인장 작업실',14,20);}
 const WH2=[{l:'편지 뭉치',x:60,y:130,w:90,h:50,f:()=>{wmsg.textContent='다 쓴 편지 뭉치. 맨 위 편지에 "들켰다! 사실 다 내가 보냈어. 내 마을 구석구석 봐줬으면 해서. 약속한 쿠키도 준비해 뒀어!" — 주인장 유채';}},
   {l:'설계도',x:320,y:30,w:150,h:100,f:()=>{wmsg.textContent='벽에 붙은 설계도. "다음 업데이트: ???" 라고 적혀 있고, 그 아래엔 비밀이라고 크게 써 있어요.';}},
