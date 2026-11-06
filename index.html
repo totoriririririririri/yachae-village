@@ -2538,15 +2538,24 @@ const YCblob=(function(){const C=new Map();
     x.fillStyle='#ff9ab8';x.fillRect(322,34,20,112);x.fillRect(448,34,20,112);x.fillStyle='#c84a7a';x.fillRect(318,30,154,8);
     // 액자
     x.fillStyle='#fff';x.fillRect(200,60,70,54);x.strokeStyle='#c8902a';x.lineWidth=4;x.strokeRect(200,60,70,54);x.fillStyle='#ffe000';x.font='26px sans-serif';x.textAlign='center';x.fillText('🌼',235,98);
-    // 침대(방석)
-    x.fillStyle='rgba(0,0,0,.15)';x.beginPath();x.ellipse(95,292,70,12,0,0,7);x.fill();
-    x.fillStyle=lg(x,0,256,0,292,[[0,'#8ad0ff'],[1,'#3a8ad8']]);x.beginPath();x.ellipse(95,276,66,20,0,0,7);x.fill();x.strokeStyle='#1a5aa8';x.lineWidth=2;x.stroke();
-    x.fillStyle='#d8f0ff';x.beginPath();x.ellipse(95,272,48,11,0,0,7);x.fill();
-    x.fillStyle='#fff';[[70,270],[95,268],[120,272]].forEach(([a,b])=>{x.beginPath();x.arc(a,b,2,0,7);x.fill();});
-    // 밥그릇
-    x.fillStyle='rgba(0,0,0,.18)';x.beginPath();x.ellipse(452,298,32,7,0,0,7);x.fill();
-    x.fillStyle=lg(x,0,278,0,298,[[0,'#ff7a7a'],[1,'#c82a2a']]);x.beginPath();x.moveTo(424,282);x.lineTo(480,282);x.lineTo(472,298);x.lineTo(432,298);x.closePath();x.fill();
-    x.fillStyle='#ffd0d0';x.beginPath();x.ellipse(452,282,28,6,0,0,7);x.fill();x.fillStyle='#fff';x.font='bold 9px '+GUL;x.fillText('까끌이',452,294);
+    // 침대 (프레임·매트리스·베개)
+    x.fillStyle='rgba(0,0,0,.16)';x.beginPath();x.ellipse(110,298,92,9,0,0,7);x.fill();
+    x.fillStyle=lg(x,22,0,52,0,[[0,'#b87a3e'],[1,'#8a5420']]);x.beginPath();x.moveTo(22,298);x.lineTo(22,214);x.quadraticCurveTo(22,192,40,192);x.quadraticCurveTo(58,192,58,214);x.lineTo(58,298);x.closePath();x.fill();x.strokeStyle='#5a3410';x.lineWidth=2;x.stroke();
+    x.fillStyle='#ff8ab0';x.beginPath();x.moveTo(40,222);x.bezierCurveTo(30,212,26,224,40,234);x.bezierCurveTo(54,224,50,212,40,222);x.fill();
+    x.fillStyle='#8a5420';x.fillRect(30,280,168,12);x.fillRect(32,292,8,8);x.fillRect(186,292,8,8);
+    x.fillStyle=lg(x,0,254,0,282,[[0,'#fffaf0'],[1,'#e8dcc8']]);x.beginPath();x.roundRect?x.roundRect(52,254,140,28,8):x.rect(52,254,140,28);x.fill();x.strokeStyle='#b8a888';x.lineWidth=1.5;x.stroke();
+    x.fillStyle=lg(x,184,0,200,0,[[0,'#b87a3e'],[1,'#8a5420']]);x.beginPath();x.moveTo(186,298);x.lineTo(186,248);x.quadraticCurveTo(186,238,194,238);x.quadraticCurveTo(202,238,202,248);x.lineTo(202,298);x.closePath();x.fill();x.strokeStyle='#5a3410';x.lineWidth=2;x.stroke();
+    x.fillStyle='#fff';x.beginPath();x.ellipse(84,250,24,11,-.08,0,7);x.fill();x.strokeStyle='#c8c0d8';x.lineWidth=1.5;x.stroke();x.strokeStyle='#a8c8ff';x.beginPath();x.moveTo(66,250);x.lineTo(102,248);x.stroke();
+    // 식탁 + 밥그릇
+    x.fillStyle='rgba(0,0,0,.16)';x.beginPath();x.ellipse(452,300,40,7,0,0,7);x.fill();
+    x.fillStyle='#7a4a1a';x.fillRect(446,236,12,60);x.beginPath();x.ellipse(452,297,26,6,0,0,7);x.fill();
+    x.fillStyle='#a8703a';x.beginPath();x.ellipse(452,240,50,11,0,0,7);x.fill();x.fillRect(402,234,100,6);
+    x.fillStyle=lg(x,0,228,0,236,[[0,'#d89a5a'],[1,'#b87a3e']]);x.beginPath();x.ellipse(452,234,50,11,0,0,7);x.fill();
+    x.save();x.beginPath();x.moveTo(410,232);x.lineTo(494,232);x.lineTo(500,256);x.quadraticCurveTo(476,262,452,258);x.quadraticCurveTo(428,262,404,256);x.closePath();x.clip();
+    for(let a=0;a<12;a++)for(let b=0;b<4;b++){x.fillStyle=(a+b)%2?'#fff':'#e83a3a';x.fillRect(402+a*9,230+b*8,9,8);}x.restore();
+    x.fillStyle='#fff';x.beginPath();x.ellipse(452,232,42,8,0,0,7);x.fill();
+    x.fillStyle=lg(x,0,214,0,232,[[0,'#ff9a9a'],[1,'#d83a3a']]);x.beginPath();x.moveTo(430,216);x.lineTo(474,216);x.lineTo(468,232);x.lineTo(436,232);x.closePath();x.fill();
+    x.fillStyle='#ffd8d8';x.beginPath();x.ellipse(452,216,22,5,0,0,7);x.fill();x.fillStyle='#fff';x.font='bold 8px '+GUL;x.textAlign='center';x.fillText('까끌이',452,229);
     // 먼지
     dirt().forEach(([a,b,r])=>{x.fillStyle='rgba(110,80,50,.55)';x.beginPath();x.arc(a,b,r,0,7);x.arc(a+r*.8,b+1,r*.7,0,7);x.arc(a-r*.7,b+1,r*.6,0,7);x.fill();x.fillStyle='#000';x.fillRect(a-2,b-1,1.5,1.5);x.fillRect(a+1.5,b-1,1.5,1.5);});
     // 전등 (왼쪽 위)
@@ -2556,7 +2565,10 @@ const YCblob=(function(){const C=new Map();
     if(light){x.fillStyle='rgba(255,240,160,.18)';x.beginPath();x.moveTo(30,60);x.lineTo(90,60);x.lineTo(170,FLOOR+20);x.lineTo(-50,FLOOR+20);x.closePath();x.fill();}
     x.fillStyle='rgba(0,0,0,.55)';x.font='10px '+GUL;x.textAlign='center';x.fillText(light?'불 끄기':'불 켜기',60,82);
   }
-  function drawHog(){const st=!light?'sleep':hog.st;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:st,face:hog.dir,panic:hog.act==='startle'});
+  function drawBlanket(){x.fillStyle=lg(x,0,256,0,288,[[0,'#ffb8d0'],[1,'#ff7aa8']]);x.beginPath();x.moveTo(118,256);x.quadraticCurveTo(158,248,196,256);x.lineTo(198,290);x.quadraticCurveTo(156,296,114,290);x.quadraticCurveTo(108,272,118,256);x.closePath();x.fill();x.strokeStyle='#d0507a';x.lineWidth=1.5;x.stroke();
+    x.fillStyle='rgba(255,255,255,.75)';for(let a=0;a<3;a++)for(let b=0;b<2;b++){x.beginPath();x.arc(134+a*22+(b%2)*11,267+b*12,2.6,0,7);x.fill();}
+    x.fillStyle='#fff0f6';x.beginPath();x.moveTo(118,256);x.quadraticCurveTo(158,248,196,256);x.lineTo(196,262);x.quadraticCurveTo(158,255,116,262);x.closePath();x.fill();}
+  function drawHog(){if(!light){const k=.6;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:'sleep',face:-1});x.drawImage(hogImg,118-100*k,266-96*k,192*k,168*k);return;}const st=!light?'sleep':hog.st;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:st,face:hog.dir,panic:hog.act==='startle'});
     const jy=hog.jump>0?-Math.sin(hog.jump/18*Math.PI)*40:0,by=(hog.st==='idle'&&light)?Math.sin(T/12)*1.2:0,k=.72;
     const bx=hog.dir>0?92:100;x.drawImage(hogImg,hog.x-bx*k,hog.y-150*k+jy+by,192*k,168*k);}
   function emoji(t,a,b,s){x.font=s+'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,a,b);x.textBaseline='alphabetic';}
@@ -2574,14 +2586,14 @@ const YCblob=(function(){const C=new Map();
       ball.cd--;hog.tx=ball.x;hog.fast=true;if(--ball.l<=0){ball=null;hog.tx=null;hog.fast=false;}}
     if(broom){broom.x+=6;if(broom.x>500){broom=null;P.c=100;save();ui();fx.push({t:'✨',x:260,y:260,l:40},{t:'✨',x:120,y:280,l:40},{t:'✨',x:400,y:270,l:40});}}
     drawRoom();
-    if(food){emoji(food.e,452,276-(food.l>40?0:(40-food.l)*.1),22);}
+    if(food){emoji(food.e,452,210,22);}
     if(broom){emoji('🧹',broom.x,262,40);x.fillStyle='rgba(255,255,255,.5)';for(let i=0;i<6;i++){x.beginPath();x.arc(broom.x-20-i*14,280+Math.sin(i+T/3)*6,4,0,7);x.fill();}}
-    if(inside&&!arriving)drawHog();
+    if(inside&&!arriving&&!light){drawHog();drawBlanket();}else{drawBlanket();if(inside&&!arriving)drawHog();}
     if(ball)emoji('⚽',ball.x,ball.y,26);
     if(bookT>0){bookT--;emoji('📖',hog.x+(hog.dir>0?60:-60),hog.y-40,34);}
     fx=fx.filter(f=>{f.l--;f.y-=.8;x.globalAlpha=Math.min(1,f.l/20);emoji(f.t,f.x,f.y,f.s||22);x.globalAlpha=1;return f.l>0;});
     if(!light){x.fillStyle='rgba(10,10,50,.55)';x.fillRect(0,0,W,H);x.fillStyle='rgba(255,240,160,.5)';x.beginPath();x.arc(60,58,4,0,7);x.fill();
-      if(inside&&!arriving){x.fillStyle='#bcd0ff';x.font='bold 18px "Arial Black",sans-serif';x.textAlign='left';const z=Math.floor(T/30)%3;x.fillText('Z'.repeat(z+1),hog.x+30,hog.y-80);}}
+}
     if(arriving){x.fillStyle='rgba(255,255,255,.75)';x.fillRect(150,140,220,40);x.fillStyle='#5a3a22';x.font='bold 14px '+GUL;x.textAlign='center';x.fillText('까끌이가 오고 있어요...',260,165);}
     if(!win.hidden&&!document.getElementById('popwrap').hidden)raf=requestAnimationFrame(frame);else raf=0;}
   const run=()=>{if(!raf)raf=requestAnimationFrame(frame);};
@@ -2610,7 +2622,7 @@ const YCblob=(function(){const C=new Map();
   const ACT={
     feed(){if(busy()||!wake())return;if(P.h>92){say('배불러요… 더는 못 먹겠어요. (꺼억)');hog.act='x';hog.actT=40;return;}
       const F=[['🍎','사과'],['🥕','당근'],['🍓','딸기'],['🐛','밀웜'],['🍪','쿠키']];const f=F[Math.random()<.12?4:Math.floor(Math.random()*4)];
-      food={e:f[0],l:90};hog.act='eat';hog.actT=200;hog.tx=420;hog.onArrive=()=>{hog.dir=1;hog.st='sniff';let n=0;const iv=setInterval(()=>{fx.push({t:'냠',x:hog.x+40,y:hog.y-60,l:25,s:14});if(++n>=4){clearInterval(iv);food=null;P.h=clamp(P.h+32);P.m=clamp(P.m+5);hog.act=null;hog.st='idle';hog.jump=18;
+      food={e:f[0],l:90};hog.act='eat';hog.actT=200;hog.tx=392;hog.onArrive=()=>{hog.dir=1;hog.st='sniff';let n=0;const iv=setInterval(()=>{fx.push({t:'냠',x:hog.x+40,y:hog.y-60,l:25,s:14});if(++n>=4){clearInterval(iv);food=null;P.h=clamp(P.h+32);P.m=clamp(P.m+5);hog.act=null;hog.st='idle';hog.jump=18;
         say(f[1]==='쿠키'?'쿠키다!!! …아, 이건 제가 받은 거니까 훔친 거 아니에요.':f[1]==='밀웜'?'밀웜 최고! 고슴도치의 소울푸드예요.':f[1]+' 맛있어요! 냠냠.');love('feed');}},450);};
       {const ch=f[1].charCodeAt(f[1].length-1)-0xAC00;say(f[1]+(ch>=0&&ch%28?'을':'를')+' 줬어요!');}},
     clean(){if(busy()||!wake())return;if(P.c>95){say('벌써 반짝반짝해요! 깨끗한 집 최고!');return;}broom={x:-40};say('쓱싹쓱싹… 먼지 친구들 안녕~');setTimeout(()=>{if(!busy()){say('반짝반짝! 고마워요. 재채기가 안 나와요!');love('clean');}},1700);},
@@ -2623,7 +2635,7 @@ const YCblob=(function(){const C=new Map();
       P.m=clamp(P.m+10);love('pet');}};
   document.querySelectorAll('[data-hh]').forEach(b=>b.onclick=()=>ACT[b.dataset.hh]());
   c.addEventListener('click',e=>{const r=c.getBoundingClientRect(),px=(e.clientX-r.left)*W/r.width,py=(e.clientY-r.top)*H/r.height;
-    if(Math.hypot(px-60,py-48)<38){light=!light;say(light?'불을 켰어요. 으음… 잘 잤다!':'불을 껐어요. 까끌이가 잠들었어요. 잘 자, 까끌이!');if(!light&&inside){hog.tx=null;hog.act=null;}return;}
+    if(Math.hypot(px-60,py-48)<38){light=!light;say(light?'불을 켰어요. 으음… 잘 잤다!':'불을 껐어요. 까끌이가 침대에 쏙 들어가 잠들었어요. 잘 자, 까끌이!');if(inside){hog.tx=null;hog.act=null;bookT=0;ball=null;if(light){hog.x=230;hog.dir=1;hog.jump=18;hog.st='idle';}}return;}
     if(inside&&!arriving&&Math.abs(px-hog.x)<45&&py>hog.y-100&&py<hog.y+10){if(!light){say('쿨쿨… (깨우지 말아 주세요)');return;}ACT.pet();return;}
     if(inside&&light&&py>FLOOR){const d=dirt().find(([a,b,r])=>Math.hypot(px-a,py-b)<r+8);if(d){P.c=clamp(P.c+14);save();ui();fx.push({t:'✨',x:d[0],y:d[1],l:30});say('먼지 하나 치웠어요!');return;}hog.tx=Math.max(60,Math.min(470,px));}});
   ui();
