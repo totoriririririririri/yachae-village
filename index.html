@@ -393,6 +393,7 @@ canvas{image-rendering:pixelated}
 .notepad .menu{border-bottom:1px solid var(--hi)}
 /* 내 문서 */
 .popwrap .docwin{width:600px}
+.popwrap .logwin{width:480px} .logwin .txtview{max-height:60vh}
 .doctool{display:flex; flex-wrap:wrap; gap:4px; padding:4px 6px; border-bottom:1px solid var(--hi)}
 .doctool .btn{min-width:0; padding:2px 8px; font:12px var(--gulim)}
 .docgrid{max-height:46vh; overflow:auto; align-content:flex-start}
@@ -531,7 +532,7 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
     <div class="subbar">
       <span class="qwrap"><input type="text" id="q" aria-label="검색어" placeholder="" autocomplete="off"><span class="qhist" id="qhist" hidden><b>최근 검색어</b></span></span><button class="s" id="qbtn">검색</button>
       <div class="sp"></div>
-      <select id="places" aria-label="가볼 곳"><option value="">가볼 곳 ▾</option><option value="w-me">주인장 소개</option><option value="w-likes">게시판</option><option value="w-proj">만드는 중</option><option value="w-pc">내 컴퓨터</option><option value="w-docs">내 문서</option><option value="w-rank">게임 랭킹</option><option value="w-guest">방명록</option><option value="w-link">링크</option></select>
+      <select id="places" aria-label="가볼 곳"><option value="">가볼 곳 ▾</option><option value="w-me">주인장 소개</option><option value="w-likes">게시판</option><option value="w-proj">만드는 중</option><option value="w-pc">내 컴퓨터</option><option value="w-docs">내 문서</option><option value="w-log">업데이트 기록</option><option value="w-rank">게임 랭킹</option><option value="w-guest">방명록</option><option value="w-link">링크</option></select>
     </div>
 
     <div class="grid">
@@ -585,6 +586,7 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
             <button class="ico" data-ic2="folder" data-run="w-docs"><canvas width="32" height="32"></canvas><span>내 문서</span></button>
             <button class="ico" data-ic2="note" data-run="w-todo"><canvas width="32" height="32"></canvas><span>할 일.txt</span></button>
             <button class="ico" data-ic2="globe" data-msg="야채마을에 연결되었습니다.&#10;속도: 56.6Kbps"><canvas width="32" height="32"></canvas><span>인터넷</span></button>
+            <button class="ico" data-ic2="readme" data-run="w-log"><canvas width="32" height="32"></canvas><span>업데이트 기록.txt</span></button>
             <button class="ico" data-ic2="mail" data-run="w-mail"><canvas width="32" height="32"></canvas><span>편지함</span></button>
             <button class="ico" data-ic2="trash" data-msg="휴지통이 비어 있습니다."><canvas width="32" height="32"></canvas><span>휴지통</span></button>
           </div>
@@ -805,6 +807,33 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
           <div class="body in"><div data-edit="todo"><div class="txtview">1. 핀볼 공 튕기기 고치기
 2. 수행평가 준비하기
 3. 방명록 만들기</div></div></div></section>
+        <section class="mw out notepad logwin" id="w-log"><div class="tbar"><span class="t">업데이트 기록.txt - 메모장</span><button class="cap out" aria-label="닫기">×</button></div>
+          <div class="menu"><span>파일(F)</span><span>편집(E)</span><span>서식(O)</span><span>도움말(H)</span></div>
+          <div class="body in"><div data-edit="log"><div class="txtview">🌱 오픈 전 - 야채마을 만들기
+· 레트로 홈페이지 기본 틀 (로고, 메뉴, 메신저, 어항, 야채 플레이어)
+· 주인장 소개, 만드는 중, 내 컴퓨터, 링크, 게시판, 방명록
+· 야채마을 지도 (집, 우체국, 공방, 오락실, 연못, 분수, 버스 정류장)
+· 도우미 고슴도치 까끌이 등장! 옷장도 있어요
+· 게임: 3D 핀볼 야채농장, 야채팡
+· 홈페이지 검색 기능
+· 숨겨진 이야기 (어디서 시작될까요?)
+
+🚀 2026.10.26 - 야채마을 정식 오픈!
+· 진짜 웹사이트로 오픈, 방명록·게시판 연결
+· 첫 방명록 등록
+· 숨겨진 이야기 보상에 사이버 쿠키 추가
+· 첫 번째 명예 탐정님을 위한 특별 꼬까옷 추가
+
+🎵 2026.10.27
+· 야채 플레이어에 진짜 BGM 「Bossa Nova des Jeux」 연결
+
+🔧 2026.11.06 - 대업데이트
+· 주인장 소개 · 만드는 중 · 할 일 · 편지함 · 새 소식 새 단장
+· 내 문서: 폴더, 메모, 사진첩
+· 게시판 사진 첨부 (한 글에 4장까지)
+· 게임 랭킹: 핀볼·야채팡 전체 순위
+· 방문자 수를 모든 손님 기준으로 변경
+· 업데이트 기록.txt 추가 (지금 보고 있는 이 문서!)</div></div></div></section>
         <section class="mw out" id="w-mail"><div class="tbar"><span class="t">편지함</span><button class="cap out" aria-label="닫기">×</button></div>
           <div class="body in"><div data-edit="mail"><div class="txtview">새 편지가 없습니다.</div></div></div></section>
         <section class="mw out docwin" id="w-docs"><div class="tbar"><span class="t">내 문서</span><button class="cap out" aria-label="닫기">×</button></div>
@@ -2205,7 +2234,7 @@ icon(document.getElementById('noteic'),'note');
 })();
 
 /* 동작 */
-const POPS=['w-todo','w-mail','w-docs','w-rank','w-pond','w-bag','w-gbook','w-drawer','w-letter','w-note','w-bus','w-plaza','w-stairs','w-work','w-end','w-stone','w-house','w-post','w-me','w-likes','w-proj','w-map','w-pin','w-games','w-bub','w-search'],popwrap=document.getElementById('popwrap');
+const POPS=['w-log','w-todo','w-mail','w-docs','w-rank','w-pond','w-bag','w-gbook','w-drawer','w-letter','w-note','w-bus','w-plaza','w-stairs','w-work','w-end','w-stone','w-house','w-post','w-me','w-likes','w-proj','w-map','w-pin','w-games','w-bub','w-search'],popwrap=document.getElementById('popwrap');
 function go(id){if(id==='w-games')ARG.ev('arcade');
   if(id==='w-house'&&ARG.has('trash')){const c=document.getElementById('room'),x=c.getContext('2d');x.fillStyle='#ffe000';x.beginPath();x.arc(97,64,4,0,7);x.fill();}
   goT=Date.now();
@@ -2331,8 +2360,9 @@ const YCblob=(function(){const C=new Map();
     proj:'핀볼 게임: 60\n야채마을: 70\n수행평가: 30',
     todo:'1. 핀볼 공 튕기기 고치기\n2. 수행평가 준비하기\n3. 방명록 만들기',
     mail:'새 편지가 없습니다.',
+    log:'🌱 오픈 전 - 야채마을 만들기\n· 레트로 홈페이지 기본 틀 (로고, 메뉴, 메신저, 어항, 야채 플레이어)\n· 주인장 소개, 만드는 중, 내 컴퓨터, 링크, 게시판, 방명록\n· 야채마을 지도 (집, 우체국, 공방, 오락실, 연못, 분수, 버스 정류장)\n· 도우미 고슴도치 까끌이 등장! 옷장도 있어요\n· 게임: 3D 핀볼 야채농장, 야채팡\n· 홈페이지 검색 기능\n· 숨겨진 이야기 (어디서 시작될까요?)\n\n🚀 2026.10.26 - 야채마을 정식 오픈!\n· 진짜 웹사이트로 오픈, 방명록·게시판 연결\n· 첫 방명록 등록\n· 숨겨진 이야기 보상에 사이버 쿠키 추가\n· 첫 번째 명예 탐정님을 위한 특별 꼬까옷 추가\n\n🎵 2026.10.27\n· 야채 플레이어에 진짜 BGM 「Bossa Nova des Jeux」 연결\n\n🔧 2026.11.06 - 대업데이트\n· 주인장 소개 · 만드는 중 · 할 일 · 편지함 · 새 소식 새 단장\n· 내 문서: 폴더, 메모, 사진첩\n· 게시판 사진 첨부 (한 글에 4장까지)\n· 게임 랭킹: 핀볼·야채팡 전체 순위\n· 방문자 수를 모든 손님 기준으로 변경\n· 업데이트 기록.txt 추가 (지금 보고 있는 이 문서!)',
     news:'[만드는 중] 핀볼 게임 60% 완성!\n공이 벽에 튕기는 부분을 고치는 중이에요.\n\n[내 컴퓨터] 내 컴퓨터 코너 오픈\n아이콘을 눌러 보세요.\n\n[방명록] 방명록 오픈!'};
-  const HINT={me:'한 줄에 하나씩 "항목: 내용" 으로 적어요. (예: 좋아하는 것: 당근)',proj:'한 줄에 하나씩 "이름: 숫자" 로 적으면 진행 막대가 그려져요. (예: 야채마을: 80)',todo:'자유롭게 적어요. 메모장처럼 보여요.',mail:'방문자들이 읽을 편지를 적어요. 여러 통이면 빈 줄로 나눠 주세요.',news:'소식 하나는 첫 줄이 제목, 다음 줄부터 설명이에요. 소식끼리는 빈 줄로 나눠요. 제목 앞에 [게시판] [방명록] [만드는 중] [내 컴퓨터] [내 문서] [랭킹] [주인장] [지도] 를 붙이면 누르면 그 창이 열려요. 맨 위 소식이 제일 먼저 보여요.'};
+  const HINT={me:'한 줄에 하나씩 "항목: 내용" 으로 적어요. (예: 좋아하는 것: 당근)',proj:'한 줄에 하나씩 "이름: 숫자" 로 적으면 진행 막대가 그려져요. (예: 야채마을: 80)',todo:'자유롭게 적어요. 메모장처럼 보여요.',mail:'방문자들이 읽을 편지를 적어요. 여러 통이면 빈 줄로 나눠 주세요.',log:'메모장처럼 자유롭게 적어요. 새 업데이트는 맨 아래에 이어서 쓰면 돼요.',news:'소식 하나는 첫 줄이 제목, 다음 줄부터 설명이에요. 소식끼리는 빈 줄로 나눠요. 제목 앞에 [게시판] [방명록] [만드는 중] [내 컴퓨터] [내 문서] [랭킹] [주인장] [지도] 를 붙이면 누르면 그 창이 열려요. 맨 위 소식이 제일 먼저 보여요.'};
   const vw=t=>[...t].reduce((a,c)=>a+(c.charCodeAt(0)>0x1100?2:1),0);
   const R={
     me:(el,t)=>{const tb=document.createElement('table');tb.className='old';t.split('\n').filter(l=>l.trim()).forEach(l=>{const tr=document.createElement('tr'),i=l.indexOf(':');
@@ -2346,6 +2376,7 @@ const YCblob=(function(){const C=new Map();
         const b=document.createElement('button');b.type='button';b.textContent=ti;if(to)b.onclick=()=>go(to);else b.style.cursor='default';el.appendChild(b);
         if(i===0&&ls.length){const n=document.createElement('span');n.className='blink';n.textContent=' NEW';n.style.cssText='color:#e00;font-weight:700;font-size:11px';b.appendChild(n);}
         const d=ls.slice(1).join('\n').trim();if(d){const p=document.createElement('p');p.textContent=d;p.style.whiteSpace='pre-line';el.appendChild(p);}});},
+    log:(el,t)=>{const d=document.createElement('div');d.className='txtview';d.textContent=t;el.appendChild(d);},
     todo:(el,t)=>{const d=document.createElement('div');d.className='txtview';d.textContent=t;el.appendChild(d);},
     mail:(el,t)=>{const d=document.createElement('div');d.className='txtview';d.textContent=t||'새 편지가 없습니다.';el.appendChild(d);}};
   const boxes=[...document.querySelectorAll('[data-edit]')];
@@ -2354,7 +2385,7 @@ const YCblob=(function(){const C=new Map();
       const show=()=>{el.textContent='';R[k](el,text);};
       try{const d=await r.db.doc('site/'+k).get();if(d.exists&&typeof d.data().text==='string'){text=d.data().text;show();}}catch(e){}
       if(!r.owner)continue;
-      const b=document.createElement('button');b.className='btn out edbtn';b.textContent=k==='news'?'✏️ 소식 쓰기':'✏️ 수정하기 (주인장)';el.after(b);
+      const b=document.createElement('button');b.className='btn out edbtn';b.textContent=k==='news'?'✏️ 소식 쓰기':k==='log'?'✏️ 기록 이어 쓰기':'✏️ 수정하기 (주인장)';el.after(b);
       b.onclick=()=>{b.hidden=true;el.textContent='';const box=document.createElement('div');box.className='edbox';
         const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('aria-label','내용 고치기');ta.rows=Math.max(5,text.split('\n').length+1);
         const h=document.createElement('div');h.className='hint';h.textContent=HINT[k];
