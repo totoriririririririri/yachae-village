@@ -40,7 +40,7 @@ function Q(path,cons){return{
 function D(path){return{
   set:data=>F.setDoc(F.doc(fs,path),data),update:data=>F.updateDoc(F.doc(fs,path),data),delete:()=>F.deleteDoc(F.doc(fs,path)),
   get:async()=>wrapSnap(await F.getDoc(F.doc(fs,path)))};}
-const db={collection:p=>Q(p,[]),doc:p=>D(p)};
+const db={collection:p=>Q(p,[]),doc:p=>D(p),incr:(p,f)=>F.setDoc(F.doc(fs,p),{[f]:F.increment(1)},{merge:true})};
 const user={id:async()=>me?me.uid:null,isOwner:async()=>!!(me&&me.email&&OWN&&me.email.toLowerCase()===OWN),can:async()=>true,canEdit:async()=>false,
   profiles:async ids=>{const out={};await Promise.all([].concat(ids).map(async id=>{try{const s=await F.getDoc(F.doc(fs,'names/'+id));out[id]={id,name:s.exists()?(s.data().name||''):''};}catch(e){out[id]={id,name:''};}}));return out;}};
 const setName=async n=>{if(me)try{await F.setDoc(F.doc(fs,'names/'+me.uid),{name:String(n).slice(0,12)});}catch(e){}};
@@ -383,6 +383,46 @@ canvas{image-rendering:pixelated}
 .popwrap #w-map{width:auto}
 .popwrap .mapbody{padding:6px; min-height:0}
 #bigmap{display:block; width:840px; height:510px}
+/* 주인장 편집 */
+.edbtn{display:block; margin:8px 0 0 auto; font:12px var(--gulim); padding:2px 10px}
+.edbox{display:flex; flex-direction:column; gap:5px}
+.edbox textarea{font:13px/1.6 var(--gulim); border:2px inset #ddd; padding:4px 6px; resize:vertical; min-height:120px}
+.edbox .hint{font:11px var(--gulim); color:#777}
+.edbox .row{display:flex; gap:6px; justify-content:flex-end} .edbox .row .btn{min-width:0; padding:2px 12px}
+.txtview{font:13px/1.7 var(--gulim); white-space:pre-wrap; word-break:break-word; background:#fff; border:2px inset #ddd; padding:8px 10px; min-height:90px; max-height:50vh; overflow:auto}
+.notepad .menu{border-bottom:1px solid var(--hi)}
+/* 내 문서 */
+.popwrap .docwin{width:600px}
+.doctool{display:flex; flex-wrap:wrap; gap:4px; padding:4px 6px; border-bottom:1px solid var(--hi)}
+.doctool .btn{min-width:0; padding:2px 8px; font:12px var(--gulim)}
+.docgrid{max-height:46vh; overflow:auto; align-content:flex-start}
+.docgrid .fico img{width:44px; height:36px; object-fit:cover; border:1px solid #888; background:#eee}
+.docgrid .fico span{word-break:break-all; text-align:center}
+.docgrid .empty{font:12px var(--gulim); color:#888; padding:10px}
+.docview{border-top:2px groove #fff; background:#f4f4ec; padding:8px 10px; max-height:52vh; overflow:auto; font:13px var(--gulim)}
+.docview h4{margin:0 0 6px; font:700 13px var(--gulim); color:#000080}
+.docview img.full{display:block; max-width:100%; max-height:44vh; margin:0 auto; border:2px inset #ddd; background:#fff}
+.docview input,.docview textarea{font:13px var(--gulim); border:2px inset #ddd; padding:3px 5px; width:100%; box-sizing:border-box}
+.docview textarea{min-height:140px; resize:vertical}
+.docview .row{display:flex; gap:6px; justify-content:flex-end; margin-top:6px; flex-wrap:wrap} .docview .row .btn{min-width:0; padding:2px 10px}
+/* 랭킹 */
+.popwrap .rankwin{width:460px}
+.ranktabs{display:flex; gap:4px; padding:6px 8px 0}
+.ranktabs button{font:12px var(--gulim); padding:3px 12px}
+.ranktabs button[aria-pressed="true"]{background:#fff; font-weight:700}
+.ranklist{margin:0; padding:6px 10px 10px 34px; font:13px/1.8 "GulimChe",ui-monospace,monospace; background:#000; color:#ffe000; max-height:56vh; overflow:auto}
+.ranklist li span{color:#5ad8ff} .ranklist li b{float:right; font-weight:400} .ranklist li.me{background:#203a80}
+.hof .more{display:block; margin:4px auto 0; font:11px var(--gulim); padding:1px 8px; min-width:0}
+/* 게시판 사진 */
+.bpicrow{display:flex; flex-wrap:wrap; gap:6px; align-items:center}
+.bpicrow label{font:12px var(--gulim); cursor:pointer}
+.bpics{display:flex; gap:6px; flex-wrap:wrap}
+.bpics div{position:relative} .bpics img{width:64px; height:64px; object-fit:cover; border:1px solid #888}
+.bpics button{position:absolute; top:-6px; right:-6px; width:18px; height:18px; padding:0; font:11px/1 sans-serif; border-radius:50%; border:1px solid #800; background:#fff; color:#c00; cursor:pointer}
+.ppics{display:flex; flex-direction:column; gap:8px; margin:8px 0}
+.ppics img{max-width:100%; max-height:420px; align-self:flex-start; border:2px solid #fff; box-shadow:1px 1px 0 #888,2px 2px 4px rgba(0,0,0,.2); cursor:zoom-in}
+.lightbox{position:fixed; inset:0; z-index:40; background:rgba(0,0,20,.82); display:grid; place-items:center; cursor:zoom-out}
+.lightbox img{max-width:92vw; max-height:90vh; border:3px solid #fff}
 /* 게시판 */
 .popwrap .board{width:560px}
 .board .body{max-height:70vh; overflow:auto; padding:0}
@@ -419,6 +459,7 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
 .likes{list-style:none; margin:0; padding:0; color:#6600cc; font-weight:700}
 .likes li{display:flex; gap:6px; align-items:center}
 .likes img{width:14px; height:14px}
+.prjt{border-collapse:collapse; font:12px/1.8 "GulimChe","굴림체",ui-monospace,monospace} .prjt td{padding:0 6px 0 0; white-space:nowrap} .prjt td:nth-child(3){text-align:right}
 .prj{font:12px/1.8 "GulimChe","굴림체",ui-monospace,monospace; white-space:pre; margin:0; overflow-x:auto}
 .cons{display:block; width:160px; height:auto; margin-top:6px}
 .desk{background:linear-gradient(180deg,#5aa8ff 0,#bfe4ff 58%,#8ad84a 59%,#3a9a1a 100%); border:2px inset #ddd; padding:10px; display:grid; grid-template-columns:repeat(6,1fr); gap:8px 4px}
@@ -490,7 +531,7 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
     <div class="subbar">
       <span class="qwrap"><input type="text" id="q" aria-label="검색어" placeholder="" autocomplete="off"><span class="qhist" id="qhist" hidden><b>최근 검색어</b></span></span><button class="s" id="qbtn">검색</button>
       <div class="sp"></div>
-      <select id="places" aria-label="가볼 곳"><option value="">가볼 곳 ▾</option><option value="w-me">주인장 소개</option><option value="w-likes">게시판</option><option value="w-proj">만드는 중</option><option value="w-pc">내 컴퓨터</option><option value="w-guest">방명록</option><option value="w-link">링크</option></select>
+      <select id="places" aria-label="가볼 곳"><option value="">가볼 곳 ▾</option><option value="w-me">주인장 소개</option><option value="w-likes">게시판</option><option value="w-proj">만드는 중</option><option value="w-pc">내 컴퓨터</option><option value="w-docs">내 문서</option><option value="w-rank">게임 랭킹</option><option value="w-guest">방명록</option><option value="w-link">링크</option></select>
     </div>
 
     <div class="grid">
@@ -541,10 +582,10 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
         <section class="mw out wide" id="w-pc"><div class="tbar"><span class="t">내 컴퓨터</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in">
           <div class="desk">
             <button class="ico" data-ic2="pc" data-msg="야채 95&#10;펜티엄 133MHz · 램 16MB&#10;하드디스크 1.2GB 중 300MB 남음"><canvas width="32" height="32"></canvas><span>내 컴퓨터</span></button>
-            <button class="ico" data-ic2="folder" data-msg="내 문서 폴더에 파일이 3개 있습니다.&#10;핀볼.py · 야채팡.exe · 수행평가.hwp"><canvas width="32" height="32"></canvas><span>내 문서</span></button>
-            <button class="ico" data-ic2="note" data-msg="할 일.txt&#10;1. 핀볼 공 튕기기 고치기&#10;2. 수행평가 준비하기&#10;3. 방명록 만들기"><canvas width="32" height="32"></canvas><span>할 일.txt</span></button>
+            <button class="ico" data-ic2="folder" data-run="w-docs"><canvas width="32" height="32"></canvas><span>내 문서</span></button>
+            <button class="ico" data-ic2="note" data-run="w-todo"><canvas width="32" height="32"></canvas><span>할 일.txt</span></button>
             <button class="ico" data-ic2="globe" data-msg="야채마을에 연결되었습니다.&#10;속도: 56.6Kbps"><canvas width="32" height="32"></canvas><span>인터넷</span></button>
-            <button class="ico" data-ic2="mail" data-msg="새 편지가 없습니다."><canvas width="32" height="32"></canvas><span>편지함</span></button>
+            <button class="ico" data-ic2="mail" data-run="w-mail"><canvas width="32" height="32"></canvas><span>편지함</span></button>
             <button class="ico" data-ic2="trash" data-msg="휴지통이 비어 있습니다."><canvas width="32" height="32"></canvas><span>휴지통</span></button>
           </div>
         </div></section>
@@ -556,7 +597,7 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
     </div>
   </section>
         <section class="mw out wide" id="w-link"><div class="tbar"><span class="t">링크</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in">
-          당신은 이 컴퓨터에서 <span class="counter" id="counter"></span> 번째로 오셨습니다.<br>
+          당신은 야채마을의 <span class="counter" id="counter"></span> 번째 손님입니다!<span id="counter-tot" style="font-size:11px;color:#666"></span><br>
           [ <button class="lk" id="ring-prev">◀ 이전</button> | 채소 웹링 | <button class="lk" id="ring-next">다음 ▶</button> ]
           <div class="badges"><canvas data-badge="0" width="88" height="31"></canvas><canvas data-badge="1" width="88" height="31"></canvas><canvas data-badge="2" width="88" height="31"></canvas></div>
         </div></section>
@@ -605,19 +646,20 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
 
 <div class="popwrap" id="popwrap" hidden>
         <section class="mw out" id="w-me"><div class="tbar"><span class="t">주인장 소개</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in">
-          <table class="old"><tr><td>닉네임</td><td>유채</td></tr><tr><td>하는 일</td><td>학생 · 코딩</td></tr><tr><td>관심</td><td>파이썬, 레트로 웹, 게임</td></tr><tr><td>한마디</td><td>만들고 싶은 게 많아요!!</td></tr></table>
+          <div data-edit="me"><table class="old"><tr><td>닉네임</td><td>유채</td></tr><tr><td>하는 일</td><td>학생 · 코딩</td></tr><tr><td>관심</td><td>파이썬, 레트로 웹, 게임</td></tr><tr><td>한마디</td><td>만들고 싶은 게 많아요!!</td></tr></table></div>
         </div></section>
         <section class="mw out board" id="w-likes"><div class="tbar"><span class="t">야채마을 게시판</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in">
           <div class="bhead"><b>♥ 야채마을 게시판</b><span id="bcount"></span><button class="btn out" id="bwrite" hidden>글쓰기</button></div>
           <form class="bform" id="bform" hidden><input id="btitle" maxlength="60" placeholder="제목" aria-label="제목"><textarea id="bbody" maxlength="3000" rows="6" placeholder="내용" aria-label="내용"></textarea>
+            <div class="bpicrow"><label class="btn out">📷 사진 추가 (최대 4장)<input type="file" id="bpicin" accept="image/*" multiple hidden></label><div class="bpics" id="bpics"></div></div>
             <div class="brow"><button class="btn out" type="submit">올리기</button><button class="btn out" type="button" id="bcancel">취소</button></div></form>
           <div class="bnote" id="bnote">게시판을 불러오는 중...</div>
           <ol class="blist" id="blist"></ol>
         </div></section>
         <section class="mw out" id="w-proj"><div class="tbar"><span class="t">만드는 중 <span class="blink">NEW!</span></span><button class="cap out" aria-label="닫기">×</button></div><div class="body in">
-<pre class="prj">핀볼 게임  [■■■■■■□□□□] 60%
+<div data-edit="proj"><pre class="prj">핀볼 게임  [■■■■■■□□□□] 60%
 야채마을  [■■■■■■■□□□] 70%
-수행평가  [■■■□□□□□□□] 30%</pre>
+수행평가  [■■■□□□□□□□] 30%</pre></div>
           <canvas class="cons" id="cons" width="160" height="48" aria-label="공사중"></canvas>
         </div></section>
         <section class="mw out pinwin" id="w-pin"><div class="tbar"><span class="t">3D 핀볼 - 야채농장</span><button class="cap out" aria-label="닫기">×</button></div>
@@ -633,8 +675,8 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
                 <div class="r"><span>최고 점수</span><b id="pin-hi">0</b></div>
                 <div class="ms" id="pin-msg">스페이스바를 꾹 눌렀다 떼서 공을 쏘세요!</div>
               </div>
-              <label class="pname">플레이어 이름 <input id="pin-name" maxlength="8" value="야채"></label>
-              <div class="hof"><b>★ 명예의 전당 ★</b><ol id="pin-hof"></ol></div>
+              <label class="pname">플레이어 이름 <input id="pin-name" maxlength="8" placeholder="이름 입력"></label>
+              <div class="hof"><b>★ 야채마을 랭킹 ★</b><ol id="pin-hof"></ol><button class="btn out more" data-rank="pin">전체 순위 보기</button></div>
               <div class="pinhelp">Z/← 왼쪽 · ///→ 오른쪽<br>스페이스 꾹 눌렀다 떼면 발사 · F2 새 게임</div>
               <div class="pinbtns">
                 <button class="btn out" id="pin-new">새 게임</button>
@@ -660,6 +702,8 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
               <div class="bublogo">야채팡!</div>
               <div class="lcd2"><div class="r"><span>점수</span></div><div class="sc" id="bub-score">0</div><div class="r"><span>최고 점수</span><b id="bub-hi">0</b></div><div class="ms" id="bub-msg">같은 색 3개를 붙이면 팡!</div></div>
               <div class="pinhelp">마우스로 조준하고 클릭해서 쏘세요.<br>7번 쏠 때마다 천장이 한두 칸 내려와요!<br>아래 선에 닿으면 게임 끝.</div>
+              <label class="pname" style="color:#335">플레이어 이름 <input id="bub-name" maxlength="8" placeholder="이름 입력"></label>
+              <div class="hof"><b>★ 야채팡 랭킹 ★</b><ol id="bub-hof"></ol><button class="btn out more" data-rank="bub">전체 순위 보기</button></div>
               <button class="btn out" id="bub-new">새 게임</button>
             </div>
           </div>
@@ -756,6 +800,26 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
         <section class="mw out bagwin" id="w-bag"><div class="tbar"><span class="t">가방</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in" style="padding:0;min-height:0">
           <div class="baggrid" id="baggrid"></div><div class="bagdesc" id="bagdesc">아이템을 눌러 보세요.</div>
         </div></section>
+        <section class="mw out notepad" id="w-todo"><div class="tbar"><span class="t">할 일.txt - 메모장</span><button class="cap out" aria-label="닫기">×</button></div>
+          <div class="menu"><span>파일(F)</span><span>편집(E)</span><span>서식(O)</span><span>도움말(H)</span></div>
+          <div class="body in"><div data-edit="todo"><div class="txtview">1. 핀볼 공 튕기기 고치기
+2. 수행평가 준비하기
+3. 방명록 만들기</div></div></div></section>
+        <section class="mw out" id="w-mail"><div class="tbar"><span class="t">편지함</span><button class="cap out" aria-label="닫기">×</button></div>
+          <div class="body in"><div data-edit="mail"><div class="txtview">새 편지가 없습니다.</div></div></div></section>
+        <section class="mw out docwin" id="w-docs"><div class="tbar"><span class="t">내 문서</span><button class="cap out" aria-label="닫기">×</button></div>
+          <div class="menu"><span>파일(F)</span><span>편집(E)</span><span>보기(V)</span><span>도움말(H)</span></div>
+          <div class="loc"><b>주소(D)</b><div class="box in" id="doc-path">C:\야채마을\내 문서</div></div>
+          <div class="doctool"><button class="btn out" id="doc-up" disabled>⬆ 위로</button><span id="doc-own" hidden style="display:contents"><button class="btn out" id="doc-nf">📁 새 폴더</button><button class="btn out" id="doc-nm">📝 새 메모</button><label class="btn out" style="cursor:pointer">🖼 사진 올리기<input type="file" id="doc-np" accept="image/*" multiple hidden></label><button class="btn out" id="doc-rmdir" hidden>🗑 이 폴더 지우기</button></span></div>
+          <div class="body in gfold docgrid" id="doc-grid"><div class="empty">불러오는 중...</div></div>
+          <div class="docview" id="docview" hidden></div>
+          <div class="status"><div class="in" id="doc-st">개체 0개</div><div class="in"></div></div>
+        </section>
+        <section class="mw out rankwin" id="w-rank"><div class="tbar"><span class="t">🏅 야채마을 게임 랭킹</span><button class="cap out" aria-label="닫기">×</button></div>
+          <div class="ranktabs" role="tablist"><button class="out" data-rk="pin" aria-pressed="true">3D 핀볼</button><button class="out" data-rk="bub" aria-pressed="false">야채팡</button></div>
+          <div class="body in" style="padding:6px"><ol class="ranklist" id="rank-list"><li>불러오는 중...</li></ol>
+          <div style="font:11px var(--gulim);color:#666;margin-top:6px">게임이 끝나면 자기 최고 점수가 자동으로 올라가요. 이름은 게임 화면의 "플레이어 이름"으로 바꿀 수 있어요.</div></div>
+        </section>
         <section class="mw out gbwin" id="w-gbook"><div class="tbar"><span class="t">방명록 - 전체 보기</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in gbbig">
           <form class="gbform" id="gbform2" hidden><input class="gbnick" maxlength="12" placeholder="닉네임" aria-label="닉네임" hidden><textarea id="gbtext2" rows="3" maxlength="200" placeholder="야채마을에 다녀간 흔적을 남겨 주세요!" aria-label="방명록 글"></textarea><button class="btn out" type="submit">남기기</button></form>
           <div class="gbnote" id="gbnote2"></div>
@@ -1305,8 +1369,14 @@ if(aqOn)aqSay('재생 중: '+SCN[aqScene]);
   const wbtn=document.getElementById('bwrite'),form=document.getElementById('bform');
   if(owner){wbtn.hidden=false;wbtn.onclick=()=>{form.hidden=!form.hidden;if(!form.hidden)document.getElementById('btitle').focus();};}
   document.getElementById('bcancel').onclick=()=>{form.hidden=true;};
+  let draft=[];const bpics=document.getElementById('bpics'),bpicin=document.getElementById('bpicin');
+  const drawDraft=()=>{bpics.textContent='';draft.forEach((d,i)=>{const w=document.createElement('div');const im=document.createElement('img');im.src=d.t;const x=document.createElement('button');x.type='button';x.textContent='×';x.setAttribute('aria-label','사진 빼기');x.onclick=()=>{draft.splice(i,1);drawDraft();};w.append(im,x);bpics.appendChild(w);});};
+  bpicin.onchange=async()=>{const fs=[...bpicin.files];bpicin.value='';for(const f of fs){if(draft.length>=4){msg('게시판','사진은 한 글에 4장까지 올릴 수 있어요.');break;}try{draft.push({full:await YCimg(f,1000,700000),t:await YCimg(f,160,40000)});}catch(e){msg('게시판','사진을 읽지 못했어요: '+f.name);}}drawDraft();};
   form.onsubmit=async e=>{e.preventDefault();const t=document.getElementById('btitle').value.trim(),b=document.getElementById('bbody').value.trim();if(!t){document.getElementById('btitle').focus();return;}
-    try{await db.collection('posts').add({title:t.slice(0,60),body:b.slice(0,3000),at:Date.now(),by:me});form.reset();form.hidden=true;}catch(err){msg('게시판',err.code==='quota_exceeded'?'게시판이 꽉 찼어요. 오래된 글을 지워 주세요.':'글을 올리지 못했어요. 잠시 후 다시 해 주세요.');}};
+    const sb=form.querySelector('[type=submit]');sb.disabled=true;sb.textContent='올리는 중...';
+    try{const pics=[];for(const d of draft){const r=await db.collection('blobs').add({img:d.full,at:Date.now()});pics.push({id:r.id,t:d.t});}
+      await db.collection('posts').add({title:t.slice(0,60),body:b.slice(0,3000),pics,at:Date.now(),by:me});form.reset();draft=[];drawDraft();form.hidden=true;}catch(err){msg('게시판',err.code==='quota_exceeded'?'게시판이 꽉 찼어요. 오래된 글을 지워 주세요.':'글을 올리지 못했어요. 사진이 너무 크거나 잠시 문제가 생겼어요.');}
+    sb.disabled=false;sb.textContent='올리기';};
   let posts=[],coms=[],open=new Set(),names={};
   const fmt=t=>{const d=new Date(t);return (d.getMonth()+1)+'/'+d.getDate();};
   const fmt2=t=>{const d=new Date(t);return fmt(t)+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');};
@@ -1329,9 +1399,10 @@ if(aqOn)aqSay('재생 중: '+SCN[aqScene]);
       row.append(no,tt,cc,dt);row.onclick=()=>{open.has(p.id)?open.delete(p.id):open.add(p.id);render();};
       li.appendChild(row);
       if(open.has(p.id)){const bd=document.createElement('div');bd.className='pbody';bd.textContent=p.body||'';
+        if(p.pics&&p.pics.length){const pw=document.createElement('div');pw.className='ppics';p.pics.forEach(pc2=>{const im=document.createElement('img');im.alt='게시글 사진';im.src=YCblob.cached(pc2.id)||pc2.t;YCblob.get(pc2.id).then(u=>{if(u)im.src=u;});im.onclick=()=>YClight(im.src);pw.appendChild(im);});bd.appendChild(pw);}
         if(owner){const d=document.createElement('button');d.className='del';d.textContent='글 삭제';d.style.marginLeft='8px';
           d.onclick=async()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='정말 지울까요? 한 번 더 누르세요';return;}
-            try{for(const c of pc)await db.doc('comments/'+c.id).delete();await db.doc('posts/'+p.id).delete();}catch(err){msg('게시판','지우지 못했어요.');}};bd.appendChild(d);}
+            try{for(const c of pc)await db.doc('comments/'+c.id).delete();for(const q of (p.pics||[]))try{await db.doc('blobs/'+q.id).delete();}catch(e){}await db.doc('posts/'+p.id).delete();}catch(err){msg('게시판','지우지 못했어요.');}};bd.appendChild(d);}
         const ul=document.createElement('ul');ul.className='coms';
         pc.forEach(c=>{const l=document.createElement('li');const w=document.createElement('span');w.className='who';w.dataset.uid=c.by||'';w.textContent=label(c.by);
           const tx=document.createElement('span');tx.className='tx';tx.textContent=c.text;const wh=document.createElement('span');wh.className='when';wh.textContent=fmt2(c.at);l.append(w,tx,wh);
@@ -1387,13 +1458,13 @@ let ball=null,score=0,balls=3,mult=1,charge=0,charging=false,over=true,held=0,fl
 const say=(t,dur=180)=>{elMsg.textContent=t;msgT=dur;};
 const nameIn=document.getElementById('pin-name'),hofEl=document.getElementById('pin-hof'),plEl=document.getElementById('pin-pl');
 let hof=[];try{hof=JSON.parse(localStorage.getItem('yachae-pin-hof')||'[]');}catch(e){}
-try{const n=localStorage.getItem('yachae-pin-name');if(n)nameIn.value=n;}catch(e){}
-const pname=()=>nameIn.value.trim()||'야채';plEl.textContent=pname();
+try{const n=localStorage.getItem('yachae-pin-name')||localStorage.getItem('yc-nick');if(n)nameIn.value=n;}catch(e){}
+const pname=()=>nameIn.value.trim()||'손님';plEl.textContent=pname();
 nameIn.addEventListener('input',()=>{plEl.textContent=pname();try{localStorage.setItem('yachae-pin-name',pname());}catch(e){}});
-function drawHof(){hofEl.textContent='';const rows=hof.length?hof:[];for(let i=0;i<5;i++){const li=document.createElement('li');const a=document.createElement('span');const b=document.createElement('b');
+function drawHof(){hofEl.textContent='';const rows=window.__pinG||hof;for(let i=0;i<5;i++){const li=document.createElement('li');const a=document.createElement('span');const b=document.createElement('b');
   a.textContent=rows[i]?rows[i].n:'---';b.textContent=rows[i]?rows[i].s.toLocaleString():'0';b.style.fontWeight='400';li.append(a,b);hofEl.appendChild(li);}}
-drawHof();
-function record(){if(!score)return;hof.push({n:pname(),s:score});hof.sort((a,b)=>b.s-a.s);hof=hof.slice(0,5);try{localStorage.setItem('yachae-pin-hof',JSON.stringify(hof));}catch(e){}drawHof();
+drawHof();window.__pinDraw=drawHof;
+function record(){if(!score)return;if(window.YCS)YCS.score('pin',pname(),score);hof.push({n:pname(),s:score});hof.sort((a,b)=>b.s-a.s);hof=hof.slice(0,5);try{localStorage.setItem('yachae-pin-hof',JSON.stringify(hof));}catch(e){}drawHof();
   const rk=hof.findIndex(h=>h.s===score&&h.n===pname());if(rk>=0)say('게임 끝! '+pname()+'님 '+(rk+1)+'위 등록! '+score.toLocaleString()+'점',99999);}
 function newBall(){ball={x:333,y:556,vx:0,vy:0,inLane:true};}
 function newGame(){score=0;balls=3;mult=1;over=false;potato=0;arrows.forEach(a=>a.lit=false);spin.v=0;held=0;lanes.forEach(l=>l.lit=false);tg.forEach(t=>t.down=false);newBall();upd();say('새 게임! 스페이스바로 공을 쏘세요.');}
@@ -1548,8 +1619,8 @@ function place(r,c,col){grid[r][c]=col;shots++;stickSound();
     say(orph.length?`팡! ${grp.length}개 + 덤으로 ${orph.length}개!`:`팡! ${grp.length}개`);}
   if(shots>=7){shots=0;const n=Math.random()<.35?2:1;for(let k=0;k<n;k++){off^=1;grid.unshift(row().map((v,i)=>(odd(0)&&i===9)?null:v));grid.pop();}say(n===2?'천장이 두 칸 내려왔어요!':'천장이 내려왔어요!');}
   upd();
-  if(!present().length){over=true;score+=1000;upd();say('전부 터뜨렸어요! 보너스 +1,000');return;}
-  for(let a=LIMIT;a<grid.length;a++)if(grid[a].some(v=>v!=null)){over=true;say('게임 끝! '+score.toLocaleString()+'점. 새 게임을 눌러 보세요.');return;}
+  if(!present().length){over=true;score+=1000;upd();say('전부 터뜨렸어요! 보너스 +1,000');if(window.YCS)YCS.score('bub',YCS.name(),score);return;}
+  for(let a=LIMIT;a<grid.length;a++)if(grid[a].some(v=>v!=null)){over=true;say('게임 끝! '+score.toLocaleString()+'점. 새 게임을 눌러 보세요.');if(window.YCS)YCS.score('bub',YCS.name(),score);return;}
   cur=next;next=pick();}
 function ball(px,py,col,r=R-1){const c=COLS[col];x.fillStyle=rg(x,px-r*.35,py-r*.4,1,px,py,r,[[0,'#fff'],[.25,c[1]],[.6,c[0]],[1,c[2]]]);x.beginPath();x.arc(px,py,r,0,7);x.fill();
   x.strokeStyle='rgba(0,0,0,.35)';x.lineWidth=1;x.stroke();x.fillStyle='rgba(255,255,255,.9)';x.beginPath();x.ellipse(px-r*.35,py-r*.45,r*.32,r*.18,-.6,0,7);x.fill();
@@ -2134,7 +2205,7 @@ icon(document.getElementById('noteic'),'note');
 })();
 
 /* 동작 */
-const POPS=['w-pond','w-bag','w-gbook','w-drawer','w-letter','w-note','w-bus','w-plaza','w-stairs','w-work','w-end','w-stone','w-house','w-post','w-me','w-likes','w-proj','w-map','w-pin','w-games','w-bub','w-search'],popwrap=document.getElementById('popwrap');
+const POPS=['w-todo','w-mail','w-docs','w-rank','w-pond','w-bag','w-gbook','w-drawer','w-letter','w-note','w-bus','w-plaza','w-stairs','w-work','w-end','w-stone','w-house','w-post','w-me','w-likes','w-proj','w-map','w-pin','w-games','w-bub','w-search'],popwrap=document.getElementById('popwrap');
 function go(id){if(id==='w-games')ARG.ev('arcade');
   if(id==='w-house'&&ARG.has('trash')){const c=document.getElementById('room'),x=c.getContext('2d');x.fillStyle='#ffe000';x.beginPath();x.arc(97,64,4,0,7);x.fill();}
   goT=Date.now();
@@ -2154,7 +2225,7 @@ document.getElementById('places').onchange=e=>{if(e.target.value)go(e.target.val
 const dlg=document.getElementById('dlg');
 function msg(t,m){document.getElementById('dlg-t').textContent=t;document.getElementById('dlg-m').textContent=m;dlg.hidden=false;document.getElementById('dlg-ok').focus();}
 ['dlg-ok','dlg-x'].forEach(i=>document.getElementById(i).onclick=()=>dlg.hidden=true);
-document.querySelectorAll('.ico').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.ic2==='trash'&&ARG.trash())return;msg(b.querySelector('span').textContent,b.dataset.msg);}));
+document.querySelectorAll('.ico').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.ic2==='trash'&&ARG.trash())return;if(b.dataset.run){go(b.dataset.run);return;}msg(b.querySelector('span').textContent,b.dataset.msg);}));
 document.getElementById('ring-prev').onclick=document.getElementById('ring-next').onclick=()=>msg('채소 웹링','웹링에 가입한 다른 홈페이지를 찾을 수 없습니다.\n나중에 다시 시도해 주세요.');
 document.getElementById('pz1').onclick=()=>msg('야채마을 광고','축하합니다! 신선한 야채가 배달될 예정입니다.\n...는 농담이고, 이건 가짜 광고예요. 속지 마세요!');
 document.getElementById('pz2').onclick=()=>msg('경고','상품을 받으려면 주민등록번호를 입력하세요.\n...라고 하면 절대 입력하면 안 돼요! 이것도 가짜 광고랍니다.');
@@ -2202,8 +2273,165 @@ document.getElementById('qbtn').onclick=()=>doSearch(document.getElementById('q'
 document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch(e.target.value);});
 document.getElementById('q2btn').onclick=()=>doSearch(document.getElementById('q2').value);
 document.getElementById('q2').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch(e.target.value);});
-let v=1;try{v=(+localStorage.getItem('mongle-visits')||0)+1;localStorage.setItem('mongle-visits',v);}catch(e){}
-document.getElementById('counter').innerHTML=String(v).padStart(6,'0').split('').map(c=>'<b>'+c+'</b>').join('');
+/* ===================== 공용: 사진 줄이기 · 사진 저장소 · 크게 보기 ===================== */
+async function YCimg(f,max,limit){const url=URL.createObjectURL(f);
+  try{const im=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
+    let m=max,q=.82,out='';
+    for(let k=0;k<14;k++){const sc=Math.min(1,m/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');
+      c.width=Math.max(1,Math.round(im.naturalWidth*sc));c.height=Math.max(1,Math.round(im.naturalHeight*sc));
+      const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);
+      out=c.toDataURL('image/jpeg',q);if(out.length<=limit)return out;if(q>.5)q-=.12;else m*=.8;}
+    return out;}finally{URL.revokeObjectURL(url);}}
+function YClight(src){const d=document.createElement('div');d.className='lightbox';d.setAttribute('role','dialog');d.setAttribute('aria-label','사진 크게 보기');
+  const im=document.createElement('img');im.src=src;im.alt='';d.appendChild(im);d.onclick=()=>d.remove();
+  const k=e=>{if(e.key==='Escape'){d.remove();removeEventListener('keydown',k);}};addEventListener('keydown',k);document.body.appendChild(d);}
+
+/* ===================== 공용: 야채마을 서버 연결 ===================== */
+const YCS=(function(){
+  const ready=(async()=>{const C=window.claude;if(!C||!C.use)return null;
+    const [db,user]=await Promise.all([C.use('db'),C.use('user')]);if(!db)return null;
+    const me=user?await user.id():null,owner=user?await user.isOwner():false;return {db,user,me,owner};})().catch(()=>null);
+  const nameOf=()=>{const a=document.getElementById('bub-name'),b=document.getElementById('pin-name');return ((a&&a.value.trim())||(b&&b.value.trim())||'손님').slice(0,8);};
+  async function score(g,n,s){s=Math.floor(+s||0);if(s<=0)return;const r=await ready;if(!r||!r.me)return;
+    try{const ref=r.db.doc('scores_'+g+'/'+r.me),old=await ref.get();if(old.exists&&(old.data().s||0)>=s){if(old.data().n!==n)await ref.set({...old.data(),n:String(n).slice(0,12)});return;}
+      await ref.set({n:String(n||'손님').slice(0,12),s,at:Date.now(),by:r.me});}catch(e){}}
+  async function top(g,n,cb){const r=await ready;if(!r)return;
+    try{r.db.collection('scores_'+g).orderBy('s','desc').limit(n).onSnapshot(sn=>cb(sn.docs.map(d=>({id:d.id,...d.data()})),r.me),()=>{});}catch(e){}}
+  return {ready,score,top,name:nameOf};
+})();
+window.YCS=YCS;
+const YCblob=(function(){const C=new Map();
+  return {cached:id=>C.get(id)||null,
+    get:async id=>{if(C.has(id))return C.get(id);const r=await YCS.ready;if(!r)return null;try{const d=await r.db.doc('blobs/'+id).get();const u=d.exists?d.data().img:null;if(u)C.set(id,u);return u;}catch(e){return null;}}};})();
+
+/* ===================== 게임 랭킹 ===================== */
+(function(){
+  const bn=document.getElementById('bub-name'),pn=document.getElementById('pin-name');
+  try{bn.value=localStorage.getItem('yachae-pin-name')||localStorage.getItem('yc-nick')||'';}catch(e){}
+  bn.addEventListener('input',()=>{try{localStorage.setItem('yachae-pin-name',bn.value.trim());}catch(e){}if(pn.value!==bn.value){pn.value=bn.value;pn.dispatchEvent(new Event('input'));}});
+  pn.addEventListener('input',()=>{if(bn.value!==pn.value)bn.value=pn.value;});
+  const fill=(ol,rows,n,me)=>{ol.textContent='';for(let i=0;i<n;i++){const li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('b');
+      a.textContent=rows[i]?rows[i].n||'손님':'---';b.textContent=rows[i]?(+rows[i].s).toLocaleString():'0';b.style.fontWeight='400';if(rows[i]&&me&&rows[i].id===me)li.className='me';li.append(a,b);ol.appendChild(li);}};
+  const bh=document.getElementById('bub-hof');
+  let lb=[];try{const h=+localStorage.getItem('yachae-bub-hi')||0;if(h)lb=[{n:bn.value||'나',s:h}];}catch(e){}fill(bh,lb,5);
+  YCS.top('pin',5,rows=>{window.__pinG=rows;window.__pinDraw&&window.__pinDraw();});
+  YCS.top('bub',5,(rows,me)=>fill(bh,rows,5,me));
+  const list=document.getElementById('rank-list'),tabs=[...document.querySelectorAll('[data-rk]')];let cur='pin',data={pin:null,bub:null},meId=null;
+  const draw=()=>{const d=data[cur];if(!d){list.innerHTML='<li>불러오는 중... (인터넷 연결이 필요해요)</li>';return;}if(!d.length){list.innerHTML='<li>아직 기록이 없어요. 첫 번째 주인공이 되어 보세요!</li>';return;}fill(list,d,d.length,meId);};
+  const sel=g=>{cur=g;tabs.forEach(t=>t.setAttribute('aria-pressed',String(t.dataset.rk===g)));draw();};
+  tabs.forEach(t=>t.onclick=()=>sel(t.dataset.rk));
+  ['pin','bub'].forEach(g=>YCS.top(g,30,(rows,me)=>{data[g]=rows;meId=me;draw();}));
+  document.querySelectorAll('[data-rank]').forEach(b=>b.onclick=()=>{go('w-rank');sel(b.dataset.rank);});
+  draw();
+})();
+
+/* ===================== 주인장이 고칠 수 있는 칸 (소개 · 만드는 중 · 할 일 · 편지함) ===================== */
+(function(){
+  const DEF={me:'닉네임: 유채\n하는 일: 학생 · 코딩\n관심: 파이썬, 레트로 웹, 게임\n한마디: 만들고 싶은 게 많아요!!',
+    proj:'핀볼 게임: 60\n야채마을: 70\n수행평가: 30',
+    todo:'1. 핀볼 공 튕기기 고치기\n2. 수행평가 준비하기\n3. 방명록 만들기',
+    mail:'새 편지가 없습니다.'};
+  const HINT={me:'한 줄에 하나씩 "항목: 내용" 으로 적어요. (예: 좋아하는 것: 당근)',proj:'한 줄에 하나씩 "이름: 숫자" 로 적으면 진행 막대가 그려져요. (예: 야채마을: 80)',todo:'자유롭게 적어요. 메모장처럼 보여요.',mail:'방문자들이 읽을 편지를 적어요. 여러 통이면 빈 줄로 나눠 주세요.'};
+  const vw=t=>[...t].reduce((a,c)=>a+(c.charCodeAt(0)>0x1100?2:1),0);
+  const R={
+    me:(el,t)=>{const tb=document.createElement('table');tb.className='old';t.split('\n').filter(l=>l.trim()).forEach(l=>{const tr=document.createElement('tr'),i=l.indexOf(':');
+        if(i>0){const a=document.createElement('td'),b=document.createElement('td');a.textContent=l.slice(0,i).trim();b.textContent=l.slice(i+1).trim();tr.append(a,b);}
+        else{const a=document.createElement('td');a.colSpan=2;a.textContent=l.trim();a.style.background='#fff';a.style.fontWeight='400';tr.appendChild(a);}tb.appendChild(tr);});el.appendChild(tb);},
+    proj:(el,t)=>{const tb=document.createElement('table');tb.className='prjt';t.split('\n').filter(l=>l.trim()).forEach(l=>{const m=l.match(/^(.*?)[\s:：]+(\d{1,3})\s*%?\s*$/),tr=document.createElement('tr');
+        if(m){const p=Math.max(0,Math.min(100,+m[2])),k=Math.round(p/10);[m[1].trim(),'['+'■'.repeat(k)+'□'.repeat(10-k)+']',p+'%'].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td);});}
+        else{const td=document.createElement('td');td.colSpan=3;td.textContent=l;tr.appendChild(td);}tb.appendChild(tr);});el.appendChild(tb);},
+    todo:(el,t)=>{const d=document.createElement('div');d.className='txtview';d.textContent=t;el.appendChild(d);},
+    mail:(el,t)=>{const d=document.createElement('div');d.className='txtview';d.textContent=t||'새 편지가 없습니다.';el.appendChild(d);}};
+  const boxes=[...document.querySelectorAll('[data-edit]')];
+  YCS.ready.then(async r=>{if(!r)return;
+    for(const el of boxes){const k=el.dataset.edit;let text=DEF[k];
+      const show=()=>{el.textContent='';R[k](el,text);};
+      try{const d=await r.db.doc('site/'+k).get();if(d.exists&&typeof d.data().text==='string'){text=d.data().text;show();}}catch(e){}
+      if(!r.owner)continue;
+      const b=document.createElement('button');b.className='btn out edbtn';b.textContent='✏️ 수정하기 (주인장)';el.after(b);
+      b.onclick=()=>{b.hidden=true;el.textContent='';const box=document.createElement('div');box.className='edbox';
+        const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('aria-label','내용 고치기');ta.rows=Math.max(5,text.split('\n').length+1);
+        const h=document.createElement('div');h.className='hint';h.textContent=HINT[k];
+        const row=document.createElement('div');row.className='row';const ok=document.createElement('button');ok.className='btn out';ok.textContent='저장';const no=document.createElement('button');no.className='btn out';no.textContent='취소';row.append(no,ok);
+        box.append(ta,h,row);el.appendChild(box);ta.focus();
+        no.onclick=()=>{show();b.hidden=false;};
+        ok.onclick=async()=>{ok.disabled=true;ok.textContent='저장 중...';
+          try{await r.db.doc('site/'+k).set({text:ta.value.slice(0,4000),at:Date.now()});text=ta.value.slice(0,4000);show();b.hidden=false;}
+          catch(e){ok.disabled=false;ok.textContent='저장';msg('저장 실패','저장하지 못했어요. 주인장으로 로그인했는지 확인해 주세요.');}};};}
+  });
+})();
+
+/* ===================== 내 문서 (폴더 · 메모 · 사진첩) ===================== */
+(function(){
+  const grid=document.getElementById('doc-grid'),view=document.getElementById('docview'),pathEl=document.getElementById('doc-path'),st=document.getElementById('doc-st'),
+    up=document.getElementById('doc-up'),own=document.getElementById('doc-own'),rmdir=document.getElementById('doc-rmdir'),np=document.getElementById('doc-np');
+  let files=[],cur='root',R=null,shown=null;
+  const byId=id=>files.find(f=>f.id===id);
+  const kids=id=>files.filter(f=>(f.parent||'root')===id).sort((a,b)=>(a.kind==='folder'?0:1)-(b.kind==='folder'?0:1)||String(a.name).localeCompare(String(b.name),'ko'));
+  const el=(t,c,txt)=>{const e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e;};
+  const btn=(t,f)=>{const b=el('button','btn out',t);b.type='button';b.onclick=f;return b;};
+  function path(){const a=[];let c=cur;while(c&&c!=='root'){const f=byId(c);if(!f)break;a.unshift(f.name);c=f.parent||'root';}return 'C:\\야채마을\\내 문서'+(a.length?'\\'+a.join('\\'):'');}
+  function render(){if(cur!=='root'&&!byId(cur))cur='root';
+    pathEl.textContent=path();up.disabled=cur==='root';const ks=kids(cur);grid.textContent='';
+    if(!ks.length)grid.appendChild(el('div','empty',R&&R.owner?'폴더가 비어 있어요. 위의 버튼으로 폴더·메모·사진을 넣어 보세요!':'폴더가 비어 있습니다.'));
+    ks.forEach(f=>{const b=el('button','fico');b.type='button';
+      if(f.kind==='photo'&&f.t){const im=el('img');im.src=f.t;im.alt='';b.appendChild(im);}
+      else{const c=el('canvas');c.width=32;c.height=32;icon(c,f.kind==='folder'?'folder':f.kind==='photo'?'photo':'note');b.appendChild(c);}
+      b.appendChild(el('span','',f.name+(f.kind==='memo'?'.txt':f.kind==='photo'?'.jpg':'')));
+      b.onclick=()=>{if(f.kind==='folder'){cur=f.id;view.hidden=true;shown=null;render();}else open(f);};
+      b.ondblclick=b.onclick;grid.appendChild(b);});
+    st.textContent='개체 '+ks.length+'개';
+    if(R&&R.owner)rmdir.hidden=cur==='root'||ks.length>0;
+    if(shown&&!byId(shown)){view.hidden=true;shown=null;}}
+  function confirmBtn(t,f){const b=btn(t,()=>{if(b.dataset.sure!=='1'){b.dataset.sure='1';b.textContent='정말 지울까요? 한 번 더';return;}f();});return b;}
+  function open(f){shown=f.id;view.hidden=false;view.textContent='';view.appendChild(el('h4','',f.name+(f.kind==='memo'?'.txt':'.jpg')));
+    if(f.kind==='memo'){view.appendChild(el('div','txtview',f.text||''));}
+    else{const im=el('img','full');im.alt=f.name;im.src=YCblob.cached(f.blob)||f.t||'';YCblob.get(f.blob).then(u=>{if(u&&shown===f.id)im.src=u;});im.style.cursor='zoom-in';im.onclick=()=>YClight(im.src);view.appendChild(im);
+      if(f.text)view.appendChild(el('div','',f.text));}
+    const row=el('div','row');row.appendChild(btn('닫기',()=>{view.hidden=true;shown=null;}));
+    if(R&&R.owner){row.prepend(btn('✏️ 고치기',()=>editForm(f)));row.prepend(confirmBtn('🗑 지우기',async()=>{try{if(f.blob)try{await R.db.doc('blobs/'+f.blob).delete();}catch(e){}await R.db.doc('files/'+f.id).delete();view.hidden=true;shown=null;}catch(e){msg('내 문서','지우지 못했어요.');}}));}
+    view.appendChild(row);}
+  function editForm(f,kind){view.hidden=false;view.textContent='';const isNew=!f;kind=kind||(f&&f.kind);
+    view.appendChild(el('h4','',isNew?(kind==='folder'?'새 폴더 만들기':'새 메모 쓰기'):'고치기'));
+    const nm=el('input');nm.maxLength=40;nm.placeholder=kind==='folder'?'폴더 이름':kind==='photo'?'사진 이름':'메모 제목';nm.value=f?f.name:'';nm.setAttribute('aria-label','이름');view.appendChild(nm);
+    let ta=null;if(kind!=='folder'){ta=el('textarea');ta.maxLength=kind==='photo'?300:8000;ta.placeholder=kind==='photo'?'사진 설명 (안 적어도 돼요)':'내용';ta.value=f?f.text||'':'';ta.style.marginTop='6px';ta.setAttribute('aria-label','내용');if(kind==='photo')ta.style.minHeight='60px';view.appendChild(ta);}
+    const row=el('div','row');const ok=btn(isNew?'만들기':'저장',async()=>{const n=nm.value.trim();if(!n){nm.focus();return;}ok.disabled=true;
+      try{if(isNew){await R.db.collection('files').add({kind,name:n.slice(0,40),parent:cur,text:ta?ta.value.slice(0,8000):'',at:Date.now(),by:R.me});view.hidden=true;}
+        else{const d={...f};delete d.id;d.name=n.slice(0,40);if(ta)d.text=ta.value.slice(0,8000);await R.db.doc('files/'+f.id).set(d);shown=f.id;setTimeout(()=>{const g=byId(f.id);if(g)open(g);},300);}}
+      catch(e){ok.disabled=false;msg('내 문서','저장하지 못했어요. 주인장으로 로그인했는지 확인해 주세요.');}});
+    row.append(btn('취소',()=>{f?open(f):(view.hidden=true);}),ok);view.appendChild(row);nm.focus();}
+  up.onclick=()=>{const f=byId(cur);cur=f?(f.parent||'root'):'root';view.hidden=true;shown=null;render();};
+  document.getElementById('doc-nf').onclick=()=>editForm(null,'folder');
+  document.getElementById('doc-nm').onclick=()=>editForm(null,'memo');
+  rmdir.onclick=async()=>{if(rmdir.dataset.sure!=='1'){rmdir.dataset.sure='1';rmdir.textContent='정말 지울까요? 한 번 더';setTimeout(()=>{rmdir.dataset.sure='';rmdir.textContent='🗑 이 폴더 지우기';},4000);return;}
+    const f=byId(cur);if(!f||kids(cur).length)return;try{await R.db.doc('files/'+f.id).delete();cur=f.parent||'root';rmdir.dataset.sure='';rmdir.textContent='🗑 이 폴더 지우기';render();}catch(e){msg('내 문서','지우지 못했어요.');}};
+  np.onchange=async()=>{const fs=[...np.files];np.value='';if(!fs.length)return;st.textContent='사진 올리는 중... (0/'+fs.length+')';let i=0;
+    for(const f of fs){try{const full=await YCimg(f,1200,750000),t=await YCimg(f,120,30000);const b=await R.db.collection('blobs').add({img:full,at:Date.now()});
+        await R.db.collection('files').add({kind:'photo',name:f.name.replace(/\.[^.]+$/,'').slice(0,40)||'사진',parent:cur,t,blob:b.id,text:'',at:Date.now(),by:R.me});}
+      catch(e){msg('내 문서','사진을 올리지 못했어요: '+f.name);}st.textContent='사진 올리는 중... ('+(++i)+'/'+fs.length+')';}
+    render();};
+  YCS.ready.then(r=>{R=r;if(!r){grid.textContent='';grid.appendChild(el('div','empty','내 문서는 인터넷에 연결된 야채마을에서만 열 수 있어요.'));return;}
+    if(r.owner)own.hidden=false;
+    try{r.db.collection('files').orderBy('at','asc').limit(1000).onSnapshot(sn=>{files=sn.docs.map(d=>({id:d.id,...d.data()}));render();},()=>{grid.textContent='';grid.appendChild(el('div','empty','내 문서를 불러오지 못했어요.'));});}catch(e){}
+  });
+})();
+
+/* ===================== 방문자 수 (모든 손님 기준) ===================== */
+(function(){
+  const el=document.getElementById('counter'),tot=document.getElementById('counter-tot');
+  const show=v=>{el.innerHTML=String(v).padStart(6,'0').split('').map(c=>'<b>'+c+'</b>').join('');};
+  let local=1;try{local=(+localStorage.getItem('mongle-visits')||0)+1;localStorage.setItem('mongle-visits',local);}catch(e){}
+  let mine=0;try{mine=+localStorage.getItem('yc-visitno')||0;}catch(e){}
+  show(mine||0);
+  YCS.ready.then(async r=>{if(!r){show(local);return;}
+    try{const ref=r.db.doc('stats/visits');
+      if(!mine){if(r.db.incr)await r.db.incr('stats/visits','n');else{const g=await ref.get();await ref.set({n:(g.exists?(g.data().n||0):0)+1});}}
+      const g=await ref.get();const n=g.exists?(g.data().n||0):0;
+      if(!mine){mine=n;try{localStorage.setItem('yc-visitno',mine);}catch(e){}}
+      show(mine);if(n)tot.textContent=' (지금까지 총 '+n.toLocaleString()+'명)';}
+    catch(e){show(mine||local);}});
+})();
+
 function tick(){const d=new Date(),h=d.getHours();document.getElementById('clock').textContent=(h<12?'오전 ':'오후 ')+((h%12)||12)+':'+String(d.getMinutes()).padStart(2,'0');}
 tick();setInterval(tick,10000);
 drawHub();drawSky();drawTop();rescale();
