@@ -5,7 +5,23 @@ service cloud.firestore {
     function isOwner() { return signedIn() && request.auth.token.email == "tori09570957@gmail.com"; }
     function mine() { return signedIn() && request.resource.data.by == request.auth.uid; }
 
+    // 게시판 글 (주인장만 쓰기)
     match /posts/{id} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    // 게시판·내 문서 사진 원본 (주인장만 쓰기)
+    match /blobs/{id} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    // 내 문서: 폴더·메모·사진 (주인장만 쓰기)
+    match /files/{id} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    // 주인장 소개 · 만드는 중 · 할 일 · 편지함 (주인장만 쓰기)
+    match /site/{id} {
       allow read: if true;
       allow write: if isOwner();
     }
@@ -26,6 +42,27 @@ service cloud.firestore {
     match /names/{uid} {
       allow read: if true;
       allow write: if signedIn() && request.auth.uid == uid && request.resource.data.name is string && request.resource.data.name.size() <= 12;
+    }
+    // 게임 랭킹: 한 사람당 기록 하나, 자기 것만
+    match /scores_pin/{uid} {
+      allow read: if true;
+      allow write: if signedIn() && request.auth.uid == uid && request.resource.data.by == uid
+        && request.resource.data.s is int && request.resource.data.s >= 0 && request.resource.data.s <= 5000000
+        && request.resource.data.n is string && request.resource.data.n.size() <= 12;
+      allow delete: if isOwner();
+    }
+    match /scores_bub/{uid} {
+      allow read: if true;
+      allow write: if signedIn() && request.auth.uid == uid && request.resource.data.by == uid
+        && request.resource.data.s is int && request.resource.data.s >= 0 && request.resource.data.s <= 5000000
+        && request.resource.data.n is string && request.resource.data.n.size() <= 12;
+      allow delete: if isOwner();
+    }
+    // 방문자 수: 1씩만 올릴 수 있어요
+    match /stats/visits {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.n == 1;
+      allow update: if signedIn() && request.resource.data.n == resource.data.n + 1;
     }
   }
 }
