@@ -395,11 +395,23 @@ canvas{image-rendering:pixelated}
 /* 내 문서 */
 .popwrap .docwin{width:600px}
 .popwrap .hhwin{width:800px}
+.popwrap .farmwin{width:800px}
+.fbar{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:6px; font:12px var(--gulim)}
+.fbar .coin,.hhcoin{font:bold 12px var(--gulim); color:#7a4a00; background:#fff3b0; border:1px solid #c8a040; padding:1px 8px}
+.fbar .flab{color:#555; margin-left:6px} .fnone{color:#999; font-style:normal}
+.fseed{font:12px var(--gulim); padding:2px 6px; cursor:pointer; margin-right:3px} .fseed.on{background:#cfe2ff; box-shadow:inset 0 0 0 1px #0a46a0}
+.fbtns{display:flex; gap:6px; margin-top:6px} .fbtns .btn{min-width:0; padding:2px 12px; font:12px var(--gulim)}
+.fshop{margin-top:6px; background:#fff; padding:6px 8px; max-height:190px; overflow:auto; font:12px var(--gulim)}
+.fshop .fhead{font-weight:700; margin-bottom:4px} .fshop .fhead span{font-weight:400; color:#888; margin-left:6px}
+.fshop .row{display:flex; align-items:center; gap:8px; padding:3px 0; border-top:1px dotted #ccc}
+.fshop .row b{width:120px; font-weight:400} .fshop .row span{flex:1; color:#666} .fshop .row em{font-style:normal; color:#7a4a00; width:44px}
+.fshop .btn{min-width:0; padding:1px 10px; font:12px var(--gulim)} .fshop .btn:disabled{color:#a0a0a0; text-shadow:1px 1px 0 #fff; cursor:default}
 .hhstat{display:flex; gap:14px; align-items:center; margin-top:6px; font:12px var(--gulim)}
 .hhstat span{display:flex; align-items:center; gap:4px}
 .hhstat .hb{display:block; width:70px; height:10px; border:1px solid #555; background:#fff; box-shadow:inset 1px 1px 0 #aaa}
 .hhstat .hb b{display:block; height:100%; width:50%; transition:width .4s}
 .hhstat .hhlove{margin-left:auto; color:#d0306a; font-weight:700}
+.hhstat .hhcoin{margin-left:auto} .hhstat .hhcoin+.hhlove{margin-left:6px}
 .hhbtns{display:flex; justify-content:space-between; gap:6px; margin-top:8px}
 .hhbtns button{flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding:6px 0 5px; border-radius:50% / 40%; font:11px var(--gulim); cursor:pointer; background:radial-gradient(circle at 40% 30%,#fff,#e4e0d4)}
 .hhbtns button span{font-size:22px; line-height:1}
@@ -830,10 +842,18 @@ table.old td:first-child{background:#ccffff; font-weight:700; white-space:nowrap
 3. 방명록 만들기</div></div></div></section>
         <section class="mw out hhwin" id="w-hhome"><div class="tbar"><span class="t">🦔 까끌이집</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in scn">
           <canvas id="hhc" width="760" height="400" role="img" aria-label="까끌이의 방. 왼쪽 위 전등을 누르면 불을 켜고 끌 수 있어요. 까끌이를 누르면 쓰다듬어요. 책장을 누르면 책을 읽어 주고, 창턱 화분을 누르면 물을 줘요." style="cursor:pointer"></canvas>
-          <div class="hhstat"><span title="배부름">🍎<i class="hb"><b id="hh-h"></b></i></span><span title="깨끗함">🫧<i class="hb"><b id="hh-c"></b></i></span><span title="기분">😊<i class="hb"><b id="hh-m"></b></i></span><span class="hhlove" id="hh-love">♥ 0</span></div>
+          <div class="hhstat"><span title="배부름">🍎<i class="hb"><b id="hh-h"></b></i></span><span title="깨끗함">🫧<i class="hb"><b id="hh-c"></b></i></span><span title="기분">😊<i class="hb"><b id="hh-m"></b></i></span><span class="hhcoin" title="야채코인">🪙 <b class="coinnum">0</b></span><span class="hhlove" id="hh-love">♥ 0</span></div>
           <div class="hhbtns"><button class="out" data-hh="feed"><span>🍎</span>밥 주기</button><button class="out" data-hh="clean"><span>🧹</span>청소하기</button><button class="out" data-hh="read"><span>📖</span>책 읽어 주기</button><button class="out" data-hh="play"><span>⚽</span>놀아 주기</button><button class="out" data-hh="pet"><span>🤚</span>쓰다듬기</button><button class="out" data-hh="water"><span>🪴</span>화분 물 주기</button></div>
           <div class="smsg" id="hh-msg">까끌이를 부르는 중...</div>
           <div class="hhnote">돌봐 주지 않아도 괜찮아요. 까끌이는 혼자서도 밥 먹고 청소할 수 있어요. 그래도 같이 해 주면 좋아해요!</div>
+        </div></section>
+        <section class="mw out farmwin" id="w-farm"><div class="tbar"><span class="t">🌱 야채농장</span><button class="cap out" aria-label="닫기">×</button></div><div class="body in scn">
+          <canvas id="farmc" width="760" height="400" role="img" aria-label="야채농장. 밭 여섯 칸과 씨앗가게가 있어요. 빈 밭을 누르면 고른 씨앗을 심고, 마른 밭을 누르면 물을 주고, 다 자란 밭을 누르면 수확해요." style="cursor:pointer"></canvas>
+          <div class="fbar"><span class="coin" title="야채코인">🪙 <b class="coinnum">0</b></span><span class="flab">씨앗</span><span id="f-seeds"></span><span class="flab">🧺 바구니</span><span id="f-crops"></span></div>
+          <div class="fbtns"><button class="btn out" id="f-shop">🏪 씨앗가게</button><button class="btn out" id="f-sell">💰 수확물 팔기</button></div>
+          <div class="fshop in" id="f-panel" hidden></div>
+          <div class="smsg" id="f-msg">농장에 가는 중...</div>
+          <div class="hhnote">씨앗을 고르고 빈 밭을 누르면 심어요. 물을 주면 흙이 촉촉한 동안 자라요. 다 자라면 눌러서 수확! 야채코인은 수확물을 팔거나 까끌이를 돌보면 생겨요.</div>
         </div></section>
         <section class="mw out notepad logwin" id="w-log"><div class="tbar"><span class="t">업데이트 기록.txt - 메모장</span><button class="cap out" aria-label="닫기">×</button></div>
           <div class="menu"><span>파일(F)</span><span>편집(E)</span><span>서식(O)</span><span>도움말(H)</span></div>
@@ -1058,6 +1078,7 @@ const PODS=[
  {id:'w-proj',label:'공방',kind:'shop',x:96,y:236,w:76,h:66},
  {id:'w-games',label:'오락실',kind:'arcade',x:442,y:92,w:70,h:80},
  {id:'pond',label:'연못',kind:'pond',x:452,y:240,w:118,h:72},
+ {id:'w-farm',label:'농장',kind:'farm',x:170,y:172,w:96,h:62},
  {id:'fountain',label:'분수',kind:'fountain',x:280,y:170,w:70,h:56},
  {id:'bus',label:'버스 정류장',kind:'bus',x:338,y:304,w:44,h:50},
  {id:'stone',label:'명예의 전당',kind:'stone',x:354,y:196,w:30,h:36},
@@ -1132,6 +1153,13 @@ function mapThing(x,p){const {x:px,y:py,kind}=p;x.lineWidth=2;x.strokeStyle='#00
     // 편지 날개
     x.save();x.translate(px-46,py-6);x.rotate(-.25);x.fillStyle='#fff';x.fillRect(-8,-5,16,11);x.strokeRect(-8,-5,16,11);x.beginPath();x.moveTo(-8,-5);x.lineTo(0,1);x.lineTo(8,-5);x.stroke();x.fillStyle='#e00a00';x.fillRect(3,-4,4,4);x.restore();
     x.save();x.translate(px-50,py+14);x.rotate(.2);x.fillStyle='#fffbe0';x.fillRect(-6,-4,12,8);x.strokeRect(-6,-4,12,8);x.beginPath();x.moveTo(-6,-4);x.lineTo(0,1);x.lineTo(6,-4);x.stroke();x.restore();}
+  if(kind==='farm'){x.fillStyle='rgba(0,40,0,.25)';x.beginPath();x.ellipse(px+3,py+22,46,8,0,0,7);x.fill();
+    x.fillStyle=lg(x,0,py-14,0,py+20,[[0,'#c8904a'],[1,'#8a5a26']]);x.beginPath();x.moveTo(px-34,py-14);x.lineTo(px+34,py-14);x.lineTo(px+42,py+20);x.lineTo(px-42,py+20);x.closePath();x.fill();x.stroke();
+    for(let r=0;r<3;r++){const yy=py-6+r*11;x.strokeStyle='rgba(60,30,0,.5)';x.lineWidth=2;x.beginPath();x.moveTo(px-34-r*2.6,yy+3);x.lineTo(px+34+r*2.6,yy+3);x.stroke();
+      for(let k=0;k<6;k++){const a=px-28-r*2+k*(11+r*.9);x.fillStyle=r===1?'#ff8a2a':'#3aa83a';x.fillRect(a,yy-3,3,4);x.fillStyle='#4ac83a';x.fillRect(a-1,yy-5,2,3);x.fillRect(a+2,yy-6,2,3);}}
+    x.strokeStyle='#000';x.lineWidth=2;
+    x.fillStyle='#e0b070';for(let k=0;k<7;k++){x.fillRect(px-44+k*14,py+16,3,10);}x.fillRect(px-44,py+19,88,3);
+    x.fillStyle='#d84a3a';x.fillRect(px+30,py-30,18,16);x.strokeRect(px+30,py-30,18,16);x.fillStyle='#a8302a';x.beginPath();x.moveTo(px+27,py-30);x.lineTo(px+39,py-40);x.lineTo(px+51,py-30);x.closePath();x.fill();x.stroke();x.fillStyle='#fff';x.fillRect(px+36,py-24,6,10);}
   if(kind==='shop'){shadow(36);box(px-28,py-10,56,34,'#f0d0a0','#a8763a');x.fillStyle='rgba(90,50,10,.35)';for(let i=-6;i<24;i+=6)x.fillRect(px-28,py+i,56,1);
     roof(px-28,py-10,56,24,'#7aa8d8','#2a5aa0');
     x.fillStyle=lg(x,0,py,0,py+24,[[0,'#8a5a2a'],[1,'#4a2a08']]);x.fillRect(px-10,py+2,20,22);x.strokeRect(px-10,py+2,20,22);
@@ -2274,11 +2302,11 @@ icon(document.getElementById('noteic'),'note');
 })();
 
 /* 동작 */
-const POPS=['w-hhome','w-log','w-todo','w-mail','w-docs','w-rank','w-pond','w-bag','w-gbook','w-drawer','w-letter','w-note','w-bus','w-plaza','w-stairs','w-work','w-end','w-stone','w-house','w-post','w-me','w-likes','w-proj','w-map','w-pin','w-games','w-bub','w-search'],popwrap=document.getElementById('popwrap');
+const POPS=['w-hhome','w-farm','w-log','w-todo','w-mail','w-docs','w-rank','w-pond','w-bag','w-gbook','w-drawer','w-letter','w-note','w-bus','w-plaza','w-stairs','w-work','w-end','w-stone','w-house','w-post','w-me','w-likes','w-proj','w-map','w-pin','w-games','w-bub','w-search'],popwrap=document.getElementById('popwrap');
 function go(id){if(id==='w-games')ARG.ev('arcade');
   if(id==='w-house'&&ARG.has('trash')){const c=document.getElementById('room'),x=c.getContext('2d');x.fillStyle='#ffe000';x.beginPath();x.arc(97,64,4,0,7);x.fill();}
   goT=Date.now();
-  if(POPS.includes(id)){POPS.forEach(p=>document.getElementById(p).hidden=p!==id);if(id==='w-map')drawBig();popwrap.hidden=false;if(id==='w-hhome'&&window.HHOME)HHOME.open();return;}
+  if(POPS.includes(id)){POPS.forEach(p=>document.getElementById(p).hidden=p!==id);if(id==='w-map')drawBig();popwrap.hidden=false;if(id==='w-hhome'&&window.HHOME)HHOME.open();if(id==='w-farm'&&window.FARM)FARM.open();return;}
   popwrap.hidden=true;const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 popwrap.querySelectorAll('.cap').forEach(b=>b.addEventListener('click',()=>popwrap.hidden=true));
 popwrap.addEventListener('click',e=>{if(e.target.classList&&e.target.classList.contains('notegrp')&&Date.now()-goT>500)popwrap.hidden=true;});
@@ -2507,6 +2535,10 @@ const YCblob=(function(){const C=new Map();
   });
 })();
 
+/* ===================== 야채코인 (농장·가게에서 쓰는 돈, 브라우저에 저장) ===================== */
+window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getItem(K);if(v!==null)n=Math.max(0,+v||0);}catch(e){}
+  const save=()=>{try{localStorage.setItem(K,n);}catch(e){}window.dispatchEvent(new Event('coin'));};
+  return {get:()=>n,add(v){n+=v;save();},spend(v){if(n<v)return false;n-=v;save();return true;}};})();
 /* ===================== 까끌이집 (돌보기) ===================== */
 (function(){
   const win=document.getElementById('w-hhome'),c=document.getElementById('hhc'),x=c.getContext('2d'),W=760,H=400,
@@ -2518,7 +2550,7 @@ const YCblob=(function(){const C=new Map();
   const say=t=>{msgEl.textContent=t;};
   const TITLES=[[0,'처음 만난 사이'],[5,'아는 사이'],[15,'친구'],[35,'단짝 친구'],[70,'가족'],[120,'영혼의 단짝']];
   function ui(){[['h','#ff8a3a'],['c','#3ab8ff'],['m','#ff5a9a']].forEach(([k,col])=>{const v=Math.round(P[k]);bars[k].style.width=v+'%';bars[k].style.background=col;bars[k].parentElement.title=v+'%';});
-    const tt=TITLES.filter(([n])=>P.love>=n).pop()[1];loveEl.textContent='♥ '+P.love+' · '+tt;}
+    document.querySelectorAll('.coinnum').forEach(e=>e.textContent=COIN.get());const tt=TITLES.filter(([n])=>P.love>=n).pop()[1];loveEl.textContent='♥ '+P.love+' · '+tt;}
   // ---- 장면 상태 ----
   let inside=false,arriving=false,light=true,hog={x:380,y:320,dir:-1,tx:null,act:null,actT:0,jump:0,st:'idle',bob:0},fx=[],food=null,ball=null,broom=null,bookT=0,raf=0,T=0,can=0;
   const FLOOR=298,DY=70,TX=W-520,BOOKMAX=24,DRY=2*3600e3,POT={x:430,y:181,k:1.4},SHELF={x:218,y:164,w:94,h:154}; // DY: 가구를 아래로, TX: 식탁을 오른쪽으로
@@ -2710,7 +2742,7 @@ const YCblob=(function(){const C=new Map();
   window.HHOME={open};
   // ---- 돌보기 ----
   const cd=(k,s)=>{const now=Date.now();P.last=P.last||{};const ok=!P.last[k]||now-P.last[k]>s*1000;if(ok)P.last[k]=now;return ok;};
-  const love=(k)=>{if(cd(k,20)){P.love++;fx.push({t:'💗',x:hog.x,y:hog.y-90,l:50});}save();ui();};
+  const love=(k)=>{if(cd(k,20)){P.love++;fx.push({t:'💗',x:hog.x,y:hog.y-90,l:50},{t:'🪙',x:hog.x+34,y:hog.y-70,l:40,s:16});COIN.add(2);}save();ui();};
   const busy=()=>!inside||arriving||leaving;
   const wake=()=>{if(!light){say('쿨쿨… (불이 꺼져 있어서 자고 있어요. 전등을 눌러 불을 켜 주세요.)');return false;}return true;};
   const ACT={
@@ -2743,6 +2775,117 @@ const YCblob=(function(){const C=new Map();
     if(inside&&!arriving&&Math.abs(px-hog.x)<45&&py>hog.y-100&&py<hog.y+10){if(!light){say('쿨쿨… (깨우지 말아 주세요)');return;}ACT.pet();return;}
     if(inside&&light&&py>FLOOR){const d=dirt().find(([a,b,r])=>Math.hypot(px-a,py-b)<r+8);if(d){P.c=clamp(P.c+14);save();ui();fx.push({t:'✨',x:d[0],y:d[1],l:30});say('먼지 하나 치웠어요!');return;}hog.tx=Math.max(60,Math.min(W-50,px));}});
   ui();
+})();
+
+/* ===================== 야채농장 (밭·씨앗가게) ===================== */
+(function(){
+  const win=document.getElementById('w-farm'),c=document.getElementById('farmc'),x=c.getContext('2d'),W=760,H=400,
+    msgEl=document.getElementById('f-msg'),panel=document.getElementById('f-panel'),seedsEl=document.getElementById('f-seeds'),cropsEl=document.getElementById('f-crops');
+  const CROPS={carrot:{n:'당근',e:'🥕',t:5,buy:5,sell:12},pepper:{n:'고추',e:'🌶️',t:8,buy:8,sell:18},peanut:{n:'땅콩',e:'🥜',t:10,buy:10,sell:22},
+    tomato:{n:'토마토',e:'🍅',t:12,buy:12,sell:28},eggplant:{n:'가지',e:'🍆',t:15,buy:15,sell:34},corn:{n:'옥수수',e:'🌽',t:20,buy:20,sell:45}};
+  const ORDER=['carrot','pepper','peanut','tomato','eggplant','corn'],WET=20*60000;
+  const K='yc-farm';let F={plots:[{},{},{},{},{},{}],seeds:{carrot:2},crops:{},sel:'carrot'};try{Object.assign(F,JSON.parse(localStorage.getItem(K)||'{}'));}catch(e){}
+  const save=()=>{try{localStorage.setItem(K,JSON.stringify(F));}catch(e){}};
+  const say=t=>{msgEl.textContent=t;};
+  const josa=(w,a,b)=>{const ch=w.charCodeAt(w.length-1)-0xAC00;return w+(ch>=0&&ch%28?a:b);};
+  // 밭 6칸: 뒷줄 3, 앞줄 3 (사다리꼴)
+  const PL=[[128,198,148,54],[296,198,148,54],[464,198,148,54],[86,276,176,74],[282,276,176,74],[478,276,176,74]];
+  const STALL={x:668,y:150,w:84,h:150};
+  function grow(p){if(!p.c)return;const now=Date.now();if(p.w){const from=Math.max(p.u||p.w,p.w),to=Math.min(now,p.w+WET);if(to>from)p.g=(p.g||0)+(to-from);}p.u=now;}
+  const need=p=>CROPS[p.c].t*60000,ripe=p=>p.c&&(p.g||0)>=need(p),dry=p=>!p.w||Date.now()>p.w+WET;
+  const stage=p=>ripe(p)?3:(p.g||0)>=need(p)*.45?2:p.w?1:0;
+  // ---- 화면 ----
+  let raf=0,T=0,fx=[],can=null;
+  const poly=(...p)=>{x.beginPath();x.moveTo(p[0],p[1]);for(let i=2;i<p.length;i+=2)x.lineTo(p[i],p[i+1]);x.closePath();};
+  function sky(){const hr=new Date().getHours(),day=hr>=7&&hr<18,eve=hr>=18&&hr<20;
+    x.fillStyle=lg(x,0,0,0,160,day?[[0,'#6ac0ff'],[1,'#d8f2ff']]:eve?[[0,'#ff9a5a'],[1,'#ffe0b0']]:[[0,'#0a1a4a'],[1,'#2a3a7a']]);x.fillRect(0,0,W,160);
+    if(day){x.fillStyle='#ffe066';x.beginPath();x.arc(640,48,22,0,7);x.fill();x.fillStyle='#fff';[[150,50,1],[420,34,.8],[560,80,.6]].forEach(([a,b,k])=>{x.beginPath();x.arc(a,b,14*k,0,7);x.arc(a+18*k,b-8*k,18*k,0,7);x.arc(a+38*k,b,13*k,0,7);x.fill();});}
+    else if(!eve){x.fillStyle='#fff6b0';x.beginPath();x.arc(640,48,16,0,7);x.fill();x.fillStyle='#0a1a4a';x.beginPath();x.arc(647,43,15,0,7);x.fill();x.fillStyle='#fff';for(let i=0;i<30;i++)x.fillRect((i*97)%W,(i*41)%130,2,2);}
+    x.fillStyle='#8ac860';x.beginPath();x.ellipse(160,165,260,46,0,0,7);x.ellipse(560,170,300,52,0,0,7);x.fill();
+    x.fillStyle=lg(x,0,150,0,H,[[0,'#a8e070'],[1,'#6ab83a']]);x.fillRect(0,160,W,H-160);
+    x.fillStyle='rgba(40,110,20,.35)';for(let i=0;i<160;i++){x.fillRect((i*131)%W,170+(i*53)%(H-175),2,3);}
+    return {day,night:!day&&!eve};}
+  function barn(){x.fillStyle='rgba(0,0,0,.15)';x.beginPath();x.ellipse(70,168,62,7,0,0,7);x.fill();
+    x.fillStyle='#d84a3a';x.fillRect(20,96,100,70);x.fillStyle='#a8302a';poly(12,98,70,58,128,98);x.fill();x.strokeStyle='#fff';x.lineWidth=2;x.stroke();
+    x.fillStyle='#fff';x.fillRect(52,122,36,44);x.strokeStyle='#d84a3a';x.lineWidth=3;x.beginPath();x.moveTo(52,122);x.lineTo(88,166);x.moveTo(88,122);x.lineTo(52,166);x.stroke();
+    x.fillStyle='#fff6c8';x.fillRect(60,76,20,14);x.strokeStyle='#fff';x.lineWidth=2;x.strokeRect(60,76,20,14);}
+  function fence(){x.fillStyle='#c89a5a';x.fillRect(130,168,530,5);x.fillRect(130,180,530,5);for(let i=134;i<660;i+=26){x.fillRect(i,160,6,30);x.fillStyle='#e0b878';x.fillRect(i,160,6,2);x.fillStyle='#c89a5a';}}
+  function stall(){const {x:sx,y:sy,w,h}=STALL;x.fillStyle='rgba(0,0,0,.18)';x.beginPath();x.ellipse(sx+w/2,sy+h+2,w/2+8,7,0,0,7);x.fill();
+    x.fillStyle='#b8823e';x.fillRect(sx+4,sy+30,6,h-30);x.fillRect(sx+w-10,sy+30,6,h-30);
+    for(let i=0;i<6;i++){x.fillStyle=i%2?'#fff':'#3aa04a';poly(sx-6+i*16,sy+20,sx+10+i*16,sy+20,sx+10+i*16,sy+36,sx+2+i*16,sy+42,sx-6+i*16,sy+36);x.fill();}
+    x.fillStyle='#e8c890';x.fillRect(sx-6,sy+8,w+12,14);x.strokeStyle='#8a5a20';x.lineWidth=2;x.strokeRect(sx-6,sy+8,w+12,14);
+    x.fillStyle='#5a3410';x.font='bold 11px '+GUL;x.textAlign='center';x.textBaseline='middle';x.fillText('씨앗가게',sx+w/2,sy+15);x.textBaseline='alphabetic';
+    x.fillStyle='#c8904a';x.fillRect(sx-2,sy+96,w+4,54);x.strokeStyle='#8a5a20';x.strokeRect(sx-2,sy+96,w+4,54);x.fillStyle='#e0b070';x.fillRect(sx-4,sy+92,w+8,6);
+    ORDER.forEach((k,i)=>{const a=sx+10+(i%3)*30,b=sy+110+Math.floor(i/3)*22;x.fillStyle='#fffbe8';x.fillRect(a-10,b-9,20,18);x.strokeStyle='#b89060';x.lineWidth=1;x.strokeRect(a-10,b-9,20,18);emoji(CROPS[k].e,a,b+1,12);});}
+  function emoji(t,a,b,s){x.font=s+'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,a,b);x.textBaseline='alphabetic';}
+  function plot(i){const [px,py,w,h]=PL[i],p=F.plots[i],ins=i<3?10:8,wet=p.c&&!dry(p);
+    x.fillStyle='rgba(0,0,0,.12)';poly(px+ins-2,py+3,px+w-ins+2,py+3,px+w+2,py+h+4,px-2,py+h+4);x.fill();
+    poly(px+ins,py,px+w-ins,py,px+w,py+h,px,py+h);x.fillStyle=wet?'#6a4020':'#a8743c';x.fill();x.strokeStyle='#7a5020';x.lineWidth=3;x.stroke();
+    x.strokeStyle=wet?'rgba(30,15,0,.4)':'rgba(90,50,10,.35)';x.lineWidth=2;for(let k=1;k<4;k++){const t=k/4,yy=py+h*t,l=px+ins*(1-t),r=px+w-ins*(1-t);x.beginPath();x.moveTo(l+4,yy);x.lineTo(r-4,yy);x.stroke();}
+    if(!p.c){x.fillStyle='rgba(255,255,255,.5)';x.font='11px '+GUL;x.textAlign='center';x.fillText('빈 밭',px+w/2,py+h/2+4);return;}
+    const st=stage(p),s=i<3?.8:1;[.25,.5,.75].forEach(f=>crop(p.c,st,px+w*f,py+h*.66,s));
+    const cx=px+w/2;
+    if(st===3){if(T%40<24)emoji('✨',px+w-14,py+8,16);}
+    else{const pct=Math.min(1,(p.g||0)/need(p));x.fillStyle='rgba(0,0,0,.35)';x.fillRect(cx-30,py+h+6,60,6);x.fillStyle=dry(p)?'#e8a040':'#4ac0ff';x.fillRect(cx-29,py+h+7,58*pct,4);
+      if(dry(p))emoji('💧',px+w-12,py+4+Math.sin(T/8)*3,16);}}
+  function crop(k,st,a,b,s){x.save();x.translate(a,b);x.scale(s,s);
+    const leaf=(lx,ly,rx,ry,ang,col='#3aa83a')=>{x.save();x.translate(lx,ly);x.rotate(ang);x.fillStyle=col;x.beginPath();x.ellipse(0,0,rx,ry,0,0,7);x.fill();x.restore();};
+    if(st===0){x.fillStyle='#8a5a28';x.beginPath();x.ellipse(0,0,9,4,0,0,7);x.fill();x.fillStyle='#e8d098';x.beginPath();x.ellipse(0,-2,2.4,1.6,0,0,7);x.fill();x.restore();return;}
+    if(st===1){x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(0,0);x.lineTo(0,-8);x.stroke();leaf(-4,-9,5,2.5,-.4,'#5ac84a');leaf(4,-9,5,2.5,.4,'#5ac84a');x.restore();return;}
+    const big=st===3;
+    if(k==='carrot'){for(let j=-2;j<=2;j++){x.strokeStyle='#3a9a2a';x.lineWidth=1.6;x.beginPath();x.moveTo(0,-2);x.lineTo(j*5,big?-24:-16);x.stroke();leaf(j*5,big?-24:-16,3,5,j*.3,'#4ab83a');}
+      if(big){x.fillStyle='#ff8a2a';x.beginPath();x.ellipse(0,0,6,4,0,0,7);x.fill();x.fillStyle='rgba(120,50,0,.4)';x.fillRect(-4,0,8,1);}}
+    else if(k==='tomato'){x.strokeStyle='#c8a060';x.lineWidth=2;x.beginPath();x.moveTo(6,2);x.lineTo(6,big?-40:-28);x.stroke();x.strokeStyle='#2a8a2a';x.lineWidth=2.4;x.beginPath();x.moveTo(0,0);x.quadraticCurveTo(-3,-16,2,big?-36:-26);x.stroke();
+      [[-7,-10,-.5],[7,-14,.5],[-6,-22,-.4],[6,-26,.4]].forEach(([u,v,r])=>leaf(u,v,7,3.5,r));if(big)[[-8,-16],[-3,-8],[8,-20],[3,-28]].forEach(([u,v])=>{x.fillStyle='#e83a2a';x.beginPath();x.arc(u,v,4.5,0,7);x.fill();x.fillStyle='rgba(255,255,255,.7)';x.fillRect(u-2,v-3,1.5,1.5);});}
+    else if(k==='eggplant'){[[-9,-8,-.6],[9,-8,.6],[-6,-18,-.3],[6,-18,.3],[0,-24,0]].forEach(([u,v,r])=>leaf(u,v,9,5,r,'#2a7a3a'));
+      x.strokeStyle='#5a3a6a';x.lineWidth=1.5;x.beginPath();x.moveTo(0,0);x.lineTo(0,-14);x.stroke();if(big)[[-8,-4,.3],[8,-6,-.3]].forEach(([u,v,r])=>{x.save();x.translate(u,v);x.rotate(r);x.fillStyle='#6a2a8a';x.beginPath();x.ellipse(0,4,4.5,9,0,0,7);x.fill();x.fillStyle='rgba(255,255,255,.35)';x.fillRect(-2,0,1.5,6);x.fillStyle='#3a8a3a';x.beginPath();x.ellipse(0,-4,4,2.5,0,0,7);x.fill();x.restore();});}
+    else if(k==='corn'){const hh=big?-56:-36;x.strokeStyle='#5aa83a';x.lineWidth=3;x.beginPath();x.moveTo(0,0);x.lineTo(0,hh);x.stroke();
+      [[-1,hh*.3],[1,hh*.5],[-1,hh*.72],[1,hh*.9]].forEach(([d,v])=>{x.strokeStyle='#4a9a2a';x.lineWidth=2.5;x.beginPath();x.moveTo(0,v);x.quadraticCurveTo(d*10,v-8,d*16,v+2);x.stroke();});
+      x.strokeStyle='#d8b860';x.lineWidth=1.5;x.beginPath();x.moveTo(0,hh);x.lineTo(-4,hh-6);x.moveTo(0,hh);x.lineTo(4,hh-7);x.moveTo(0,hh);x.lineTo(0,hh-8);x.stroke();
+      if(big){x.fillStyle='#f4d040';x.beginPath();x.ellipse(5,hh*.55,3.6,8,.2,0,7);x.fill();x.fillStyle='rgba(200,150,0,.6)';for(let r=0;r<4;r++)x.fillRect(4,hh*.55-6+r*4,3,1);x.fillStyle='#7ac04a';x.beginPath();x.moveTo(1,hh*.55+8);x.quadraticCurveTo(0,hh*.55-4,4,hh*.55-10);x.lineTo(3,hh*.55+8);x.fill();}}
+    else if(k==='pepper'){[[-8,-8,-.5],[8,-8,.5],[-5,-16,-.3],[5,-16,.3],[0,-20,0]].forEach(([u,v,r])=>leaf(u,v,6,3,r));
+      if(big)[[-7,-6,.3],[6,-8,-.4],[1,-12,.1]].forEach(([u,v,r])=>{x.save();x.translate(u,v);x.rotate(r);x.fillStyle='#e8302a';x.beginPath();x.moveTo(-2,-3);x.quadraticCurveTo(3,4,0,10);x.quadraticCurveTo(-4,4,-2,-3);x.fill();x.fillStyle='#2a8a2a';x.fillRect(-2,-5,3,3);x.restore();});}
+    else if(k==='peanut'){[[-9,-4,-.8],[9,-4,.8],[-5,-9,-.4],[5,-9,.4],[0,-12,0]].forEach(([u,v,r])=>leaf(u,v,5,3,r,'#4aa83a'));
+      if(big){x.fillStyle='#ffd83a';[[-4,-14],[5,-13]].forEach(([u,v])=>{x.beginPath();x.arc(u,v,2.4,0,7);x.fill();});x.fillStyle='#d8b070';[[-12,2,.4],[11,3,-.3]].forEach(([u,v,r])=>{x.save();x.translate(u,v);x.rotate(r);x.beginPath();x.ellipse(-2.5,0,3,2.4,0,0,7);x.ellipse(2.5,0,3,2.4,0,0,7);x.fill();x.restore();});}}
+    x.restore();}
+  function frame(){T++;const S=sky();barn();fence();stall();
+    F.plots.forEach(grow);for(let i=0;i<6;i++)plot(i);
+    if(can){can.l--;const [px,py,w]=PL[can.i],a=px+w/2+26,b=py-26;x.save();x.translate(a,b);x.rotate(-.5);x.fillStyle='#4aa8d8';x.fillRect(-12,-10,24,20);x.strokeStyle='#2a78a8';x.lineWidth=3;x.beginPath();x.arc(0,-12,8,Math.PI,0);x.stroke();x.beginPath();x.moveTo(-12,4);x.lineTo(-26,-6);x.stroke();x.restore();
+      x.fillStyle='rgba(90,170,255,.85)';for(let k=0;k<7;k++){const t=(T*2+k*9)%36;x.beginPath();x.ellipse(a-34+k*4,b+t,1.6,3,0,0,7);x.fill();}if(can.l<=0)can=null;}
+    fx=fx.filter(f=>{f.l--;f.y-=1;x.globalAlpha=Math.min(1,f.l/20);emoji(f.t,f.x,f.y,f.s||22);x.globalAlpha=1;return f.l>0;});
+    if(S.night){x.fillStyle='rgba(10,10,50,.28)';x.fillRect(0,0,W,H);}
+    if(!win.hidden&&!document.getElementById('popwrap').hidden)raf=requestAnimationFrame(frame);else raf=0;}
+  const run=()=>{if(!raf)raf=requestAnimationFrame(frame);};
+  // ---- 바구니·씨앗 표시 ----
+  function ui(){document.querySelectorAll('.coinnum').forEach(e=>e.textContent=COIN.get());
+    if(!F.seeds[F.sel])F.sel=ORDER.find(k=>F.seeds[k])||F.sel;
+    seedsEl.innerHTML=ORDER.filter(k=>F.seeds[k]).map(k=>`<button class="out fseed${k===F.sel?' on':''}" data-c="${k}" title="${CROPS[k].n} 씨앗">${CROPS[k].e} ${CROPS[k].n} ×${F.seeds[k]}</button>`).join('')||'<i class="fnone">없음</i>';
+    cropsEl.innerHTML=ORDER.filter(k=>F.crops[k]).map(k=>`<span title="${CROPS[k].n}">${CROPS[k].e}${F.crops[k]}</span>`).join(' ')||'<i class="fnone">비었음</i>';
+    seedsEl.querySelectorAll('.fseed').forEach(b=>b.onclick=()=>{F.sel=b.dataset.c;save();ui();say(CROPS[F.sel].e+' '+josa(CROPS[F.sel].n+' 씨앗','을','를')+' 골랐어요. 빈 밭을 눌러 심어요.');});
+    if(!panel.hidden)drawPanel();}
+  let mode='buy';
+  function drawPanel(){const coins=COIN.get();
+    if(mode==='buy')panel.innerHTML='<div class="fhead">🏪 씨앗가게 <span>씨앗 하나로 밭 한 칸을 심어요</span></div>'+ORDER.map(k=>{const C=CROPS[k];return `<div class="row"><b>${C.e} ${C.n} 씨앗</b><span>자라는 시간 ${C.t}분 · 팔면 🪙${C.sell}</span><em>🪙 ${C.buy}</em><button class="btn out" data-buy="${k}"${coins<C.buy?' disabled':''}>사기</button></div>`;}).join('');
+    else{const has=ORDER.filter(k=>F.crops[k]);panel.innerHTML='<div class="fhead">💰 수확물 팔기 <span>판 돈은 야채코인으로 받아요</span></div>'+(has.length?has.map(k=>{const C=CROPS[k];return `<div class="row"><b>${C.e} ${C.n} ×${F.crops[k]}</b><span>하나에 🪙${C.sell}</span><button class="btn out" data-sell="${k}">1개 팔기</button><button class="btn out" data-sellall="${k}">모두 팔기</button></div>`;}).join(''):'<div class="row"><span>바구니가 비었어요. 밭에서 수확해 오세요!</span></div>');}
+    panel.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const k=b.dataset.buy,C=CROPS[k];if(!COIN.spend(C.buy)){say('야채코인이 모자라요. 수확물을 팔거나 까끌이를 돌봐 주면 코인이 생겨요.');return;}F.seeds[k]=(F.seeds[k]||0)+1;F.sel=k;save();ui();say(josa(C.n+' 씨앗','을','를')+' 샀어요! (🪙 -'+C.buy+')');});
+    panel.querySelectorAll('[data-sell],[data-sellall]').forEach(b=>b.onclick=()=>{const k=b.dataset.sell||b.dataset.sellall,C=CROPS[k],n=b.dataset.sellall?F.crops[k]:1;if(!F.crops[k])return;F.crops[k]-=n;if(!F.crops[k])delete F.crops[k];COIN.add(C.sell*n);save();ui();say(C.e+' '+C.n+' '+n+'개를 팔았어요! (🪙 +'+C.sell*n+')');});}
+  const openPanel=(m,toggle)=>{if(toggle&&!panel.hidden&&mode===m){panel.hidden=true;return;}mode=m;panel.hidden=false;drawPanel();};
+  document.getElementById('f-shop').onclick=()=>openPanel('buy',true);
+  document.getElementById('f-sell').onclick=()=>openPanel('sell',true);
+  // ---- 밭 누르기 ----
+  const inPlot=(i,px,py)=>{const [a,b,w,h]=PL[i];return px>a-4&&px<a+w+4&&py>b-30&&py<b+h+8;};
+  c.addEventListener('click',e=>{const r=c.getBoundingClientRect(),px=(e.clientX-r.left)*W/r.width,py=(e.clientY-r.top)*H/r.height;
+    if(px>STALL.x-8&&px<STALL.x+STALL.w+8&&py>STALL.y&&py<STALL.y+STALL.h){openPanel('buy');say('어서 오세요, 씨앗가게예요! 무슨 씨앗을 드릴까요?');return;}
+    for(let i=5;i>=0;i--)if(inPlot(i,px,py)){act(i);return;}});
+  function act(i){const p=F.plots[i],[px,py,w]=PL[i];grow(p);
+    if(!p.c){const k=F.sel;if(!F.seeds[k]){openPanel('buy');say('씨앗이 없어요. 오른쪽 씨앗가게에서 사 오세요!');return;}
+      F.seeds[k]--;if(!F.seeds[k])delete F.seeds[k];F.plots[i]={c:k,g:0,u:Date.now()};save();ui();fx.push({t:'🌱',x:px+w/2,y:py+10,l:30});say(josa(CROPS[k].n,'을','를')+' 심었어요! 이제 물을 주세요. 💧');return;}
+    const C=CROPS[p.c];
+    if(ripe(p)){F.crops[p.c]=(F.crops[p.c]||0)+1;F.plots[i]={};save();ui();fx.push({t:C.e,x:px+w/2,y:py+10,l:45,s:30});say(josa(C.n,'을','를')+' 수확했어요! 바구니에 쏙. '+C.e);return;}
+    if(dry(p)){p.w=Date.now();p.u=p.w;save();can={i,l:60};say(C.n+' 밭에 물을 줬어요. 쑥쑥 자라라~ (흙이 마를 때까지 자라요)');return;}
+    const left=Math.ceil((need(p)-(p.g||0))/60000);say(C.e+' '+C.n+' 자라는 중… 앞으로 '+left+'분쯤 남았어요. 흙은 아직 촉촉해요!');}
+  window.FARM={open(){F.plots.forEach(grow);save();ui();run();const r=F.plots.filter(ripe).length;say(r?'다 자란 작물이 '+r+'칸 있어요! 눌러서 수확해요. ✨':'야채농장에 온 걸 환영해요! 씨앗을 고르고 빈 밭을 눌러 심어 보세요.');}};
+  window.addEventListener('coin',ui);ui();
 })();
 
 /* ===================== 방문자 수 (모든 손님 기준) ===================== */
