@@ -399,8 +399,8 @@ canvas{image-rendering:pixelated}
 .popwrap .bswin{width:420px}
 #m-panel{max-height:none}
 .shopwrap{display:flex; gap:10px; align-items:flex-start} .shoplist{flex:1; min-width:0; max-height:250px; overflow:auto}
-.npcbox{flex:none; width:150px; text-align:center}
-.scn .npcc,.npcc{border:0; width:140px; height:140px; display:block; margin:0 auto; animation:npcbob 2.4s ease-in-out infinite} @keyframes npcbob{50%{transform:translateY(-3px)}}
+.npcbox{flex:none; width:160px; text-align:center}
+.scn .npcc,.npcc{border:0; width:150px; height:150px; display:block; margin:0 auto; animation:npcbob 2.4s ease-in-out infinite} @keyframes npcbob{50%{transform:translateY(-3px)}}
 .npcname{display:inline-block; margin-top:2px; font:bold 11px var(--gulim); color:#145a14; padding:1px 10px; border-radius:10px; border:1px solid #3a9a3a; background:linear-gradient(#f8fff4 0,#d4f6c4 48%,#94dc7c 52%,#c6f2b4 100%)}
 .npcsay{position:relative; text-align:left; font:12px/1.5 var(--gulim); color:#123; padding:6px 8px; margin-bottom:8px; border-radius:10px; border:1px solid #7ab0d8; background:linear-gradient(#ffffff,#e4f4ff); box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(0,60,120,.2); min-height:36px}
 .npcsay:after{content:""; position:absolute; left:50%; bottom:-7px; margin-left:-6px; border:6px solid transparent; border-bottom:0; border-top-color:#7ab0d8}
@@ -2987,49 +2987,57 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
 })();
 
 /* ===================== 페럿 상인 (가게마다 소품만 다른 같은… 아니, 다른 페럿) ===================== */
-// FERRETPAINT(ctx, {shop:'seed', tilt:0}) — 120x120 칸에 카운터 뒤 상반신을 그린다. (주인장 그림 2번째 버전)
-// 큰 머리, 동그란 귀, 고글처럼 가로로 긴 밝은 얼굴 무늬(아래 가운데가 살짝 파임), 점눈, ω 입, 코 없음.
-// 좁고 둥근 어깨, 목끈·바느질·허리 리본이 있는 앞치마, 몸 옆으로 내린 팔과 카운터 위에 얹은 손.
+// FERRETPAINT(ctx, {shop:'seed', tilt:0}) — 150x150 칸. 주인장 그림(3번째): 첫 번째 페럿 전신 + 유리 진열장 카운터.
+// 큰 머리, 동그란 귀, 가로로 긴 밝은 얼굴 무늬, 점눈, 물결 입. 목까지 올라오는 긴 앞치마(반달 주머니).
+// 왼팔은 옆으로 내리고 그 앞에 씨앗 선반, 오른손은 카운터 위(옆에 분홍 화분). 카운터는 유리라 몸이 비쳐 보인다.
 window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||0,L='#4a3020';
   x.save();x.lineJoin='round';x.lineCap='round';
   const fur=(a,b,c,d)=>lg(x,a,b,c,d,[[0,'#e6b886'],[1,'#c08a58']]);
   const AP={seed:['#7ac85a','#4a9a32']}[shop]||['#7ac85a','#4a9a32'];
-  // 몸통 (좁고 둥근 어깨)
-  x.beginPath();x.moveTo(36,124);x.lineTo(37,84);x.quadraticCurveTo(38,64,60,63);x.quadraticCurveTo(82,64,83,84);x.lineTo(84,124);x.closePath();x.fillStyle=fur(36,0,84,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
-  // 앞치마: 목끈 + 가슴판(아래로 조금 넓어짐) + 바느질선
-  x.strokeStyle=AP[1];x.lineWidth=3;x.beginPath();x.moveTo(48,74);x.quadraticCurveTo(47,66,51,61);x.moveTo(72,74);x.quadraticCurveTo(73,66,69,61);x.stroke();
-  const bib=()=>{x.beginPath();x.moveTo(47,73);x.quadraticCurveTo(60,71,73,73);x.lineTo(76,96);x.quadraticCurveTo(79,100,80,104);x.lineTo(81,124);x.lineTo(39,124);x.lineTo(40,104);x.quadraticCurveTo(41,100,44,96);x.closePath();};
-  bib();x.fillStyle=lg(x,0,72,0,124,[[0,AP[0]],[1,AP[1]]]);x.fill();x.strokeStyle=L;x.lineWidth=1.9;x.stroke();
-  x.save();bib();x.clip();x.strokeStyle='rgba(255,255,255,.65)';x.lineWidth=1;x.setLineDash([2,2]);x.beginPath();x.moveTo(49.5,76);x.quadraticCurveTo(60,74,70.5,76);x.lineTo(73,95);x.moveTo(49.5,76);x.lineTo(47,95);x.stroke();x.setLineDash([]);x.restore();
-  // 허리끈 리본 (옆구리)
-  [[39,94,-1],[81,94,1]].forEach(([a,b,d])=>{x.strokeStyle=AP[1];x.lineWidth=2;x.beginPath();x.moveTo(a-d*4,b);x.quadraticCurveTo(a+d*3,b-5,a+d*5,b-1);x.quadraticCurveTo(a+d*2,b+1,a-d*4,b);x.stroke();});
-  // 둥근 주머니
-  x.beginPath();x.moveTo(51,82);x.lineTo(69,82);x.lineTo(69,90);x.quadraticCurveTo(69,94,65,94);x.lineTo(55,94);x.quadraticCurveTo(51,94,51,90);x.closePath();x.fillStyle='rgba(0,0,0,.1)';x.fill();x.strokeStyle=L;x.lineWidth=1.6;x.stroke();
-  x.strokeStyle='rgba(255,255,255,.6)';x.lineWidth=1;x.setLineDash([2,2]);x.beginPath();x.moveTo(52.5,84);x.lineTo(67.5,84);x.stroke();x.setLineDash([]);
-  if(shop==='seed'){x.fillStyle='rgba(110,70,30,.55)';[[46,102,3,2.2],[74,88,2.5,2],[58,99,2.5,1.8]].forEach(([a,b,rx,ry])=>{x.beginPath();x.ellipse(a,b,rx,ry,.4,0,7);x.fill();});
-    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(64,83);x.lineTo(66,74);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(62,73,4,2,-.5,0,7);x.ellipse(70,72,4,2,.5,0,7);x.fill();}
-  // 팔 (몸 옆으로 내려서 카운터 위로)
-  [[-1,40],[1,80]].forEach(([d,a])=>{[[9,L],[5.5,'#d6a470']].forEach(([w,c])=>{x.strokeStyle=c;x.lineWidth=w;x.beginPath();x.moveTo(a,72);x.quadraticCurveTo(a+d*5,82,a+d*2,94);x.stroke();});});
+  const armStroke=(f)=>{[[11,L],[7,'#d8a874']].forEach(([w,c])=>{x.strokeStyle=c;x.lineWidth=w;x.beginPath();f();x.stroke();});};
+  x.save();x.translate(15,0);
+  // 왼팔 (몸 옆으로 내림)
+  armStroke(()=>{x.moveTo(33,72);x.quadraticCurveTo(22,84,20,100);});
+  x.fillStyle='#d8a874';x.beginPath();x.ellipse(20,103,6.5,5.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
+  // 발
+  [[44,140],[78,140]].forEach(([a,b])=>{x.fillStyle='#b88050';x.beginPath();x.ellipse(a,b,12,7.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();});
+  // 몸통
+  x.beginPath();x.moveTo(30,64);x.lineTo(30,124);x.quadraticCurveTo(30,138,46,138);x.lineTo(76,138);x.quadraticCurveTo(92,138,92,124);x.lineTo(92,64);x.closePath();x.fillStyle=fur(30,0,92,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  // 긴 앞치마 (가슴판이 목까지)
+  const apron=()=>{x.beginPath();x.moveTo(41,64);x.lineTo(81,64);x.lineTo(82,84);x.quadraticCurveTo(91,87,91,96);x.lineTo(91,124);x.quadraticCurveTo(91,137,77,137);x.lineTo(45,137);x.quadraticCurveTo(31,137,31,124);x.lineTo(31,96);x.quadraticCurveTo(31,87,40,84);x.closePath();};
+  apron();x.fillStyle=lg(x,0,64,0,137,[[0,AP[0]],[1,AP[1]]]);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
+  x.fillStyle='rgba(255,255,255,.28)';x.fillRect(43,66,36,3);
+  x.beginPath();x.moveTo(46,98);x.lineTo(76,98);x.quadraticCurveTo(76,118,61,119);x.quadraticCurveTo(46,118,46,98);x.closePath();x.fillStyle='rgba(0,0,0,.08)';x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
+  if(shop==='seed'){x.fillStyle='rgba(110,70,30,.55)';[[38,112,4,3],[82,104,3.5,2.5],[70,128,5,3],[40,128,3,2],[84,122,2.5,2],[80,90,3,2]].forEach(([a,b,rx,ry])=>{x.beginPath();x.ellipse(a,b,rx,ry,.4,0,7);x.fill();});
+    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(64,99);x.lineTo(66,88);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(62,87,4,2,-.5,0,7);x.ellipse(70,86,4,2,.5,0,7);x.fill();}
   // 머리 (말할 때 살짝 갸웃)
-  x.save();x.translate(60,64);x.rotate(tilt);x.translate(-60,-64);
-  [[31,18],[89,17]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,10,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();x.fillStyle='#fff2e0';x.beginPath();x.arc(a+(a<60?2:-2),b+1,4.5,0,7);x.fill();});
-  x.beginPath();x.ellipse(60,38,36,26.5,0,0,7);
-  x.fillStyle=fur(24,14,96,64);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
-  // 고글처럼 가로로 긴 밝은 얼굴 무늬 (아래 가운데가 파임)
-  x.beginPath();x.moveTo(33,37);x.quadraticCurveTo(33,24,48,24);x.lineTo(73,23);x.quadraticCurveTo(88,23,88,36);x.quadraticCurveTo(88,50,74,50);x.quadraticCurveTo(64,50,60,44);x.quadraticCurveTo(56,50,46,50);x.quadraticCurveTo(33,50,33,37);x.closePath();
-  x.fillStyle=lg(x,0,23,0,51,[[0,'#fffaf0'],[1,'#f4e2c8']]);x.fill();x.strokeStyle=L;x.lineWidth=1.9;x.stroke();
-  // 점눈, ω 입
-  x.fillStyle='#2a1a10';x.beginPath();x.arc(46,36,2.5,0,7);x.arc(74,35,2.5,0,7);x.fill();
-  x.strokeStyle=L;x.lineWidth=1.8;x.beginPath();x.moveTo(53.5,51);x.quadraticCurveTo(55,55.5,58.5,53);x.quadraticCurveTo(60,51.5,61.5,53);x.quadraticCurveTo(65,55.5,66.5,51);x.stroke();
-  x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(40,17,8,3,-.25,0,7);x.fill();
+  x.save();x.translate(60,66);x.rotate(tilt);x.translate(-60,-66);
+  [[26,24],[94,22]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,11,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();x.fillStyle='#ffe8d0';x.beginPath();x.arc(a+(a<60?2:-2),b+1,5,0,7);x.fill();});
+  x.beginPath();x.ellipse(60,46,40,27,0,0,7);x.fillStyle=fur(20,20,100,72);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  x.beginPath();x.moveTo(30,44);x.quadraticCurveTo(30,30,48,31);x.quadraticCurveTo(62,28,80,30);x.quadraticCurveTo(94,32,92,44);x.quadraticCurveTo(90,58,74,58);x.quadraticCurveTo(60,62,44,59);x.quadraticCurveTo(30,57,30,44);x.closePath();
+  x.fillStyle=lg(x,0,30,0,60,[[0,'#fffaf0'],[1,'#f6e2c8']]);x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
+  x.fillStyle='#2a1a10';x.beginPath();x.arc(46,42,2.6,0,7);x.arc(74,40,2.6,0,7);x.fill();
+  x.strokeStyle=L;x.lineWidth=1.8;x.beginPath();x.moveTo(52,52);x.quadraticCurveTo(55,56,58,52);x.quadraticCurveTo(61,49,64,52);x.quadraticCurveTo(67,55,70,51);x.stroke();
+  x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(42,27,10,4,-.3,0,7);x.fill();
   x.restore();
-  // 카운터
-  x.fillStyle=lg(x,0,100,0,120,[[0,'#d8a868'],[1,'#a8743c']]);x.fillRect(0,103,120,17);x.fillStyle=lg(x,0,96,0,104,[[0,'#f4d098'],[1,'#c8945a']]);x.fillRect(0,96,120,8);
-  x.fillStyle='rgba(255,255,255,.45)';x.fillRect(0,96,120,1.5);x.strokeStyle=L;x.lineWidth=1.6;x.beginPath();x.moveTo(0,96.5);x.lineTo(120,96.5);x.moveTo(0,104);x.lineTo(120,104);x.stroke();
-  if(shop==='seed'){[[4,'#ff9a3a'],[15,'#e84a3a']].forEach(([a,c])=>{x.fillStyle='#fff';x.fillRect(a,85,9,12);x.strokeStyle='#8a6a40';x.lineWidth=1;x.strokeRect(a+.5,85.5,8,11);x.fillStyle=c;x.beginPath();x.arc(a+4.5,90,2.6,0,7);x.fill();});
-    x.fillStyle='#d0703a';x.beginPath();x.moveTo(103,97);x.lineTo(116,97);x.lineTo(114,88);x.lineTo(105,88);x.closePath();x.fill();x.fillStyle='#4ab83a';x.beginPath();x.arc(109.5,84,5,0,7);x.fill();}
-  // 카운터 위에 얹은 두 손
-  [[41,95],[79,95]].forEach(([a,b])=>{x.fillStyle='#d8a874';x.beginPath();x.ellipse(a,b,8,5.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();x.strokeStyle='rgba(74,48,32,.6)';x.lineWidth=1;x.beginPath();x.moveTo(a-2,b-2);x.lineTo(a-2,b+2);x.moveTo(a+2,b-2);x.lineTo(a+2,b+2);x.stroke();});
+  // 오른팔 (굽혀서 카운터 위로)
+  armStroke(()=>{x.moveTo(88,70);x.quadraticCurveTo(100,78,98,92);});
+  x.fillStyle='#d8a874';x.beginPath();x.ellipse(98,93,7.5,5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
+  x.restore();
+  // 씨앗 선반 (회색 철망 2단, 왼쪽)
+  if(shop==='seed'){const PK=['#ff9a3a','#e84a3a','#ffd23a','#7a5ad8','#4ab83a','#e86aa8','#3a8ad8'];
+    [[66,80],[80,95]].forEach(([t,b],r)=>{for(let k=0;k<6;k++){const a=4+k*6.6,c=PK[(k+r*3)%PK.length];x.fillStyle='#fffaf0';x.fillRect(a,t+2,5.6,b-t-2);x.fillStyle=c;x.fillRect(a,t+5,5.6,5);x.strokeStyle='rgba(0,0,0,.25)';x.lineWidth=.6;x.strokeRect(a+.3,t+2.3,5,b-t-2.6);}});
+    x.strokeStyle='#8a929a';x.lineWidth=2;x.beginPath();x.rect(2,65,42,30);x.moveTo(2,80);x.lineTo(44,80);x.stroke();
+    x.strokeStyle='rgba(255,255,255,.7)';x.lineWidth=.8;x.beginPath();x.moveTo(3,66);x.lineTo(43,66);x.moveTo(3,81);x.lineTo(43,81);x.stroke();
+    // 분홍 화분 (오른쪽, 손 옆)
+    x.fillStyle=lg(x,120,0,142,0,[[0,'#ff7aa8'],[1,'#d81a5a']]);x.beginPath();x.moveTo(120,84);x.lineTo(142,84);x.lineTo(139,95);x.lineTo(123,95);x.closePath();x.fill();x.strokeStyle=L;x.lineWidth=1.6;x.stroke();
+    x.fillStyle='#ff9ac0';x.fillRect(119,81,24,4);x.strokeRect(119,81,24,4);x.fillStyle='rgba(255,255,255,.5)';x.fillRect(123,86,2,7);
+    x.strokeStyle='#2a8a2a';x.lineWidth=1.6;x.beginPath();x.moveTo(131,81);x.lineTo(131,73);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(127.5,73,4,2,-.5,0,7);x.ellipse(134.5,72,4,2,.5,0,7);x.fill();}
+  // 유리 진열장 카운터 (몸이 비쳐 보임)
+  x.fillStyle=lg(x,0,96,0,150,[[0,'rgba(200,240,255,.35)'],[1,'rgba(150,210,240,.45)']]);x.fillRect(0,96,150,54);
+  x.fillStyle='rgba(255,255,255,.45)';[[6,104,20],[22,104,8],[112,128,26],[132,128,10]].forEach(([a,b,w])=>{x.beginPath();x.moveTo(a,b);x.lineTo(a+w,b-10);x.lineTo(a+w+3,b-10);x.lineTo(a+3,b);x.closePath();x.fill();});
+  x.fillStyle='#7a5440';x.fillRect(0,94,150,3.5);x.fillStyle='rgba(255,255,255,.4)';x.fillRect(0,94,150,1);
+  x.fillStyle='#7a5440';x.fillRect(0,109,150,2.5);
   x.restore();};
 
 /* ===================== 쇼핑몰 ===================== */
@@ -3038,12 +3046,12 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||
   const SHOPS=[{k:'seed',n:'씨앗가게',col:'#3aa04a',open:true,ic:'🌱'},{k:'super',n:'슈퍼마켓',col:'#e8402a',ic:'🛒'},{k:'life',n:'생활용품점',col:'#3a8ad8',ic:'🧴'},{k:'deco',n:'인테리어점',col:'#c8803a',ic:'🛋️'},{k:'elec',n:'전자제품점',col:'#7a5ad8',ic:'💡'}];
   const say=t=>{msgEl.textContent=t;};let raf=0,T=0,cur=null;
   const SW=136,SX=i=>20+i*146;
-  const FIMG=document.createElement('canvas');FIMG.width=240;FIMG.height=240;{const g=FIMG.getContext('2d');g.scale(2,2);FERRETPAINT(g,{shop:'seed'});}
+  const FIMG=document.createElement('canvas');FIMG.width=300;FIMG.height=300;{const g=FIMG.getContext('2d');g.scale(2,2);FERRETPAINT(g,{shop:'seed'});}
   // 씨앗가게 페럿의 말
   const NPC={greet:['어서 오세요~ 씨앗가게예요! 흙 묻은 건 신경 쓰지 마세요. 방금 밭에서 왔거든요.','오늘 당근 씨앗이 싱싱해요! …씨앗이 싱싱한 게 뭐냐고요? 저도 몰라요.','다른 가게에 저랑 닮은 페럿이 있다고요? 에이, 저는 씨앗가게에서만 일해요.','물은 흙이 마를 때마다 주세요. 저도 목마르면 물 마셔요.'],
     buy:['고마워요! 잘 키워 주세요~','좋은 선택이에요! 그 씨앗, 제가 직접 골랐어요.','쑥쑥 자랄 거예요. 아마도요!'],sell:['오, 잘 키웠네요! 값 잘 쳐 드릴게요.','싱싱하다~ 이거 제 점심… 아니, 가게 물건으로 쓸게요.'],poor:['코인이 조금 모자라네요… 외상은 안 돼요!']};
   let npcLine='',npcPick=a=>a[Math.floor(Math.random()*a.length)];
-  function npcDraw(w){const cv=panel.querySelector('.npcc');if(!cv)return;const g=cv.getContext('2d');g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,120,120);FERRETPAINT(g,{shop:'seed',tilt:w});}
+  function npcDraw(w){const cv=panel.querySelector('.npcc');if(!cv)return;const g=cv.getContext('2d');g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,150,150);FERRETPAINT(g,{shop:'seed',tilt:w});}
   function talk(kind){npcLine=npcPick(NPC[kind]);const b=panel.querySelector('.npcsay');if(b)b.textContent=npcLine;let f=0;const t=()=>{npcDraw([0,.09,-.07,.05,0][f]);if(++f<5)setTimeout(t,150);};t();}
   function emoji(t,a,b,s){x.font=s+'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,a,b);x.textBaseline='alphabetic';}
   const rr=(a,b,w,h,r)=>{x.beginPath();x.roundRect?x.roundRect(a,b,w,h,r):x.rect(a,b,w,h);};
@@ -3071,7 +3079,7 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||
       gloss(a-3,100,SW+6,26,9,.55);x.strokeStyle='rgba(0,0,0,.25)';x.lineWidth=1;rr(a-3,100,SW+6,26,10);x.stroke();
       // 유리 진열창
       rr(a+12,138,SW-24,80,8);x.fillStyle=s.open?lg(x,0,138,0,218,[[0,'#f0fcff'],[1,'#7ac8f0']]):lg(x,0,138,0,218,[[0,'#a8b4bc'],[1,'#7a8890']]);x.fill();x.strokeStyle='#4a7aa0';x.lineWidth=1.5;x.stroke();
-      if(s.open){x.save();rr(a+12,138,SW-24,80,8);x.clip();x.drawImage(FIMG,a+SW/2-40,140+Math.sin(T/16),80,80);x.restore();emoji('🥕',a+26,206,14);emoji('🌽',a+SW-26,206,14);}
+      if(s.open){x.save();rr(a+12,138,SW-24,80,8);x.clip();x.drawImage(FIMG,a+SW/2-42,136+Math.sin(T/16),84,84);x.restore();emoji('🥕',a+26,206,14);emoji('🌽',a+SW-26,206,14);}
       x.save();rr(a+12,138,SW-24,80,8);x.clip();x.fillStyle='rgba(255,255,255,.45)';x.beginPath();x.moveTo(a+12,138);x.lineTo(a+52,138);x.lineTo(a+12,186);x.closePath();x.fill();x.restore();
       if(!s.open){x.save();x.translate(a+SW/2,178);x.rotate(-.08);x.fillStyle='#ffd84a';x.fillRect(-46,-14,92,28);x.strokeStyle='#000';x.lineWidth=1.5;x.strokeRect(-46,-14,92,28);for(let k=0;k<6;k++){x.fillStyle='#222';x.beginPath();x.moveTo(-46+k*16,14);x.lineTo(-40+k*16,14);x.lineTo(-34+k*16,9);x.lineTo(-40+k*16,9);x.fill();}
         x.fillStyle='#222';x.font='bold 12px '+GUL;x.textAlign='center';x.fillText('준비 중',0,4);x.restore();}
@@ -3087,7 +3095,7 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||
     [[22,250],[W-22,250]].forEach(([a,b])=>{x.fillStyle='#c8a070';x.fillRect(a-3,b,6,16);x.fillStyle=rg(x,a-5,b-14,2,a,b-8,18,[[0,'#d8ffb0'],[.6,'#4ac030'],[1,'#1a8a1a']]);x.beginPath();x.arc(a,b-8,16,0,7);x.fill();x.fillStyle='rgba(255,255,255,.6)';x.beginPath();x.ellipse(a-5,b-16,6,3,-.4,0,7);x.fill();});
     if(!win.hidden&&!document.getElementById('popwrap').hidden)raf=requestAnimationFrame(draw);else raf=0;}
   function seedShop(){const FM=window.FARM,coins=COIN.get(),crops=FM.crops(),has=FM.ORDER.filter(k=>crops[k]);
-    panel.hidden=false;panel.innerHTML='<div class="shopwrap"><div class="npcbox"><div class="npcsay"></div><canvas class="npcc" width="240" height="240" role="img" aria-label="흙 묻은 초록 앞치마를 두른 씨앗가게 페럿"></canvas><div class="npcname">씨앗가게 페럿</div></div><div class="shoplist"><div class="fhead">🌱 씨앗가게 <span>씨앗을 사고, 텃밭에서 키운 작물을 팔아요</span></div>'+
+    panel.hidden=false;panel.innerHTML='<div class="shopwrap"><div class="npcbox"><div class="npcsay"></div><canvas class="npcc" width="300" height="300" role="img" aria-label="흙 묻은 초록 앞치마를 두른 씨앗가게 페럿"></canvas><div class="npcname">씨앗가게 페럿</div></div><div class="shoplist"><div class="fhead">🌱 씨앗가게 <span>씨앗을 사고, 텃밭에서 키운 작물을 팔아요</span></div>'+
       FM.ORDER.map(k=>{const C=FM.CROPS[k];return `<div class="row"><b>${C.e} ${C.n} 씨앗</b><span>자라는 시간 ${C.t}분 · 키워서 팔면 🪙${C.sell}</span><em>🪙 ${C.buy}</em><button class="abtn green" data-buy="${k}"${coins<C.buy?' disabled':''}>사기</button></div>`;}).join('')+
       '<div class="fhead" style="margin-top:6px">💰 작물 팔기</div>'+(has.length?has.map(k=>{const C=FM.CROPS[k];return `<div class="row"><b>${C.e} ${C.n} ×${crops[k]}</b><span>하나에 🪙${C.sell}</span><button class="abtn" data-sell="${k}">1개 팔기</button><button class="abtn" data-sellall="${k}">모두 팔기</button></div>`;}).join(''):'<div class="row"><span>팔 작물이 없어요. 텃밭에서 수확해 오세요!</span></div>')+'</div></div>';panel.querySelector('.npcsay').textContent=npcLine;npcDraw(0);
     panel.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const C=FM.CROPS[b.dataset.buy];if(!FM.buySeed(b.dataset.buy)){talk('poor');say('야채코인이 모자라요. 작물을 팔거나 까끌이를 돌봐 주면 코인이 생겨요.');return;}seedShop();talk('buy');say(FM.josa(C.n+' 씨앗','을','를')+' 샀어요! (🪙 -'+C.buy+') 텃밭에 심어 보세요.');});
