@@ -341,6 +341,13 @@ canvas{image-rendering:pixelated}
 .popwrap .hhwin{width:800px}
 .popwrap .farmwin{width:800px}
 .popwrap .bswin{width:420px}
+#m-panel{max-height:none}
+.shopwrap{display:flex; gap:10px; align-items:flex-start} .shoplist{flex:1; min-width:0; max-height:250px; overflow:auto}
+.npcbox{flex:none; width:150px; text-align:center}
+.npcc{width:120px; height:150px; display:block; margin:0 auto; animation:npcbob 2.4s ease-in-out infinite} @keyframes npcbob{50%{transform:translateY(-3px)}}
+.npcname{display:inline-block; margin-top:2px; font:bold 11px var(--gulim); color:#145a14; padding:1px 10px; border-radius:10px; border:1px solid #3a9a3a; background:linear-gradient(#f8fff4 0,#d4f6c4 48%,#94dc7c 52%,#c6f2b4 100%)}
+.npcsay{position:relative; text-align:left; font:12px/1.5 var(--gulim); color:#123; padding:6px 8px; margin-bottom:8px; border-radius:10px; border:1px solid #7ab0d8; background:linear-gradient(#ffffff,#e4f4ff); box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(0,60,120,.2); min-height:36px}
+.npcsay:after{content:""; position:absolute; left:50%; bottom:-7px; margin-left:-6px; border:6px solid transparent; border-bottom:0; border-top-color:#7ab0d8}
 .bsboard{position:relative; overflow:hidden; border-radius:12px; border:1px solid #0a5a9a; padding:10px 12px; color:#fff; font:13px var(--gulim); text-shadow:0 1px 1px rgba(0,40,90,.6);
   background:linear-gradient(180deg,#8ee0ff 0%,#3aaeee 46%,#1a86d0 54%,#2aa8ea 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 12px rgba(255,255,255,.35),0 3px 8px rgba(0,60,120,.35)}
 .bsboard:before{content:""; position:absolute; left:6px; right:6px; top:2px; height:44%; border-radius:10px 10px 30px 30px; background:linear-gradient(rgba(255,255,255,.7),rgba(255,255,255,.08)); pointer-events:none}
@@ -2923,12 +2930,58 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
   window.BUSSTOP={open};
 })();
 
+/* ===================== 페럿 상인 (가게마다 소품만 다른 같은… 아니, 다른 페럿) ===================== */
+// FERRETPAINT(ctx, {shop:'seed', wave:0~1}) — 120x150 칸에 그린다. 주인장 그림: 동그란 귀, 가로로 긴 밝은 얼굴 무늬, 점눈, 물결 입, 원통 몸, 반달 주머니 앞치마, 짧은 발.
+window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',wave=o.wave||0,L='#4a3020';
+  x.save();x.lineJoin='round';x.lineCap='round';
+  const fur=(a,b,c,d)=>lg(x,a,b,c,d,[[0,'#e6b886'],[1,'#c08a58']]);
+  // 발
+  [[44,140],[78,140]].forEach(([a,b])=>{x.fillStyle='#b88050';x.beginPath();x.ellipse(a,b,12,7.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();});
+  // 팔 (외곽선 먼저, 털 색 위에)
+  const arm=(pts)=>{[[11,L],[7,'#d8a874']].forEach(([w,c])=>{x.strokeStyle=c;x.lineWidth=w;x.beginPath();x.moveTo(pts[0],pts[1]);x.quadraticCurveTo(pts[2],pts[3],pts[4],pts[5]);x.stroke();});};
+  arm([32,80,14,82,12,66]);
+  x.save();x.translate(90,74);x.rotate(-wave*.5);arm([0,0,20,-6,22,-26]);x.restore();
+  // 몸통
+  x.beginPath();x.moveTo(30,64);x.lineTo(30,124);x.quadraticCurveTo(30,138,46,138);x.lineTo(76,138);x.quadraticCurveTo(92,138,92,124);x.lineTo(92,64);x.closePath();x.fillStyle=fur(30,0,92,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  // 앞치마 (가게마다 색·소품)
+  const AP={seed:['#7ac85a','#4a9a32']}[shop]||['#7ac85a','#4a9a32'];
+  x.beginPath();x.moveTo(31,70);x.quadraticCurveTo(61,86,91,68);x.lineTo(91,124);x.quadraticCurveTo(91,137,77,137);x.lineTo(45,137);x.quadraticCurveTo(31,137,31,124);x.closePath();
+  x.fillStyle=lg(x,0,70,0,137,[[0,AP[0]],[1,AP[1]]]);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
+  x.fillStyle='rgba(255,255,255,.3)';x.beginPath();x.moveTo(34,74);x.quadraticCurveTo(61,88,88,72);x.lineTo(88,78);x.quadraticCurveTo(61,93,34,80);x.closePath();x.fill();
+  // 반달 주머니
+  x.beginPath();x.moveTo(46,98);x.lineTo(76,98);x.quadraticCurveTo(76,118,61,119);x.quadraticCurveTo(46,118,46,98);x.closePath();x.fillStyle='rgba(0,0,0,.08)';x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
+  if(shop==='seed'){
+    // 흙 얼룩
+    x.fillStyle='rgba(110,70,30,.55)';[[38,112,4,3],[82,104,3.5,2.5],[70,128,5,3],[40,128,3,2],[84,122,2.5,2]].forEach(([a,b,rx,ry])=>{x.beginPath();x.ellipse(a,b,rx,ry,.4,0,7);x.fill();});
+    // 주머니에 꽂힌 새싹
+    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(66,99);x.lineTo(68,88);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(64,87,4,2,-.5,0,7);x.ellipse(72,86,4,2,.5,0,7);x.fill();
+  }
+  // 머리
+  [[26,24],[94,22]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,11,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();x.fillStyle='#ffe8d0';x.beginPath();x.arc(a+(a<60?2:-2),b+1,5,0,7);x.fill();});
+  x.beginPath();x.ellipse(60,46,40,27,0,0,7);x.fillStyle=fur(20,20,100,72);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  // 가로로 긴 밝은 얼굴 무늬
+  x.beginPath();x.moveTo(30,44);x.quadraticCurveTo(30,30,48,31);x.quadraticCurveTo(62,28,80,30);x.quadraticCurveTo(94,32,92,44);x.quadraticCurveTo(90,58,74,58);x.quadraticCurveTo(60,62,44,59);x.quadraticCurveTo(30,57,30,44);x.closePath();
+  x.fillStyle=lg(x,0,30,0,60,[[0,'#fffaf0'],[1,'#f6e2c8']]);x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
+  // 점눈, 물결 입
+  x.fillStyle='#2a1a10';x.beginPath();x.arc(46,42,2.6,0,7);x.arc(74,40,2.6,0,7);x.fill();
+  x.strokeStyle=L;x.lineWidth=1.8;x.beginPath();x.moveTo(52,52);x.quadraticCurveTo(55,56,58,52);x.quadraticCurveTo(61,49,64,52);x.quadraticCurveTo(67,55,70,51);x.stroke();
+  // 광택 (에어로 느낌 살짝)
+  x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(42,27,10,4,-.3,0,7);x.fill();
+  x.restore();};
+
 /* ===================== 쇼핑몰 ===================== */
 (function(){
   const win=document.getElementById('w-mall'),c=document.getElementById('mallc'),x=c.getContext('2d'),W=760,H=300,msgEl=document.getElementById('m-msg'),panel=document.getElementById('m-panel');
   const SHOPS=[{k:'seed',n:'씨앗가게',col:'#3aa04a',open:true,ic:'🌱'},{k:'super',n:'슈퍼마켓',col:'#e8402a',ic:'🛒'},{k:'life',n:'생활용품점',col:'#3a8ad8',ic:'🧴'},{k:'deco',n:'인테리어점',col:'#c8803a',ic:'🛋️'},{k:'elec',n:'전자제품점',col:'#7a5ad8',ic:'💡'}];
   const say=t=>{msgEl.textContent=t;};let raf=0,T=0,cur=null;
   const SW=136,SX=i=>20+i*146;
+  const FIMG=document.createElement('canvas');FIMG.width=240;FIMG.height=300;{const g=FIMG.getContext('2d');g.scale(2,2);FERRETPAINT(g,{shop:'seed'});}
+  // 씨앗가게 페럿의 말
+  const NPC={greet:['어서 오세요~ 씨앗가게예요! 흙 묻은 건 신경 쓰지 마세요. 방금 밭에서 왔거든요.','오늘 당근 씨앗이 싱싱해요! …씨앗이 싱싱한 게 뭐냐고요? 저도 몰라요.','다른 가게에 저랑 닮은 페럿이 있다고요? 에이, 저는 씨앗가게에서만 일해요.','물은 흙이 마를 때마다 주세요. 저도 목마르면 물 마셔요.'],
+    buy:['고마워요! 잘 키워 주세요~','좋은 선택이에요! 그 씨앗, 제가 직접 골랐어요.','쑥쑥 자랄 거예요. 아마도요!'],sell:['오, 잘 키웠네요! 값 잘 쳐 드릴게요.','싱싱하다~ 이거 제 점심… 아니, 가게 물건으로 쓸게요.'],poor:['코인이 조금 모자라네요… 외상은 안 돼요!']};
+  let npcLine='',npcPick=a=>a[Math.floor(Math.random()*a.length)];
+  function npcDraw(w){const cv=panel.querySelector('.npcc');if(!cv)return;const g=cv.getContext('2d');g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,120,150);FERRETPAINT(g,{shop:'seed',wave:w});}
+  function talk(kind){npcLine=npcPick(NPC[kind]);const b=panel.querySelector('.npcsay');if(b)b.textContent=npcLine;let f=0;const t=()=>{npcDraw([0,1,.3,1,0][f]);if(++f<5)setTimeout(t,140);};t();}
   function emoji(t,a,b,s){x.font=s+'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,a,b);x.textBaseline='alphabetic';}
   const rr=(a,b,w,h,r)=>{x.beginPath();x.roundRect?x.roundRect(a,b,w,h,r):x.rect(a,b,w,h);};
   const gloss=(a,b,w,h,r,al=.5)=>{rr(a+2,b+1.5,w-4,h*.48,r);x.fillStyle=lg(x,0,b,0,b+h*.5,[[0,'rgba(255,255,255,'+al+')'],[1,'rgba(255,255,255,.08)']]);x.fill();};
@@ -2962,6 +3015,7 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
       // 유리문
       rr(a+SW/2-15,222,30,30,4);x.fillStyle=lg(x,0,222,0,252,[[0,'#e0f6ff'],[1,'#6ab4e8']]);x.fill();x.strokeStyle='#3a6a90';x.lineWidth=1.5;x.stroke();x.beginPath();x.moveTo(a+SW/2,222);x.lineTo(a+SW/2,252);x.stroke();
       x.fillStyle='rgba(255,255,255,.5)';x.fillRect(a+SW/2-12,225,3,22);
+      if(s.k==='seed'){const by=Math.sin(T/14)*1.5;x.fillStyle='rgba(0,40,80,.2)';x.beginPath();x.ellipse(a+30,255,18,4,0,0,7);x.fill();x.drawImage(FIMG,a+6,196+by,48,60);}
       if(on){x.save();x.shadowColor='rgba(80,210,255,.95)';x.shadowBlur=16;x.strokeStyle='#5ad0ff';x.lineWidth=3;rr(a-4,60,SW+8,196,12);x.stroke();x.restore();}});
     // 반짝이는 바닥 + 비친 그림자
     x.fillStyle=lg(x,0,266,0,H,[[0,'#eef6fa'],[1,'#bccdd8']]);x.fillRect(0,266,W,H-266);
@@ -2971,14 +3025,14 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
     [[22,250],[W-22,250]].forEach(([a,b])=>{x.fillStyle='#c8a070';x.fillRect(a-3,b,6,16);x.fillStyle=rg(x,a-5,b-14,2,a,b-8,18,[[0,'#d8ffb0'],[.6,'#4ac030'],[1,'#1a8a1a']]);x.beginPath();x.arc(a,b-8,16,0,7);x.fill();x.fillStyle='rgba(255,255,255,.6)';x.beginPath();x.ellipse(a-5,b-16,6,3,-.4,0,7);x.fill();});
     if(!win.hidden&&!document.getElementById('popwrap').hidden)raf=requestAnimationFrame(draw);else raf=0;}
   function seedShop(){const FM=window.FARM,coins=COIN.get(),crops=FM.crops(),has=FM.ORDER.filter(k=>crops[k]);
-    panel.hidden=false;panel.innerHTML='<div class="fhead">🌱 씨앗가게 <span>씨앗을 사고, 텃밭에서 키운 작물을 팔아요</span></div>'+
+    panel.hidden=false;panel.innerHTML='<div class="shopwrap"><div class="npcbox"><div class="npcsay"></div><canvas class="npcc" width="240" height="300" role="img" aria-label="흙 묻은 초록 앞치마를 두른 씨앗가게 페럿"></canvas><div class="npcname">씨앗가게 페럿</div></div><div class="shoplist"><div class="fhead">🌱 씨앗가게 <span>씨앗을 사고, 텃밭에서 키운 작물을 팔아요</span></div>'+
       FM.ORDER.map(k=>{const C=FM.CROPS[k];return `<div class="row"><b>${C.e} ${C.n} 씨앗</b><span>자라는 시간 ${C.t}분 · 키워서 팔면 🪙${C.sell}</span><em>🪙 ${C.buy}</em><button class="abtn green" data-buy="${k}"${coins<C.buy?' disabled':''}>사기</button></div>`;}).join('')+
-      '<div class="fhead" style="margin-top:6px">💰 작물 팔기</div>'+(has.length?has.map(k=>{const C=FM.CROPS[k];return `<div class="row"><b>${C.e} ${C.n} ×${crops[k]}</b><span>하나에 🪙${C.sell}</span><button class="abtn" data-sell="${k}">1개 팔기</button><button class="abtn" data-sellall="${k}">모두 팔기</button></div>`;}).join(''):'<div class="row"><span>팔 작물이 없어요. 텃밭에서 수확해 오세요!</span></div>');
-    panel.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const C=FM.CROPS[b.dataset.buy];if(!FM.buySeed(b.dataset.buy)){say('야채코인이 모자라요. 작물을 팔거나 까끌이를 돌봐 주면 코인이 생겨요.');return;}seedShop();say(FM.josa(C.n+' 씨앗','을','를')+' 샀어요! (🪙 -'+C.buy+') 텃밭에 심어 보세요.');});
-    panel.querySelectorAll('[data-sell],[data-sellall]').forEach(b=>b.onclick=()=>{const k=b.dataset.sell||b.dataset.sellall,C=FM.CROPS[k],n=FM.sell(k,b.dataset.sellall?999:1);seedShop();say(C.e+' '+C.n+' '+n+'개를 팔았어요! (🪙 +'+C.sell*n+')');});}
+      '<div class="fhead" style="margin-top:6px">💰 작물 팔기</div>'+(has.length?has.map(k=>{const C=FM.CROPS[k];return `<div class="row"><b>${C.e} ${C.n} ×${crops[k]}</b><span>하나에 🪙${C.sell}</span><button class="abtn" data-sell="${k}">1개 팔기</button><button class="abtn" data-sellall="${k}">모두 팔기</button></div>`;}).join(''):'<div class="row"><span>팔 작물이 없어요. 텃밭에서 수확해 오세요!</span></div>')+'</div></div>';panel.querySelector('.npcsay').textContent=npcLine;npcDraw(0);
+    panel.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const C=FM.CROPS[b.dataset.buy];if(!FM.buySeed(b.dataset.buy)){talk('poor');say('야채코인이 모자라요. 작물을 팔거나 까끌이를 돌봐 주면 코인이 생겨요.');return;}seedShop();talk('buy');say(FM.josa(C.n+' 씨앗','을','를')+' 샀어요! (🪙 -'+C.buy+') 텃밭에 심어 보세요.');});
+    panel.querySelectorAll('[data-sell],[data-sellall]').forEach(b=>b.onclick=()=>{const k=b.dataset.sell||b.dataset.sellall,C=FM.CROPS[k],n=FM.sell(k,b.dataset.sellall?999:1);seedShop();talk('sell');say(C.e+' '+C.n+' '+n+'개를 팔았어요! (🪙 +'+C.sell*n+')');});}
   c.addEventListener('click',e=>{const r=c.getBoundingClientRect(),px=(e.clientX-r.left)*W/r.width,py=(e.clientY-r.top)*H/r.height;if(py<60||py>256)return;
     const i=SHOPS.findIndex((s,i)=>px>=SX(i)&&px<=SX(i)+SW);if(i<0)return;const s=SHOPS[i];cur=s.k;
-    if(s.k==='seed'){seedShop();say('어서 오세요, 씨앗가게예요! 무슨 씨앗을 드릴까요?');}else{panel.hidden=true;say(s.ic+' '+s.n+'은(는) 아직 준비 중이에요. 곧 문을 열어요!');}});
+    if(s.k==='seed'){seedShop();talk('greet');say('🌱 씨앗가게에 들어왔어요.');}else{panel.hidden=true;say(s.ic+' '+s.n+'은(는) 아직 준비 중이에요. 곧 문을 열어요!');}});
   window.addEventListener('coin',()=>{document.querySelectorAll('.coinnum').forEach(e=>e.textContent=COIN.get());if(!panel.hidden&&cur==='seed')seedShop();});
   document.getElementById('m-home').onclick=()=>{document.getElementById('popwrap').hidden=true;};
   window.MALL={open(){cur=null;panel.hidden=true;document.querySelectorAll('.coinnum').forEach(e=>e.textContent=COIN.get());say('야채마을 쇼핑몰에 도착했어요! 가게를 눌러 들어가 보세요.');if(!raf)raf=requestAnimationFrame(draw);}};
