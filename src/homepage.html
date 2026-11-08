@@ -2977,9 +2977,9 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||
     wood(2,59,6,37,'#c88a4a','#9a6430');wood(38,59,6,37,'#c88a4a','#9a6430');
     [[57,'#e8b070','#c48a4a'],[77,'#e0a866','#bc8242'],[92,'#e0a866','#bc8242']].forEach(([y,c1,c2])=>wood(0,y,46,4,c1,c2));
     x.fillStyle='rgba(255,255,255,.35)';[57,77,92].forEach(y=>x.fillRect(1,y+.8,44,.9));
-    // 분홍 화분 (오른쪽, 손 옆)
-    x.fillStyle=lg(x,120,0,142,0,[[0,'#ff7aa8'],[1,'#d81a5a']]);x.beginPath();x.moveTo(120,84);x.lineTo(142,84);x.lineTo(139,95);x.lineTo(123,95);x.closePath();x.fill();x.strokeStyle=L;x.lineWidth=1.6;x.stroke();
-    x.fillStyle='#ff9ac0';x.fillRect(119,81,24,4);x.strokeRect(119,81,24,4);x.fillStyle='rgba(255,255,255,.5)';x.fillRect(123,86,2,7);
+    // 빨간 화분 (오른쪽, 손 옆)
+    x.fillStyle=lg(x,120,0,142,0,[[0,'#ff6a5a'],[1,'#c81e1e']]);x.beginPath();x.moveTo(120,84);x.lineTo(142,84);x.lineTo(139,95);x.lineTo(123,95);x.closePath();x.fill();x.strokeStyle=L;x.lineWidth=1.6;x.stroke();
+    x.fillStyle='#ff8a7a';x.fillRect(119,81,24,4);x.strokeRect(119,81,24,4);x.fillStyle='rgba(255,255,255,.5)';x.fillRect(123,86,2,7);
     x.strokeStyle='#2a8a2a';x.lineWidth=1.6;x.beginPath();x.moveTo(131,81);x.lineTo(131,73);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(127.5,73,4,2,-.5,0,7);x.ellipse(134.5,72,4,2,.5,0,7);x.fill();}
   // 유리 진열장 카운터: 원목 위판·테두리·받침 + 유리 앞판, 안에 씨앗 병과 새싹 화분 (가운데는 비워서 몸이 비쳐 보임)
   const wd=(a,b,w,h,c1,c2,grain)=>{x.fillStyle=lg(x,a,b,a,b+h,[[0,c1],[1,c2]]);x.fillRect(a,b,w,h);x.strokeStyle=L;x.lineWidth=1.1;x.strokeRect(a+.5,b+.5,w-1,h-1);
