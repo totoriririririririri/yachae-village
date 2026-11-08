@@ -2806,8 +2806,8 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
   const say=t=>{msgEl.textContent=t;};
   const josa=(w,a,b)=>{const ch=w.charCodeAt(w.length-1)-0xAC00;return w+(ch>=0&&ch%28?a:b);};
   // 밭 하나: 고랑 두 줄, 줄마다 세 자리
-  const SPOT=[[268,236],[380,234],[492,236],[236,306],[380,304],[524,306]];
-  const TOOLS=[{k:'seed',n:'씨앗 고르기',x:258,col:'#e8b860'},{k:'water',n:'물 주기',x:380,col:'#6ac0f0'},{k:'harvest',n:'수확하기',x:502,col:'#ff9a5a'}],TY=92;
+  const SPOT=[[326,236],[436,236],[546,236],[300,298],[436,298],[572,298]];
+  const TOOLS=[{k:'seed',n:'씨앗 고르기',x:316,col:'#e8b860'},{k:'water',n:'물 주기',x:436,col:'#6ac0f0'},{k:'harvest',n:'수확하기',x:556,col:'#ff9a5a'}],TY=92;
   let tool='seed';
   function grow(p){if(!p.c)return;const now=Date.now();if(p.w){const from=Math.max(p.u||p.w,p.w),to=Math.min(now,p.w+WET);if(to>from)p.g=(p.g||0)+(to-from);}p.u=now;}
   const need=p=>CROPS[p.c].t*60000,ripe=p=>p.c&&(p.g||0)>=need(p),dry=p=>!p.w||Date.now()>p.w+WET;
@@ -2837,10 +2837,17 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
     [[692,226,'#e07a40'],[722,226,'#d0603a']].forEach(([a,b,col])=>{x.fillStyle=col;poly(a-10,b-12,a+10,b-12,a+7,b,a-7,b);x.fill();x.fillStyle='#4ab83a';x.beginPath();x.arc(a,b-16,6,0,7);x.fill();});
     return {night:!day&&!eve};}
   function field(){
-    const top=196,bot=346,path=()=>{x.beginPath();x.moveTo(200,top);x.quadraticCurveTo(380,top-10,560,top);x.quadraticCurveTo(612,top+6,650,bot);x.quadraticCurveTo(380,bot+12,110,bot);x.quadraticCurveTo(150,top+6,200,top);x.closePath();};
-    x.fillStyle='rgba(0,0,0,.14)';x.save();x.translate(4,8);path();x.fill();x.restore();
-    const wetAny=F.plots.some(p=>p.c&&!dry(p));path();x.fillStyle=lg(x,0,top,0,bot,wetAny?[[0,'#7a4a24'],[1,'#5a3418']]:[[0,'#b8844a'],[1,'#94643a']]);x.fill();x.strokeStyle='#6a4018';x.lineWidth=3;x.stroke();
-    x.save();path();x.clip();[[top+44,180,580],[top+112,150,612]].forEach(([yy,a,b])=>{x.strokeStyle='rgba(50,25,5,.45)';x.lineWidth=3;x.beginPath();x.moveTo(a,yy+4);x.quadraticCurveTo(380,yy-6,b,yy+2);x.stroke();x.strokeStyle='rgba(255,220,170,.25)';x.lineWidth=1.5;x.beginPath();x.moveTo(a,yy+8);x.quadraticCurveTo(380,yy-2,b,yy+6);x.stroke();});
+    // 원근: 윗변이 좁고 아랫변이 넓은 사다리꼴 + 앞쪽 두께. 집 벽(오른쪽 끝 150)과 겹치지 않게 오른쪽에 둔다.
+    const CX=436,top=200,bot=330,tw=176,bw=236,th=18,
+      path=()=>{x.beginPath();x.moveTo(CX-tw+14,top);x.quadraticCurveTo(CX,top-6,CX+tw-14,top);x.quadraticCurveTo(CX+tw,top,CX+tw+4,top+12);x.lineTo(CX+bw-6,bot-8);x.quadraticCurveTo(CX+bw,bot,CX+bw-14,bot);
+        x.quadraticCurveTo(CX,bot+6,CX-bw+14,bot);x.quadraticCurveTo(CX-bw,bot,CX-bw+6,bot-8);x.lineTo(CX-tw-4,top+12);x.quadraticCurveTo(CX-tw,top,CX-tw+14,top);x.closePath();};
+    x.fillStyle='rgba(0,0,0,.16)';x.beginPath();x.ellipse(CX+6,bot+th+4,bw+10,12,0,0,7);x.fill();
+    // 앞쪽 흙 두께
+    x.fillStyle='#5a3418';x.beginPath();x.moveTo(CX-bw+4,bot-6);x.quadraticCurveTo(CX,bot+8,CX+bw-4,bot-6);x.lineTo(CX+bw-10,bot+th-4);x.quadraticCurveTo(CX,bot+th+8,CX-bw+10,bot+th-4);x.closePath();x.fill();
+    const wetAny=F.plots.some(p=>p.c&&!dry(p));path();x.fillStyle=lg(x,0,top,0,bot,wetAny?[[0,'#7a4a24'],[1,'#5e381a']]:[[0,'#b8844a'],[1,'#9a6a3c']]);x.fill();x.strokeStyle='#6a4018';x.lineWidth=3;x.stroke();
+    x.save();path();x.clip();
+    const edge=t=>[CX-(tw+(bw-tw)*t),CX+(tw+(bw-tw)*t)];
+    [[236,.28],[298,.75]].forEach(([yy,t])=>{const [l,r]=edge(t);x.strokeStyle='rgba(50,25,5,.45)';x.lineWidth=2+t*2;x.beginPath();x.moveTo(l+22,yy+4);x.lineTo(r-22,yy+4);x.stroke();x.strokeStyle='rgba(255,220,170,.25)';x.lineWidth=1.5;x.beginPath();x.moveTo(l+22,yy+8);x.lineTo(r-22,yy+8);x.stroke();});
     // 젖은 자리만 진하게
     SPOT.forEach(([a,b],i)=>{const p=F.plots[i];if(p.c&&!dry(p)){x.fillStyle='rgba(40,20,5,.35)';x.beginPath();x.ellipse(a,b+4,34,11,0,0,7);x.fill();}});x.restore();}
   function spot(i){const [a,b]=SPOT[i],p=F.plots[i];
