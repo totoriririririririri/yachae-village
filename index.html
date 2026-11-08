@@ -3037,11 +3037,34 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||
     x.fillStyle=lg(x,120,0,142,0,[[0,'#ff7aa8'],[1,'#d81a5a']]);x.beginPath();x.moveTo(120,84);x.lineTo(142,84);x.lineTo(139,95);x.lineTo(123,95);x.closePath();x.fill();x.strokeStyle=L;x.lineWidth=1.6;x.stroke();
     x.fillStyle='#ff9ac0';x.fillRect(119,81,24,4);x.strokeRect(119,81,24,4);x.fillStyle='rgba(255,255,255,.5)';x.fillRect(123,86,2,7);
     x.strokeStyle='#2a8a2a';x.lineWidth=1.6;x.beginPath();x.moveTo(131,81);x.lineTo(131,73);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(127.5,73,4,2,-.5,0,7);x.ellipse(134.5,72,4,2,.5,0,7);x.fill();}
-  // 유리 진열장 카운터 (몸이 비쳐 보임)
-  x.fillStyle=lg(x,0,96,0,150,[[0,'rgba(200,240,255,.35)'],[1,'rgba(150,210,240,.45)']]);x.fillRect(0,96,150,54);
-  x.fillStyle='rgba(255,255,255,.45)';[[6,104,20],[22,104,8],[112,128,26],[132,128,10]].forEach(([a,b,w])=>{x.beginPath();x.moveTo(a,b);x.lineTo(a+w,b-10);x.lineTo(a+w+3,b-10);x.lineTo(a+3,b);x.closePath();x.fill();});
-  x.fillStyle='#7a5440';x.fillRect(0,94,150,3.5);x.fillStyle='rgba(255,255,255,.4)';x.fillRect(0,94,150,1);
-  x.fillStyle='#7a5440';x.fillRect(0,109,150,2.5);
+  // 유리 진열장 카운터: 원목 위판·테두리·받침 + 유리 앞판, 안에 씨앗 병과 새싹 화분 (가운데는 비워서 몸이 비쳐 보임)
+  const wd=(a,b,w,h,c1,c2,grain)=>{x.fillStyle=lg(x,a,b,a,b+h,[[0,c1],[1,c2]]);x.fillRect(a,b,w,h);x.strokeStyle=L;x.lineWidth=1.1;x.strokeRect(a+.5,b+.5,w-1,h-1);
+    if(grain){x.strokeStyle='rgba(90,50,15,.3)';x.lineWidth=.7;x.beginPath();for(let k=1;k<3;k++){const yy=b+h*k/3;x.moveTo(a+2,yy);x.bezierCurveTo(a+w*.3,yy-1,a+w*.7,yy+1,a+w-2,yy);}x.stroke();}};
+  // 유리 (살짝 하늘색) + 안쪽 유리 선반
+  x.fillStyle=lg(x,0,98,0,142,[[0,'rgba(210,245,255,.32)'],[1,'rgba(160,215,245,.42)']]);x.fillRect(0,98,150,44);
+  x.fillStyle='rgba(255,255,255,.55)';x.fillRect(4,119,142,1.5);x.fillStyle='rgba(120,190,230,.5)';x.fillRect(4,120.5,142,1);
+  if(shop==='seed'){
+    // 씨앗 병 (왼쪽 위 칸, 오른쪽 위 칸)
+    [[10,'#ff9a3a'],[22,'#e84a3a'],[118,'#ffd23a'],[130,'#7a5ad8']].forEach(([a,c])=>{x.fillStyle='rgba(255,255,255,.55)';x.beginPath();x.roundRect?x.roundRect(a,105,10,14,2.5):x.rect(a,105,10,14);x.fill();
+      x.fillStyle=c;x.fillRect(a+1.5,111,7,7);x.fillStyle='rgba(0,0,0,.18)';for(let k=0;k<4;k++)x.fillRect(a+2.5+(k%2)*3.5,112+Math.floor(k/2)*3,1.2,1.2);
+      x.fillStyle='#b8823e';x.fillRect(a+1,102.5,8,3);x.strokeStyle='rgba(60,90,110,.6)';x.lineWidth=.8;x.strokeRect(a+.4,105.4,9.2,13.2);x.fillStyle='rgba(255,255,255,.8)';x.fillRect(a+2,106.5,1.3,9);});
+    // 새싹 화분 (아래 칸 양쪽)
+    [[16,'#e07a40'],[134,'#e86aa8']].forEach(([a,c])=>{x.fillStyle=c;x.beginPath();x.moveTo(a-7,132);x.lineTo(a+7,132);x.lineTo(a+5,141);x.lineTo(a-5,141);x.closePath();x.fill();x.strokeStyle=L;x.lineWidth=.9;x.stroke();
+      x.strokeStyle='#2a8a2a';x.lineWidth=1.3;x.beginPath();x.moveTo(a,132);x.lineTo(a,126);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(a-3,126,3,1.6,-.5,0,7);x.ellipse(a+3,125,3,1.6,.5,0,7);x.fill();});
+    // 별 스티커
+    x.save();x.translate(104,132);x.rotate(.2);x.fillStyle='#ffd84a';x.beginPath();for(let i=0;i<10;i++){const q=i*Math.PI/5-Math.PI/2,r=i%2?2.6:6;x.lineTo(Math.cos(q)*r,Math.sin(q)*r);}x.closePath();x.fill();x.strokeStyle='#d8a020';x.lineWidth=.8;x.stroke();x.fillStyle='rgba(255,255,255,.7)';x.beginPath();x.arc(-1.5,-1.5,1.2,0,7);x.fill();x.restore();
+  }
+  // 반짝이는 반사광
+  x.fillStyle='rgba(255,255,255,.5)';[[6,124,22],[26,124,8],[108,148,24],[128,148,9]].forEach(([a,b,w])=>{x.beginPath();x.moveTo(a,b);x.lineTo(a+w,b-20);x.lineTo(a+w+3.5,b-20);x.lineTo(a+3.5,b);x.closePath();x.fill();});
+  x.fillStyle=lg(x,0,98,0,106,[[0,'rgba(255,255,255,.45)'],[1,'rgba(255,255,255,0)']]);x.fillRect(4,98,142,8);
+  // 원목 테두리: 위판, 기둥, 받침
+  wd(0,98,5,46,'#c88a4a','#9a6430');wd(145,98,5,46,'#c88a4a','#9a6430');
+  wd(0,141,150,9,'#b87a3e','#8a5426',true);
+  wd(0,91,150,7,'#ecbc80','#c48a4a',true);x.fillStyle='rgba(255,255,255,.5)';x.fillRect(1,91.8,148,1);
+  // 가격표 (위판에 매달림)
+  if(shop==='seed'){x.strokeStyle='#8a6a40';x.lineWidth=.7;x.beginPath();x.moveTo(84,98);x.lineTo(86,103);x.stroke();
+    x.save();x.translate(86,107);x.rotate(.12);x.fillStyle='#fffaf0';x.beginPath();x.moveTo(-6,-4);x.lineTo(5,-4);x.lineTo(7,0);x.lineTo(5,4);x.lineTo(-6,4);x.closePath();x.fill();x.strokeStyle='#c89a5a';x.lineWidth=.8;x.stroke();
+    x.fillStyle='#e8402a';x.font='bold 5.5px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('5🪙',0,.3);x.textBaseline='alphabetic';x.restore();}
   // 카운터 위에 얹은 오른손 (왼손은 선반 뒤)
   x.fillStyle='#d8a874';x.beginPath();x.ellipse(113,92.5,8.5,5.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
   x.strokeStyle='rgba(74,48,32,.6)';x.lineWidth=1;x.beginPath();x.moveTo(111,91);x.lineTo(111,95);x.moveTo(115,91);x.lineTo(115,95);x.stroke();
