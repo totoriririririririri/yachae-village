@@ -2470,35 +2470,35 @@ const YCblob=(function(){const C=new Map();
   const hogImg=document.createElement('canvas');hogImg.width=192;hogImg.height=168;
   function drawRoom(){
     // 방 (한 점 투시: 뒷벽·옆벽·천장·바닥)
-    const BL=64,BR=W-64,BT=28,VX=W/2,VY=170,sideY=y0=>FLOOR+(BL)*(FLOOR-VY)/(VX-BL),FY=sideY();
+    const BL=46,BR=W-46,BT=20,VX=W/2,VY=170,sideY=y0=>FLOOR+(BL)*(FLOOR-VY)/(VX-BL),FY=sideY();
     const poly=(...p)=>{x.beginPath();x.moveTo(p[0],p[1]);for(let i=2;i<p.length;i+=2)x.lineTo(p[i],p[i+1]);x.closePath();};
     const paper=()=>{x.globalAlpha=.25;x.fillStyle='#f0b860';for(let i=0;i<W;i+=26)for(let j=10;j<FLOOR+20;j+=26){x.beginPath();x.arc(i+((j/26)%2)*13,j,2.2,0,7);x.fill();}x.globalAlpha=1;};
     // 뒷벽
-    x.fillStyle=lg(x,0,0,0,FLOOR,[[0,'#fff3d6'],[1,'#f9dfae']]);x.fillRect(0,0,W,FLOOR+20);paper();
+    x.fillStyle=lg(x,0,0,0,FLOOR,[[0,'#fffaea'],[1,'#fdecc4']]);x.fillRect(0,0,W,FLOOR+20);paper();
     // 아래쪽 줄무늬 벽판 + 몰딩
     {const RY=228,side=(bx)=>RY+(bx===BL?-1:-1)*0+0,ry0=RY+(0-BL)*(RY-VY)/(BL-VX),ryW=ry0;
-      x.save();x.beginPath();x.rect(BL,RY,BR-BL,FLOOR-RY);x.clip();for(let i=BL;i<BR;i+=14){x.fillStyle=((i-BL)/14)%2?'#fff2d0':'#f8dc9c';x.fillRect(i,RY,14,FLOOR-RY);}x.restore();
-      [[0,BL],[W,BR]].forEach(([ex,bx])=>{x.save();poly(ex,ry0,bx,RY,bx,FLOOR,ex,FY);x.clip();for(let k=0;k<6;k++){const t0=k/6,t1=(k+.5)/6,xa=ex+(bx-ex)*t0,xb2=ex+(bx-ex)*t1;poly(xa,ry0+(RY-ry0)*t0,xb2,ry0+(RY-ry0)*t1,xb2,FY+(FLOOR-FY)*t1,xa,FY+(FLOOR-FY)*t0);x.fillStyle='#f8dc9c';x.fill();}x.restore();});
-      x.fillStyle='#c8803a';x.fillRect(BL,RY-4,BR-BL,6);x.fillStyle='#e8a860';x.fillRect(BL,RY-4,BR-BL,2);
-      poly(0,ry0-4,BL,RY-4,BL,RY+2,0,ry0+3);x.fillStyle='#b8702e';x.fill();poly(W,ry0-4,BR,RY-4,BR,RY+2,W,ry0+3);x.fill();}
+      x.save();x.beginPath();x.rect(BL,RY,BR-BL,FLOOR-RY);x.clip();for(let i=BL;i<BR;i+=14){x.fillStyle=((i-BL)/14)%2?'#fffaea':'#fde8b4';x.fillRect(i,RY,14,FLOOR-RY);}x.restore();
+      [[0,BL],[W,BR]].forEach(([ex,bx])=>{x.save();poly(ex,ry0,bx,RY,bx,FLOOR,ex,FY);x.clip();for(let k=0;k<6;k++){const t0=k/6,t1=(k+.5)/6,xa=ex+(bx-ex)*t0,xb2=ex+(bx-ex)*t1;poly(xa,ry0+(RY-ry0)*t0,xb2,ry0+(RY-ry0)*t1,xb2,FY+(FLOOR-FY)*t1,xa,FY+(FLOOR-FY)*t0);x.fillStyle='#fde8b4';x.fill();}x.restore();});
+      x.fillStyle='#e0a868';x.fillRect(BL,RY-4,BR-BL,6);x.fillStyle='#f4c890';x.fillRect(BL,RY-4,BR-BL,2);
+      poly(0,ry0-4,BL,RY-4,BL,RY+2,0,ry0+3);x.fillStyle='#d49a5a';x.fill();poly(W,ry0-4,BR,RY-4,BR,RY+2,W,ry0+3);x.fill();}
     // 옆벽 (조금 더 어둡게)
-    [[0,0,BL,BT,BL,FLOOR,0,FY],[W,0,BR,BT,BR,FLOOR,W,FY]].forEach((p,i)=>{poly(...p);x.fillStyle=lg(x,i?W:0,0,i?BR:BL,0,[[0,'rgba(150,90,30,.22)'],[1,'rgba(150,90,30,.1)']]);x.fill();});
+    [[0,0,BL,BT,BL,FLOOR,0,FY],[W,0,BR,BT,BR,FLOOR,W,FY]].forEach((p,i)=>{poly(...p);x.fillStyle=lg(x,i?W:0,0,i?BR:BL,0,[[0,'rgba(200,140,60,.12)'],[1,'rgba(200,140,60,.04)']]);x.fill();});
     // 천장
-    poly(0,0,W,0,BR,BT,BL,BT);x.fillStyle='#f3dfb6';x.fill();x.fillStyle='#e2c48e';x.fillRect(BL,BT-3,BR-BL,3);
-    x.strokeStyle='rgba(150,100,40,.35)';x.lineWidth=1;x.beginPath();x.moveTo(BL,BT);x.lineTo(BL,FLOOR);x.moveTo(BR,BT);x.lineTo(BR,FLOOR);x.stroke();
+    poly(0,0,W,0,BR,BT,BL,BT);x.fillStyle='#fdf4e0';x.fill();x.fillStyle='#f0dcb0';x.fillRect(BL,BT-3,BR-BL,3);
+    x.strokeStyle='rgba(180,130,60,.25)';x.lineWidth=1;x.beginPath();x.moveTo(BL,BT);x.lineTo(BL,FLOOR);x.moveTo(BR,BT);x.lineTo(BR,FLOOR);x.stroke();
     // 구석 그림자
-    x.fillStyle=lg(x,BL,0,BL+40,0,[[0,'rgba(120,70,20,.16)'],[1,'rgba(120,70,20,0)']]);x.fillRect(BL,BT,40,FLOOR-BT);
-    x.fillStyle=lg(x,BR,0,BR-40,0,[[0,'rgba(120,70,20,.16)'],[1,'rgba(120,70,20,0)']]);x.fillRect(BR-40,BT,40,FLOOR-BT);
-    x.fillStyle=lg(x,0,BT,0,BT+24,[[0,'rgba(120,70,20,.14)'],[1,'rgba(120,70,20,0)']]);x.fillRect(BL,BT,BR-BL,24);
+    x.fillStyle=lg(x,BL,0,BL+40,0,[[0,'rgba(160,100,40,.07)'],[1,'rgba(160,100,40,0)']]);x.fillRect(BL,BT,40,FLOOR-BT);
+    x.fillStyle=lg(x,BR,0,BR-40,0,[[0,'rgba(160,100,40,.07)'],[1,'rgba(160,100,40,0)']]);x.fillRect(BR-40,BT,40,FLOOR-BT);
+    x.fillStyle=lg(x,0,BT,0,BT+24,[[0,'rgba(160,100,40,.06)'],[1,'rgba(160,100,40,0)']]);x.fillRect(BL,BT,BR-BL,24);
     // 바닥 (안쪽으로 모이는 마룻결)
-    poly(BL,FLOOR,BR,FLOOR,W,FY,W,H,0,H,0,FY);x.fillStyle=lg(x,0,FLOOR,0,H,[[0,'#b07a3c'],[1,'#c8904a']]);x.fill();
+    poly(BL,FLOOR,BR,FLOOR,W,FY,W,H,0,H,0,FY);x.fillStyle=lg(x,0,FLOOR,0,H,[[0,'#d2a066'],[1,'#e0b47a']]);x.fill();
     x.save();poly(BL,FLOOR,BR,FLOOR,W,FY,W,H,0,H,0,FY);x.clip();
-    x.strokeStyle='rgba(70,35,5,.28)';x.lineWidth=1;for(let xb=-900;xb<=W+900;xb+=46){x.beginPath();x.moveTo(VX+(xb-VX)*(FLOOR-VY)/(H-VY),FLOOR);x.lineTo(xb,H);x.stroke();}
-    x.strokeStyle='rgba(70,35,5,.16)';for(let k=1;k<6;k++){const yy=FLOOR+(H-FLOOR)*Math.pow(k/6,1.5);for(let xb=-900+(k%2)*23;xb<=W+900;xb+=92){const f=(yy-VY)/(H-VY),a=VX+(xb-VX)*f,b=VX+(xb+46-VX)*f;x.beginPath();x.moveTo(a,yy);x.lineTo(b,yy);x.stroke();}}
-    x.fillStyle=lg(x,0,FLOOR,0,FLOOR+30,[[0,'rgba(60,30,0,.22)'],[1,'rgba(60,30,0,0)']]);x.fillRect(0,FLOOR,W,30);x.restore();
+    x.strokeStyle='rgba(120,70,20,.2)';x.lineWidth=1;for(let xb=-900;xb<=W+900;xb+=46){x.beginPath();x.moveTo(VX+(xb-VX)*(FLOOR-VY)/(H-VY),FLOOR);x.lineTo(xb,H);x.stroke();}
+    x.strokeStyle='rgba(120,70,20,.12)';for(let k=1;k<6;k++){const yy=FLOOR+(H-FLOOR)*Math.pow(k/6,1.5);for(let xb=-900+(k%2)*23;xb<=W+900;xb+=92){const f=(yy-VY)/(H-VY),a=VX+(xb-VX)*f,b=VX+(xb+46-VX)*f;x.beginPath();x.moveTo(a,yy);x.lineTo(b,yy);x.stroke();}}
+    x.fillStyle=lg(x,0,FLOOR,0,FLOOR+30,[[0,'rgba(120,70,20,.1)'],[1,'rgba(120,70,20,0)']]);x.fillRect(0,FLOOR,W,30);x.restore();
     // 걸레받이
-    x.fillStyle='#8a5a26';x.fillRect(BL,FLOOR-8,BR-BL,8);x.fillStyle='#b07a40';x.fillRect(BL,FLOOR-8,BR-BL,2);
-    poly(0,FY-10,BL,FLOOR-8,BL,FLOOR,0,FY);x.fillStyle='#7a4a1a';x.fill();poly(W,FY-10,BR,FLOOR-8,BR,FLOOR,W,FY);x.fill();
+    x.fillStyle='#b88450';x.fillRect(BL,FLOOR-8,BR-BL,8);x.fillStyle='#d8a870';x.fillRect(BL,FLOOR-8,BR-BL,2);
+    poly(0,FY-10,BL,FLOOR-8,BL,FLOOR,0,FY);x.fillStyle='#a87444';x.fill();poly(W,FY-10,BR,FLOOR-8,BR,FLOOR,W,FY);x.fill();
     // 창문 (크게)
     const hr=new Date().getHours(),day=hr>=7&&hr<18,eve=hr>=18&&hr<20,wx=380,wy=36,ww=260,wh=176,gx=wx+7,gy=wy+7,gw=ww-14,gh=wh-14;
     x.fillStyle='#fff';x.fillRect(wx,wy,ww,wh);x.fillStyle=lg(x,0,gy,0,gy+gh,day?[[0,'#5ab8ff'],[1,'#c8ecff']]:eve?[[0,'#ff9a5a'],[1,'#ffd8a0']]:[[0,'#0a1a4a'],[1,'#2a3a7a']]);x.fillRect(gx,gy,gw,gh);
