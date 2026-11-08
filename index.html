@@ -2629,8 +2629,8 @@ const YCblob=(function(){const C=new Map();
     x.fillStyle='#fff';x.beginPath();x.moveTo(98,256);x.quadraticCurveTo(148,247,196,256);x.lineTo(196,263);x.quadraticCurveTo(148,255,96,263);x.closePath();x.fill();
     x.strokeStyle='#e8604a';x.lineWidth=1;x.beginPath();for(let i=0;i<=32;i++){const a=98+i*3,t=(a-98)/98;x.lineTo(a,259.5+(i%2?1.2:-1.2)-Math.sin(t*Math.PI)*4.5);}x.stroke();
     // 노란 달 쿠션
-    {const cx=182,cy=250,r=13;x.fillStyle='#f4c440';x.beginPath();x.arc(cx,cy,r,Math.PI*.5,Math.PI*1.5,false);x.quadraticCurveTo(cx-r*.3,cy,cx,cy+r);x.closePath();x.fill();x.strokeStyle='#c89620';x.lineWidth=1.2;x.stroke();
-      x.fillStyle='rgba(255,255,255,.5)';x.beginPath();x.ellipse(cx-r*.7,cy-r*.3,2,4,.3,0,7);x.fill();}
+    {const cx=184,cy=249,r=16;x.fillStyle='#f4c440';x.beginPath();x.arc(cx,cy,r,Math.PI*.5,Math.PI*1.5,false);x.quadraticCurveTo(cx-r*.3,cy,cx,cy+r);x.closePath();x.fill();x.strokeStyle='#c89620';x.lineWidth=1.2;x.stroke();
+      x.fillStyle='#3a2a10';x.beginPath();x.arc(cx-r*.68,cy-1.5,1.3,0,7);x.arc(cx-r*.32,cy-1.5,1.3,0,7);x.fill();x.strokeStyle='#3a2a10';x.lineWidth=1;x.lineCap='round';x.beginPath();x.arc(cx-r*.5,cy+1.2,2,.15*Math.PI,.85*Math.PI);x.stroke();x.fillStyle='rgba(255,140,120,.45)';x.beginPath();x.arc(cx-r*.8,cy+2.5,1.6,0,7);x.arc(cx-r*.2,cy+2.5,1.6,0,7);x.fill();}
     x.restore();}
   function drawHog(){if(!light){const k=.6;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:'sleep',face:-1});x.drawImage(hogImg,96-100*k,244+DY-96*k,192*k,168*k);return;}const st=!light?'sleep':hog.st;window.HOGPAINT&&window.HOGPAINT(hogImg.getContext('2d'),{state:st,face:hog.dir,panic:hog.act==='startle'});
     const jy=hog.jump>0?-Math.sin(hog.jump/18*Math.PI)*40:0,by=(hog.st==='idle'&&light)?Math.sin(T/12)*1.2:0,k=.72;
