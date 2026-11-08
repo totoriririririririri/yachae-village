@@ -400,7 +400,7 @@ canvas{image-rendering:pixelated}
 #m-panel{max-height:none}
 .shopwrap{display:flex; gap:10px; align-items:flex-start} .shoplist{flex:1; min-width:0; max-height:250px; overflow:auto}
 .npcbox{flex:none; width:150px; text-align:center}
-.npcc{width:120px; height:150px; display:block; margin:0 auto; animation:npcbob 2.4s ease-in-out infinite} @keyframes npcbob{50%{transform:translateY(-3px)}}
+.scn .npcc,.npcc{border:0; width:140px; height:140px; display:block; margin:0 auto; animation:npcbob 2.4s ease-in-out infinite} @keyframes npcbob{50%{transform:translateY(-3px)}}
 .npcname{display:inline-block; margin-top:2px; font:bold 11px var(--gulim); color:#145a14; padding:1px 10px; border-radius:10px; border:1px solid #3a9a3a; background:linear-gradient(#f8fff4 0,#d4f6c4 48%,#94dc7c 52%,#c6f2b4 100%)}
 .npcsay{position:relative; text-align:left; font:12px/1.5 var(--gulim); color:#123; padding:6px 8px; margin-bottom:8px; border-radius:10px; border:1px solid #7ab0d8; background:linear-gradient(#ffffff,#e4f4ff); box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(0,60,120,.2); min-height:36px}
 .npcsay:after{content:""; position:absolute; left:50%; bottom:-7px; margin-left:-6px; border:6px solid transparent; border-bottom:0; border-top-color:#7ab0d8}
@@ -2987,42 +2987,46 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
 })();
 
 /* ===================== 페럿 상인 (가게마다 소품만 다른 같은… 아니, 다른 페럿) ===================== */
-// FERRETPAINT(ctx, {shop:'seed', wave:0~1}) — 120x150 칸에 그린다. 주인장 그림: 동그란 귀, 가로로 긴 밝은 얼굴 무늬, 점눈, 물결 입, 원통 몸, 반달 주머니 앞치마, 짧은 발.
-window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',wave=o.wave||0,L='#4a3020';
+// FERRETPAINT(ctx, {shop:'seed', tilt:0}) — 120x120 칸에 카운터 뒤 상반신을 그린다.
+// 주인장 그림: 동그란 귀, 페럿 얼굴(눈가 마스크 + 작은 흰 주둥이), 점눈, 물결 입, 원통 몸, 앞치마. 손은 카운터 위에.
+window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||0,L='#4a3020';
   x.save();x.lineJoin='round';x.lineCap='round';
   const fur=(a,b,c,d)=>lg(x,a,b,c,d,[[0,'#e6b886'],[1,'#c08a58']]);
-  // 발
-  [[44,140],[78,140]].forEach(([a,b])=>{x.fillStyle='#b88050';x.beginPath();x.ellipse(a,b,12,7.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();});
-  // 팔 (외곽선 먼저, 털 색 위에)
-  const arm=(pts)=>{[[11,L],[7,'#d8a874']].forEach(([w,c])=>{x.strokeStyle=c;x.lineWidth=w;x.beginPath();x.moveTo(pts[0],pts[1]);x.quadraticCurveTo(pts[2],pts[3],pts[4],pts[5]);x.stroke();});};
-  arm([32,80,14,82,12,66]);
-  x.save();x.translate(90,74);x.rotate(-wave*.5);arm([0,0,20,-6,22,-26]);x.restore();
-  // 몸통
-  x.beginPath();x.moveTo(30,64);x.lineTo(30,124);x.quadraticCurveTo(30,138,46,138);x.lineTo(76,138);x.quadraticCurveTo(92,138,92,124);x.lineTo(92,64);x.closePath();x.fillStyle=fur(30,0,92,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
-  // 앞치마 (가게마다 색·소품)
+  // 몸통 (어깨부터)
+  x.beginPath();x.moveTo(24,124);x.lineTo(26,84);x.quadraticCurveTo(28,66,60,64);x.quadraticCurveTo(92,66,94,84);x.lineTo(96,124);x.closePath();x.fillStyle=fur(24,0,96,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  // 앞치마 가슴판 + 끈
   const AP={seed:['#7ac85a','#4a9a32']}[shop]||['#7ac85a','#4a9a32'];
-  x.beginPath();x.moveTo(31,70);x.quadraticCurveTo(61,86,91,68);x.lineTo(91,124);x.quadraticCurveTo(91,137,77,137);x.lineTo(45,137);x.quadraticCurveTo(31,137,31,124);x.closePath();
-  x.fillStyle=lg(x,0,70,0,137,[[0,AP[0]],[1,AP[1]]]);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
-  x.fillStyle='rgba(255,255,255,.3)';x.beginPath();x.moveTo(34,74);x.quadraticCurveTo(61,88,88,72);x.lineTo(88,78);x.quadraticCurveTo(61,93,34,80);x.closePath();x.fill();
+  x.strokeStyle=AP[1];x.lineWidth=3.5;x.beginPath();x.moveTo(40,78);x.quadraticCurveTo(44,68,52,66);x.moveTo(80,78);x.quadraticCurveTo(76,68,68,66);x.stroke();
+  x.beginPath();x.moveTo(38,78);x.lineTo(82,78);x.lineTo(86,124);x.lineTo(34,124);x.closePath();x.fillStyle=lg(x,0,78,0,124,[[0,AP[0]],[1,AP[1]]]);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
+  x.fillStyle='rgba(255,255,255,.3)';x.fillRect(40,80,40,4);
   // 반달 주머니
-  x.beginPath();x.moveTo(46,98);x.lineTo(76,98);x.quadraticCurveTo(76,118,61,119);x.quadraticCurveTo(46,118,46,98);x.closePath();x.fillStyle='rgba(0,0,0,.08)';x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
-  if(shop==='seed'){
-    // 흙 얼룩
-    x.fillStyle='rgba(110,70,30,.55)';[[38,112,4,3],[82,104,3.5,2.5],[70,128,5,3],[40,128,3,2],[84,122,2.5,2]].forEach(([a,b,rx,ry])=>{x.beginPath();x.ellipse(a,b,rx,ry,.4,0,7);x.fill();});
-    // 주머니에 꽂힌 새싹
-    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(66,99);x.lineTo(68,88);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(64,87,4,2,-.5,0,7);x.ellipse(72,86,4,2,.5,0,7);x.fill();
-  }
-  // 머리
-  [[26,24],[94,22]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,11,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();x.fillStyle='#ffe8d0';x.beginPath();x.arc(a+(a<60?2:-2),b+1,5,0,7);x.fill();});
-  x.beginPath();x.ellipse(60,46,40,27,0,0,7);x.fillStyle=fur(20,20,100,72);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
-  // 가로로 긴 밝은 얼굴 무늬
-  x.beginPath();x.moveTo(30,44);x.quadraticCurveTo(30,30,48,31);x.quadraticCurveTo(62,28,80,30);x.quadraticCurveTo(94,32,92,44);x.quadraticCurveTo(90,58,74,58);x.quadraticCurveTo(60,62,44,59);x.quadraticCurveTo(30,57,30,44);x.closePath();
-  x.fillStyle=lg(x,0,30,0,60,[[0,'#fffaf0'],[1,'#f6e2c8']]);x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
-  // 점눈, 물결 입
-  x.fillStyle='#2a1a10';x.beginPath();x.arc(46,42,2.6,0,7);x.arc(74,40,2.6,0,7);x.fill();
-  x.strokeStyle=L;x.lineWidth=1.8;x.beginPath();x.moveTo(52,52);x.quadraticCurveTo(55,56,58,52);x.quadraticCurveTo(61,49,64,52);x.quadraticCurveTo(67,55,70,51);x.stroke();
-  // 광택 (에어로 느낌 살짝)
-  x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(42,27,10,4,-.3,0,7);x.fill();
+  x.beginPath();x.moveTo(48,86);x.lineTo(72,86);x.quadraticCurveTo(72,100,60,101);x.quadraticCurveTo(48,100,48,86);x.closePath();x.fillStyle='rgba(0,0,0,.08)';x.fill();x.strokeStyle=L;x.lineWidth=1.6;x.stroke();
+  if(shop==='seed'){x.fillStyle='rgba(110,70,30,.55)';[[42,94,3.5,2.5],[78,90,3,2],[74,99,2.5,2]].forEach(([a,b,rx,ry])=>{x.beginPath();x.ellipse(a,b,rx,ry,.4,0,7);x.fill();});
+    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(64,87);x.lineTo(66,77);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(62,76,4,2,-.5,0,7);x.ellipse(70,75,4,2,.5,0,7);x.fill();}
+  // 머리 (말할 때 살짝 갸웃)
+  x.save();x.translate(60,64);x.rotate(tilt);x.translate(-60,-64);
+  [[28,20],[92,20]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,10,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();x.fillStyle='#fff2e0';x.beginPath();x.arc(a+(a<60?2:-2),b+1,4.5,0,7);x.fill();});
+  x.beginPath();x.ellipse(60,42,38,25,0,0,7);x.fillStyle=fur(22,18,98,68);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  x.save();x.beginPath();x.ellipse(60,42,37,24,0,0,7);x.clip();
+  // 흰 눈썹 무늬, 눈가 마스크(진한 갈색 띠)
+  x.fillStyle='#fff4e4';x.beginPath();x.ellipse(45,29,8,3,-.15,0,7);x.ellipse(75,29,8,3,.15,0,7);x.fill();
+  x.fillStyle='#8a5632';x.beginPath();x.moveTo(22,40);x.quadraticCurveTo(36,31,50,36);x.quadraticCurveTo(60,40,70,36);x.quadraticCurveTo(84,31,98,40);x.quadraticCurveTo(86,50,72,46);x.quadraticCurveTo(60,44,48,46);x.quadraticCurveTo(34,50,22,40);x.closePath();x.fill();
+  x.restore();
+  // 작은 흰 주둥이
+  x.beginPath();x.ellipse(60,54,14,9,0,0,7);x.fillStyle=lg(x,0,45,0,63,[[0,'#ffffff'],[1,'#f4e6d4']]);x.fill();
+  // 점눈 (마스크 위라서 반짝이 하나)
+  [[46,40],[74,40]].forEach(([a,b])=>{x.fillStyle='#1a0e06';x.beginPath();x.arc(a,b,3,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(a+1,b-1,.9,0,7);x.fill();});
+  // 코, 물결 입
+  x.fillStyle='#c86a6a';x.beginPath();x.ellipse(60,49,3,2,0,0,7);x.fill();
+  x.strokeStyle=L;x.lineWidth=1.6;x.beginPath();x.moveTo(53,56);x.quadraticCurveTo(55.5,59,58,56);x.quadraticCurveTo(60,53.5,62,56);x.quadraticCurveTo(64.5,59,67,56);x.stroke();
+  x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(44,23,9,3.5,-.3,0,7);x.fill();
+  x.restore();
+  // 카운터 + 카운터 위에 얹은 손
+  x.fillStyle=lg(x,0,100,0,120,[[0,'#d8a868'],[1,'#a8743c']]);x.fillRect(0,102,120,18);x.fillStyle=lg(x,0,96,0,104,[[0,'#f4d098'],[1,'#c8945a']]);x.fillRect(0,97,120,7);
+  x.fillStyle='rgba(255,255,255,.45)';x.fillRect(0,97,120,1.5);x.strokeStyle='rgba(90,50,10,.5)';x.lineWidth=1;x.beginPath();x.moveTo(0,104);x.lineTo(120,104);x.stroke();
+  if(shop==='seed'){[[8,'#ff9a3a'],[20,'#e84a3a']].forEach(([a,c])=>{x.fillStyle='#fff';x.fillRect(a,86,10,13);x.strokeStyle='#8a6a40';x.lineWidth=1;x.strokeRect(a+.5,86.5,9,12);x.fillStyle=c;x.beginPath();x.arc(a+5,91,3,0,7);x.fill();});
+    x.fillStyle='#d0703a';x.beginPath();x.moveTo(98,98);x.lineTo(112,98);x.lineTo(110,88);x.lineTo(100,88);x.closePath();x.fill();x.fillStyle='#4ab83a';x.beginPath();x.arc(105,84,5,0,7);x.fill();}
+  [[42,99],[78,99]].forEach(([a,b])=>{x.fillStyle='#d8a874';x.beginPath();x.ellipse(a,b,8,5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();x.strokeStyle='rgba(74,48,32,.6)';x.lineWidth=1;x.beginPath();x.moveTo(a-2,b-1);x.lineTo(a-2,b+3);x.moveTo(a+2,b-1);x.lineTo(a+2,b+3);x.stroke();});
   x.restore();};
 
 /* ===================== 쇼핑몰 ===================== */
@@ -3031,13 +3035,13 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',wave=o.wave||
   const SHOPS=[{k:'seed',n:'씨앗가게',col:'#3aa04a',open:true,ic:'🌱'},{k:'super',n:'슈퍼마켓',col:'#e8402a',ic:'🛒'},{k:'life',n:'생활용품점',col:'#3a8ad8',ic:'🧴'},{k:'deco',n:'인테리어점',col:'#c8803a',ic:'🛋️'},{k:'elec',n:'전자제품점',col:'#7a5ad8',ic:'💡'}];
   const say=t=>{msgEl.textContent=t;};let raf=0,T=0,cur=null;
   const SW=136,SX=i=>20+i*146;
-  const FIMG=document.createElement('canvas');FIMG.width=240;FIMG.height=300;{const g=FIMG.getContext('2d');g.scale(2,2);FERRETPAINT(g,{shop:'seed'});}
+  const FIMG=document.createElement('canvas');FIMG.width=240;FIMG.height=240;{const g=FIMG.getContext('2d');g.scale(2,2);FERRETPAINT(g,{shop:'seed'});}
   // 씨앗가게 페럿의 말
   const NPC={greet:['어서 오세요~ 씨앗가게예요! 흙 묻은 건 신경 쓰지 마세요. 방금 밭에서 왔거든요.','오늘 당근 씨앗이 싱싱해요! …씨앗이 싱싱한 게 뭐냐고요? 저도 몰라요.','다른 가게에 저랑 닮은 페럿이 있다고요? 에이, 저는 씨앗가게에서만 일해요.','물은 흙이 마를 때마다 주세요. 저도 목마르면 물 마셔요.'],
     buy:['고마워요! 잘 키워 주세요~','좋은 선택이에요! 그 씨앗, 제가 직접 골랐어요.','쑥쑥 자랄 거예요. 아마도요!'],sell:['오, 잘 키웠네요! 값 잘 쳐 드릴게요.','싱싱하다~ 이거 제 점심… 아니, 가게 물건으로 쓸게요.'],poor:['코인이 조금 모자라네요… 외상은 안 돼요!']};
   let npcLine='',npcPick=a=>a[Math.floor(Math.random()*a.length)];
-  function npcDraw(w){const cv=panel.querySelector('.npcc');if(!cv)return;const g=cv.getContext('2d');g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,120,150);FERRETPAINT(g,{shop:'seed',wave:w});}
-  function talk(kind){npcLine=npcPick(NPC[kind]);const b=panel.querySelector('.npcsay');if(b)b.textContent=npcLine;let f=0;const t=()=>{npcDraw([0,1,.3,1,0][f]);if(++f<5)setTimeout(t,140);};t();}
+  function npcDraw(w){const cv=panel.querySelector('.npcc');if(!cv)return;const g=cv.getContext('2d');g.setTransform(2,0,0,2,0,0);g.clearRect(0,0,120,120);FERRETPAINT(g,{shop:'seed',tilt:w});}
+  function talk(kind){npcLine=npcPick(NPC[kind]);const b=panel.querySelector('.npcsay');if(b)b.textContent=npcLine;let f=0;const t=()=>{npcDraw([0,.09,-.07,.05,0][f]);if(++f<5)setTimeout(t,150);};t();}
   function emoji(t,a,b,s){x.font=s+'px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,a,b);x.textBaseline='alphabetic';}
   const rr=(a,b,w,h,r)=>{x.beginPath();x.roundRect?x.roundRect(a,b,w,h,r):x.rect(a,b,w,h);};
   const gloss=(a,b,w,h,r,al=.5)=>{rr(a+2,b+1.5,w-4,h*.48,r);x.fillStyle=lg(x,0,b,0,b+h*.5,[[0,'rgba(255,255,255,'+al+')'],[1,'rgba(255,255,255,.08)']]);x.fill();};
@@ -3064,14 +3068,13 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',wave=o.wave||
       gloss(a-3,100,SW+6,26,9,.55);x.strokeStyle='rgba(0,0,0,.25)';x.lineWidth=1;rr(a-3,100,SW+6,26,10);x.stroke();
       // 유리 진열창
       rr(a+12,138,SW-24,80,8);x.fillStyle=s.open?lg(x,0,138,0,218,[[0,'#f0fcff'],[1,'#7ac8f0']]):lg(x,0,138,0,218,[[0,'#a8b4bc'],[1,'#7a8890']]);x.fill();x.strokeStyle='#4a7aa0';x.lineWidth=1.5;x.stroke();
-      if(s.open){emoji('🥕',a+40,190,20);emoji('🌽',a+SW-40,190,20);emoji('🌱',a+SW/2,176,18);}
+      if(s.open){x.save();rr(a+12,138,SW-24,80,8);x.clip();x.drawImage(FIMG,a+SW/2-40,140+Math.sin(T/16),80,80);x.restore();emoji('🥕',a+26,206,14);emoji('🌽',a+SW-26,206,14);}
       x.save();rr(a+12,138,SW-24,80,8);x.clip();x.fillStyle='rgba(255,255,255,.45)';x.beginPath();x.moveTo(a+12,138);x.lineTo(a+52,138);x.lineTo(a+12,186);x.closePath();x.fill();x.restore();
       if(!s.open){x.save();x.translate(a+SW/2,178);x.rotate(-.08);x.fillStyle='#ffd84a';x.fillRect(-46,-14,92,28);x.strokeStyle='#000';x.lineWidth=1.5;x.strokeRect(-46,-14,92,28);for(let k=0;k<6;k++){x.fillStyle='#222';x.beginPath();x.moveTo(-46+k*16,14);x.lineTo(-40+k*16,14);x.lineTo(-34+k*16,9);x.lineTo(-40+k*16,9);x.fill();}
         x.fillStyle='#222';x.font='bold 12px '+GUL;x.textAlign='center';x.fillText('준비 중',0,4);x.restore();}
       // 유리문
       rr(a+SW/2-15,222,30,30,4);x.fillStyle=lg(x,0,222,0,252,[[0,'#e0f6ff'],[1,'#6ab4e8']]);x.fill();x.strokeStyle='#3a6a90';x.lineWidth=1.5;x.stroke();x.beginPath();x.moveTo(a+SW/2,222);x.lineTo(a+SW/2,252);x.stroke();
       x.fillStyle='rgba(255,255,255,.5)';x.fillRect(a+SW/2-12,225,3,22);
-      if(s.k==='seed'){const by=Math.sin(T/14)*1.5;x.fillStyle='rgba(0,40,80,.2)';x.beginPath();x.ellipse(a+30,255,18,4,0,0,7);x.fill();x.drawImage(FIMG,a+6,196+by,48,60);}
       if(on){x.save();x.shadowColor='rgba(80,210,255,.95)';x.shadowBlur=16;x.strokeStyle='#5ad0ff';x.lineWidth=3;rr(a-4,60,SW+8,196,12);x.stroke();x.restore();}});
     // 반짝이는 바닥 + 비친 그림자
     x.fillStyle=lg(x,0,266,0,H,[[0,'#eef6fa'],[1,'#bccdd8']]);x.fillRect(0,266,W,H-266);
@@ -3081,7 +3084,7 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',wave=o.wave||
     [[22,250],[W-22,250]].forEach(([a,b])=>{x.fillStyle='#c8a070';x.fillRect(a-3,b,6,16);x.fillStyle=rg(x,a-5,b-14,2,a,b-8,18,[[0,'#d8ffb0'],[.6,'#4ac030'],[1,'#1a8a1a']]);x.beginPath();x.arc(a,b-8,16,0,7);x.fill();x.fillStyle='rgba(255,255,255,.6)';x.beginPath();x.ellipse(a-5,b-16,6,3,-.4,0,7);x.fill();});
     if(!win.hidden&&!document.getElementById('popwrap').hidden)raf=requestAnimationFrame(draw);else raf=0;}
   function seedShop(){const FM=window.FARM,coins=COIN.get(),crops=FM.crops(),has=FM.ORDER.filter(k=>crops[k]);
-    panel.hidden=false;panel.innerHTML='<div class="shopwrap"><div class="npcbox"><div class="npcsay"></div><canvas class="npcc" width="240" height="300" role="img" aria-label="흙 묻은 초록 앞치마를 두른 씨앗가게 페럿"></canvas><div class="npcname">씨앗가게 페럿</div></div><div class="shoplist"><div class="fhead">🌱 씨앗가게 <span>씨앗을 사고, 텃밭에서 키운 작물을 팔아요</span></div>'+
+    panel.hidden=false;panel.innerHTML='<div class="shopwrap"><div class="npcbox"><div class="npcsay"></div><canvas class="npcc" width="240" height="240" role="img" aria-label="흙 묻은 초록 앞치마를 두른 씨앗가게 페럿"></canvas><div class="npcname">씨앗가게 페럿</div></div><div class="shoplist"><div class="fhead">🌱 씨앗가게 <span>씨앗을 사고, 텃밭에서 키운 작물을 팔아요</span></div>'+
       FM.ORDER.map(k=>{const C=FM.CROPS[k];return `<div class="row"><b>${C.e} ${C.n} 씨앗</b><span>자라는 시간 ${C.t}분 · 키워서 팔면 🪙${C.sell}</span><em>🪙 ${C.buy}</em><button class="abtn green" data-buy="${k}"${coins<C.buy?' disabled':''}>사기</button></div>`;}).join('')+
       '<div class="fhead" style="margin-top:6px">💰 작물 팔기</div>'+(has.length?has.map(k=>{const C=FM.CROPS[k];return `<div class="row"><b>${C.e} ${C.n} ×${crops[k]}</b><span>하나에 🪙${C.sell}</span><button class="abtn" data-sell="${k}">1개 팔기</button><button class="abtn" data-sellall="${k}">모두 팔기</button></div>`;}).join(''):'<div class="row"><span>팔 작물이 없어요. 텃밭에서 수확해 오세요!</span></div>')+'</div></div>';panel.querySelector('.npcsay').textContent=npcLine;npcDraw(0);
     panel.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{const C=FM.CROPS[b.dataset.buy];if(!FM.buySeed(b.dataset.buy)){talk('poor');say('야채코인이 모자라요. 작물을 팔거나 까끌이를 돌봐 주면 코인이 생겨요.');return;}seedShop();talk('buy');say(FM.josa(C.n+' 씨앗','을','를')+' 샀어요! (🪙 -'+C.buy+') 텃밭에 심어 보세요.');});
