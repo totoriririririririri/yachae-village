@@ -2987,46 +2987,44 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
 })();
 
 /* ===================== 페럿 상인 (가게마다 소품만 다른 같은… 아니, 다른 페럿) ===================== */
-// FERRETPAINT(ctx, {shop:'seed', tilt:0}) — 120x120 칸에 카운터 뒤 상반신을 그린다.
-// 주인장 그림: 동그란 귀, 페럿 얼굴(눈가 마스크 + 작은 흰 주둥이), 점눈, 물결 입, 원통 몸, 앞치마. 손은 카운터 위에.
+// FERRETPAINT(ctx, {shop:'seed', tilt:0}) — 120x120 칸에 카운터 뒤 상반신을 그린다. (주인장 그림 2번째 버전)
+// 큰 머리, 동그란 귀, 고글처럼 가로로 긴 밝은 얼굴 무늬(아래 가운데가 살짝 파임), 점눈, ω 입, 코 없음.
+// 둥근 어깨, 앞치마 가슴판, 네모 주머니, 몸 옆으로 내린 팔과 카운터 위에 얹은 손.
 window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||0,L='#4a3020';
   x.save();x.lineJoin='round';x.lineCap='round';
   const fur=(a,b,c,d)=>lg(x,a,b,c,d,[[0,'#e6b886'],[1,'#c08a58']]);
-  // 몸통 (어깨부터)
-  x.beginPath();x.moveTo(24,124);x.lineTo(26,84);x.quadraticCurveTo(28,66,60,64);x.quadraticCurveTo(92,66,94,84);x.lineTo(96,124);x.closePath();x.fillStyle=fur(24,0,96,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
-  // 앞치마 가슴판 + 끈
   const AP={seed:['#7ac85a','#4a9a32']}[shop]||['#7ac85a','#4a9a32'];
-  x.strokeStyle=AP[1];x.lineWidth=3.5;x.beginPath();x.moveTo(40,78);x.quadraticCurveTo(44,68,52,66);x.moveTo(80,78);x.quadraticCurveTo(76,68,68,66);x.stroke();
-  x.beginPath();x.moveTo(38,78);x.lineTo(82,78);x.lineTo(86,124);x.lineTo(34,124);x.closePath();x.fillStyle=lg(x,0,78,0,124,[[0,AP[0]],[1,AP[1]]]);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
-  x.fillStyle='rgba(255,255,255,.3)';x.fillRect(40,80,40,4);
-  // 반달 주머니
-  x.beginPath();x.moveTo(48,86);x.lineTo(72,86);x.quadraticCurveTo(72,100,60,101);x.quadraticCurveTo(48,100,48,86);x.closePath();x.fillStyle='rgba(0,0,0,.08)';x.fill();x.strokeStyle=L;x.lineWidth=1.6;x.stroke();
-  if(shop==='seed'){x.fillStyle='rgba(110,70,30,.55)';[[42,94,3.5,2.5],[78,90,3,2],[74,99,2.5,2]].forEach(([a,b,rx,ry])=>{x.beginPath();x.ellipse(a,b,rx,ry,.4,0,7);x.fill();});
-    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(64,87);x.lineTo(66,77);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(62,76,4,2,-.5,0,7);x.ellipse(70,75,4,2,.5,0,7);x.fill();}
+  // 팔 (몸 뒤, 양옆으로 둥글게 내려옴)
+  [[-1,30],[1,90]].forEach(([d,a])=>{x.beginPath();x.moveTo(a-d*2,66);x.quadraticCurveTo(a+d*14,70,a+d*12,94);x.lineTo(a-d*2,94);x.closePath();x.fillStyle=fur(a-12,0,a+12,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();});
+  // 몸통
+  x.beginPath();x.moveTo(30,124);x.lineTo(30,74);x.quadraticCurveTo(31,62,46,62);x.lineTo(74,62);x.quadraticCurveTo(89,62,90,74);x.lineTo(90,124);x.closePath();x.fillStyle=fur(30,0,90,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  // 앞치마: 가슴판 띠 + 아래로
+  x.beginPath();x.moveTo(38,66);x.lineTo(82,66);x.lineTo(82,124);x.lineTo(38,124);x.closePath();x.fillStyle=lg(x,0,66,0,124,[[0,AP[0]],[1,AP[1]]]);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
+  x.beginPath();x.moveTo(38,75);x.lineTo(82,75);x.stroke();x.fillStyle='rgba(255,255,255,.3)';x.fillRect(40,67.5,40,3);
+  // 네모 주머니 (카운터 위로 살짝)
+  x.beginPath();x.moveTo(47,84);x.lineTo(73,84);x.lineTo(73,100);x.lineTo(47,100);x.closePath();x.fillStyle='rgba(0,0,0,.08)';x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
+  if(shop==='seed'){x.fillStyle='rgba(110,70,30,.55)';[[43,90,3,2.2],[78,82,3,2],[60,79,2.5,1.8]].forEach(([a,b,rx,ry])=>{x.beginPath();x.ellipse(a,b,rx,ry,.4,0,7);x.fill();});
+    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(67,85);x.lineTo(69,76);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(65,75,4,2,-.5,0,7);x.ellipse(73,74,4,2,.5,0,7);x.fill();}
   // 머리 (말할 때 살짝 갸웃)
-  x.save();x.translate(60,64);x.rotate(tilt);x.translate(-60,-64);
-  [[28,20],[92,20]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,10,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();x.fillStyle='#fff2e0';x.beginPath();x.arc(a+(a<60?2:-2),b+1,4.5,0,7);x.fill();});
-  x.beginPath();x.ellipse(60,42,38,25,0,0,7);x.fillStyle=fur(22,18,98,68);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
-  x.save();x.beginPath();x.ellipse(60,42,37,24,0,0,7);x.clip();
-  // 흰 눈썹 무늬, 눈가 마스크(진한 갈색 띠)
-  x.fillStyle='#fff4e4';x.beginPath();x.ellipse(45,29,8,3,-.15,0,7);x.ellipse(75,29,8,3,.15,0,7);x.fill();
-  x.fillStyle='#8a5632';x.beginPath();x.moveTo(22,40);x.quadraticCurveTo(36,31,50,36);x.quadraticCurveTo(60,40,70,36);x.quadraticCurveTo(84,31,98,40);x.quadraticCurveTo(86,50,72,46);x.quadraticCurveTo(60,44,48,46);x.quadraticCurveTo(34,50,22,40);x.closePath();x.fill();
+  x.save();x.translate(60,62);x.rotate(tilt);x.translate(-60,-62);
+  [[29,16],[91,15]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,10,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();x.fillStyle='#fff2e0';x.beginPath();x.arc(a+(a<60?2:-2),b+1,4.5,0,7);x.fill();});
+  x.beginPath();x.moveTo(24,36);x.quadraticCurveTo(24,14,48,13);x.lineTo(72,13);x.quadraticCurveTo(96,14,96,36);x.quadraticCurveTo(96,62,70,63);x.lineTo(50,63);x.quadraticCurveTo(24,62,24,36);x.closePath();
+  x.fillStyle=fur(24,14,96,64);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  // 고글처럼 가로로 긴 밝은 얼굴 무늬 (아래 가운데가 파임)
+  x.beginPath();x.moveTo(33,37);x.quadraticCurveTo(33,24,48,24);x.lineTo(73,23);x.quadraticCurveTo(88,23,88,36);x.quadraticCurveTo(88,50,74,50);x.quadraticCurveTo(64,50,60,44);x.quadraticCurveTo(56,50,46,50);x.quadraticCurveTo(33,50,33,37);x.closePath();
+  x.fillStyle=lg(x,0,23,0,51,[[0,'#fffaf0'],[1,'#f4e2c8']]);x.fill();x.strokeStyle=L;x.lineWidth=1.9;x.stroke();
+  // 점눈, ω 입
+  x.fillStyle='#2a1a10';x.beginPath();x.arc(46,36,2.5,0,7);x.arc(74,35,2.5,0,7);x.fill();
+  x.strokeStyle=L;x.lineWidth=1.8;x.beginPath();x.moveTo(53.5,51);x.quadraticCurveTo(55,55.5,58.5,53);x.quadraticCurveTo(60,51.5,61.5,53);x.quadraticCurveTo(65,55.5,66.5,51);x.stroke();
+  x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(40,17,8,3,-.25,0,7);x.fill();
   x.restore();
-  // 작은 흰 주둥이
-  x.beginPath();x.ellipse(60,54,14,9,0,0,7);x.fillStyle=lg(x,0,45,0,63,[[0,'#ffffff'],[1,'#f4e6d4']]);x.fill();
-  // 점눈 (마스크 위라서 반짝이 하나)
-  [[46,40],[74,40]].forEach(([a,b])=>{x.fillStyle='#1a0e06';x.beginPath();x.arc(a,b,3,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(a+1,b-1,.9,0,7);x.fill();});
-  // 코, 물결 입
-  x.fillStyle='#c86a6a';x.beginPath();x.ellipse(60,49,3,2,0,0,7);x.fill();
-  x.strokeStyle=L;x.lineWidth=1.6;x.beginPath();x.moveTo(53,56);x.quadraticCurveTo(55.5,59,58,56);x.quadraticCurveTo(60,53.5,62,56);x.quadraticCurveTo(64.5,59,67,56);x.stroke();
-  x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(44,23,9,3.5,-.3,0,7);x.fill();
-  x.restore();
-  // 카운터 + 카운터 위에 얹은 손
-  x.fillStyle=lg(x,0,100,0,120,[[0,'#d8a868'],[1,'#a8743c']]);x.fillRect(0,102,120,18);x.fillStyle=lg(x,0,96,0,104,[[0,'#f4d098'],[1,'#c8945a']]);x.fillRect(0,97,120,7);
-  x.fillStyle='rgba(255,255,255,.45)';x.fillRect(0,97,120,1.5);x.strokeStyle='rgba(90,50,10,.5)';x.lineWidth=1;x.beginPath();x.moveTo(0,104);x.lineTo(120,104);x.stroke();
-  if(shop==='seed'){[[8,'#ff9a3a'],[20,'#e84a3a']].forEach(([a,c])=>{x.fillStyle='#fff';x.fillRect(a,86,10,13);x.strokeStyle='#8a6a40';x.lineWidth=1;x.strokeRect(a+.5,86.5,9,12);x.fillStyle=c;x.beginPath();x.arc(a+5,91,3,0,7);x.fill();});
-    x.fillStyle='#d0703a';x.beginPath();x.moveTo(98,98);x.lineTo(112,98);x.lineTo(110,88);x.lineTo(100,88);x.closePath();x.fill();x.fillStyle='#4ab83a';x.beginPath();x.arc(105,84,5,0,7);x.fill();}
-  [[42,99],[78,99]].forEach(([a,b])=>{x.fillStyle='#d8a874';x.beginPath();x.ellipse(a,b,8,5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();x.strokeStyle='rgba(74,48,32,.6)';x.lineWidth=1;x.beginPath();x.moveTo(a-2,b-1);x.lineTo(a-2,b+3);x.moveTo(a+2,b-1);x.lineTo(a+2,b+3);x.stroke();});
+  // 카운터
+  x.fillStyle=lg(x,0,100,0,120,[[0,'#d8a868'],[1,'#a8743c']]);x.fillRect(0,103,120,17);x.fillStyle=lg(x,0,96,0,104,[[0,'#f4d098'],[1,'#c8945a']]);x.fillRect(0,96,120,8);
+  x.fillStyle='rgba(255,255,255,.45)';x.fillRect(0,96,120,1.5);x.strokeStyle=L;x.lineWidth=1.6;x.beginPath();x.moveTo(0,96.5);x.lineTo(120,96.5);x.moveTo(0,104);x.lineTo(120,104);x.stroke();
+  if(shop==='seed'){[[4,'#ff9a3a'],[15,'#e84a3a']].forEach(([a,c])=>{x.fillStyle='#fff';x.fillRect(a,85,9,12);x.strokeStyle='#8a6a40';x.lineWidth=1;x.strokeRect(a+.5,85.5,8,11);x.fillStyle=c;x.beginPath();x.arc(a+4.5,90,2.6,0,7);x.fill();});
+    x.fillStyle='#d0703a';x.beginPath();x.moveTo(103,97);x.lineTo(116,97);x.lineTo(114,88);x.lineTo(105,88);x.closePath();x.fill();x.fillStyle='#4ab83a';x.beginPath();x.arc(109.5,84,5,0,7);x.fill();}
+  // 카운터 위에 얹은 두 손
+  [[28,95],[92,95]].forEach(([a,b])=>{x.fillStyle='#d8a874';x.beginPath();x.ellipse(a,b,8,5.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();x.strokeStyle='rgba(74,48,32,.6)';x.lineWidth=1;x.beginPath();x.moveTo(a-2,b-2);x.lineTo(a-2,b+2);x.moveTo(a+2,b-2);x.lineTo(a+2,b+2);x.stroke();});
   x.restore();};
 
 /* ===================== 쇼핑몰 ===================== */
