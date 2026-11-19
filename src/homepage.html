@@ -2933,36 +2933,54 @@ window.COIN=(function(){const K='yc-coin';let n=30;try{const v=localStorage.getI
 /* ===================== 페럿 상인 (가게마다 소품만 다른 같은… 아니, 다른 페럿) ===================== */
 // FERRETPAINT(ctx, {shop:'seed', tilt:0}) — 150x150 칸. 주인장 그림(3번째): 첫 번째 페럿 전신 + 유리 진열장 카운터.
 // 큰 머리, 동그란 귀, 가로로 긴 밝은 얼굴 무늬, 점눈, 물결 입. 목까지 올라오는 긴 앞치마(반달 주머니).
-// 팔은 몸 뒤에서 이어지고, 왼손은 나무 씨앗 선반 뒤, 오른손은 카운터 위(옆에 분홍 화분). 카운터는 유리라 몸이 비쳐 보인다.
+// 몸·팔·손은 매끈한 곡선 한 덩어리(외곽선 먼저 → 털 한꺼번에), 왼손은 나무 씨앗 선반 뒤, 오른손은 카운터 위(옆에 빨간 화분). 카운터는 유리라 몸이 비쳐 보인다.
 window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||0,L='#4a3020';
   x.save();x.lineJoin='round';x.lineCap='round';
   const fur=(a,b,c,d)=>lg(x,a,b,c,d,[[0,'#e6b886'],[1,'#c08a58']]);
   const AP={seed:['#7ac85a','#4a9a32']}[shop]||['#7ac85a','#4a9a32'];
-  const ARMS=[[()=>{x.moveTo(35,70);x.quadraticCurveTo(24,76,24,86);},'#e2b382'],[()=>{x.moveTo(85,68);x.quadraticCurveTo(94,74,97,91);},'#c69260']];
-  const armLine=(f,w,c)=>{x.strokeStyle=c;x.lineWidth=w;x.beginPath();f();x.stroke();};
+  // 몸통·팔은 매끈한 곡선 도형. 외곽선을 모두 먼저 긋고 털을 한꺼번에 칠해서 하나로 이어 보이게 한다.
+  const FUR=fur(30,0,92,0);
+  const torso=()=>{x.beginPath();x.moveTo(60,59);x.bezierCurveTo(70,59,76,59,80,60);x.bezierCurveTo(88,61,92,66,92,74);x.lineTo(92,124);x.bezierCurveTo(92,133,86,138,76,138);x.lineTo(46,138);x.bezierCurveTo(36,138,30,133,30,124);x.lineTo(30,74);x.bezierCurveTo(30,66,34,61,42,60);x.bezierCurveTo(46,59,52,59,60,59);x.closePath();};
+  const RIN=[88.5,92.5,88.5,84,85.5,75,78.5,70.5],LIN=[32.5,89,32.5,82,34.5,75,41.5,71];
+  const armR=()=>{x.beginPath();x.moveTo(78.5,63);x.bezierCurveTo(91,63.5,101,73,104.5,86);x.bezierCurveTo(106.5,93,104,98.5,97.5,98.5);x.bezierCurveTo(91.5,98.5,88.5,96.5,88.5,92.5);x.bezierCurveTo(RIN[2],RIN[3],RIN[4],RIN[5],RIN[6],RIN[7]);x.closePath();};
+  const armL=()=>{x.beginPath();x.moveTo(41.5,63);x.bezierCurveTo(30,64,21.5,72,19.5,84);x.bezierCurveTo(18.5,91,21,95.5,26.5,95.5);x.bezierCurveTo(30.5,95.5,32.5,93,32.5,89);x.bezierCurveTo(LIN[2],LIN[3],LIN[4],LIN[5],LIN[6],LIN[7]);x.closePath();};
+  // 끝으로 갈수록 굵어지는 선 (팔 안쪽 선이 어깨에서 스르르 생겨나게)
+  const taper=(q,w0,w1)=>{const B=(t,i)=>{const u=1-t;return u*u*u*q[i]+3*u*u*t*q[i+2]+3*u*t*t*q[i+4]+t*t*t*q[i+6];};x.strokeStyle=L;let px=B(0,0),py=B(0,1);for(let k=1;k<=18;k++){const t=k/18,nx=B(t,0),ny=B(t,1);x.lineWidth=w0+(w1-w0)*t;x.beginPath();x.moveTo(px,py);x.lineTo(nx,ny);x.stroke();px=nx;py=ny;}};
+  const rev=q=>[q[6],q[7],q[4],q[5],q[2],q[3],q[0],q[1]];
+  const sil=(arms)=>{x.strokeStyle=L;x.lineWidth=4.4;arms.forEach(f=>{f();x.stroke();});x.fillStyle=FUR;arms.forEach(f=>{f();x.fill();});};
   x.save();x.translate(15,0);
-  // 팔 외곽선 먼저 (몸통을 그린 뒤 털 색을 다시 칠해서 몸과 팔 사이 경계를 지운다)
-  ARMS.forEach(([f])=>armLine(f,15,L));
-  // 발
-  [[44,140],[78,140]].forEach(([a,b])=>{x.fillStyle='#b88050';x.beginPath();x.ellipse(a,b,12,7.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();});
-  // 몸통
-  x.beginPath();x.moveTo(30,64);x.lineTo(30,124);x.quadraticCurveTo(30,138,46,138);x.lineTo(76,138);x.quadraticCurveTo(92,138,92,124);x.lineTo(92,64);x.closePath();x.fillStyle=fur(30,0,92,0);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
-  ARMS.forEach(([f])=>armLine(f,10.5,fur(30,0,92,0)));
-  // 긴 앞치마 (가슴판이 목까지)
-  const apron=()=>{x.beginPath();x.moveTo(41,64);x.lineTo(81,64);x.lineTo(82,84);x.quadraticCurveTo(91,87,91,96);x.lineTo(91,124);x.quadraticCurveTo(91,137,77,137);x.lineTo(45,137);x.quadraticCurveTo(31,137,31,124);x.lineTo(31,96);x.quadraticCurveTo(31,87,40,84);x.closePath();};
+  // 발 (몸 뒤)
+  [[44,140],[78,140]].forEach(([a,b])=>{x.fillStyle=lg(x,0,b-7,0,b+7,[[0,'#c89060'],[1,'#a87040']]);x.beginPath();x.ellipse(a,b,12,7.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();});
+  sil([torso,armL,armR]);
+  // 몸통 입체감: 옆구리 살짝 그늘, 가운데 살짝 밝게
+  x.save();torso();x.clip();x.fillStyle=lg(x,29,0,93,0,[[0,'rgba(255,240,215,.0)'],[.35,'rgba(255,240,215,.22)'],[.75,'rgba(120,70,30,0)'],[1,'rgba(120,70,30,.18)']]);x.fillRect(29,58,65,82);x.restore();
+  // 긴 앞치마 (가슴판이 목까지, 아래로 부드럽게 퍼짐)
+  const apron=()=>{x.beginPath();x.moveTo(42,64);x.lineTo(80,64);x.lineTo(81,78);x.bezierCurveTo(82,86,91,86,91,96);x.lineTo(91,124);x.bezierCurveTo(91,133,86,137,77,137);x.lineTo(45,137);x.bezierCurveTo(36,137,31,133,31,124);x.lineTo(31,96);x.bezierCurveTo(31,86,40,86,41,78);x.closePath();};
   apron();x.fillStyle=lg(x,0,64,0,137,[[0,AP[0]],[1,AP[1]]]);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
-  x.fillStyle='rgba(255,255,255,.28)';x.fillRect(43,66,36,3);
-  x.beginPath();x.moveTo(46,98);x.lineTo(76,98);x.quadraticCurveTo(76,118,61,119);x.quadraticCurveTo(46,118,46,98);x.closePath();x.fillStyle='rgba(0,0,0,.08)';x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
+  x.save();apron();x.clip();x.fillStyle=lg(x,31,0,91,0,[[0,'rgba(255,255,255,.12)'],[.4,'rgba(255,255,255,0)'],[1,'rgba(0,40,0,.14)']]);x.fillRect(31,64,60,74);x.restore();
+  x.fillStyle='rgba(255,255,255,.28)';x.beginPath();x.roundRect?x.roundRect(43,66,36,3,1.5):x.rect(43,66,36,3);x.fill();
+  // 반달 주머니 (박음질)
+  x.beginPath();x.moveTo(46,98);x.lineTo(76,98);x.bezierCurveTo(76,111,70,119,61,119);x.bezierCurveTo(52,119,46,111,46,98);x.closePath();x.fillStyle='rgba(0,0,0,.08)';x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
+  x.setLineDash([1.6,1.8]);x.strokeStyle='rgba(255,255,255,.55)';x.lineWidth=.8;x.beginPath();x.moveTo(48.5,100.5);x.lineTo(73.5,100.5);x.bezierCurveTo(73.5,110,68.5,116.5,61,116.5);x.bezierCurveTo(53.5,116.5,48.5,110,48.5,100.5);x.stroke();x.setLineDash([]);
   if(shop==='seed'){x.fillStyle='rgba(110,70,30,.55)';[[38,112,4,3],[82,104,3.5,2.5],[70,128,5,3],[40,128,3,2],[84,122,2.5,2],[80,90,3,2]].forEach(([a,b,rx,ry])=>{x.beginPath();x.ellipse(a,b,rx,ry,.4,0,7);x.fill();});
-    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(64,99);x.lineTo(66,88);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(62,87,4,2,-.5,0,7);x.ellipse(70,86,4,2,.5,0,7);x.fill();}
+    x.strokeStyle='#2a8a2a';x.lineWidth=2;x.beginPath();x.moveTo(64,99);x.quadraticCurveTo(64.2,93,66,88);x.stroke();x.fillStyle='#5ac84a';x.beginPath();x.ellipse(62,87,4,2,-.5,0,7);x.ellipse(70,86,4,2,.5,0,7);x.fill();
+    x.strokeStyle='rgba(20,90,20,.5)';x.lineWidth=.6;x.beginPath();x.moveTo(59,88.5);x.lineTo(65,86.5);x.moveTo(73,87.5);x.lineTo(67,86);x.stroke();}
+  // 팔은 몸·앞치마 앞쪽: 몸 안쪽에서만 다시 칠하고 안쪽 선은 어깨에서 가늘게 시작
+  x.save();torso();x.clip();x.fillStyle=FUR;armL();x.fill();armR();x.fill();x.restore();
+  taper(rev(LIN),.2,2.2);taper(rev(RIN),.2,2.2);
   // 머리 (말할 때 살짝 갸웃)
   x.save();x.translate(60,66);x.rotate(tilt);x.translate(-60,-66);
-  [[26,24],[94,22]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,11,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();x.fillStyle='#ffe8d0';x.beginPath();x.arc(a+(a<60?2:-2),b+1,5,0,7);x.fill();});
-  x.beginPath();x.ellipse(60,46,40,27,0,0,7);x.fillStyle=fur(20,20,100,72);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
-  x.beginPath();x.moveTo(30,44);x.quadraticCurveTo(30,30,48,31);x.quadraticCurveTo(62,28,80,30);x.quadraticCurveTo(94,32,92,44);x.quadraticCurveTo(90,58,74,58);x.quadraticCurveTo(60,62,44,59);x.quadraticCurveTo(30,57,30,44);x.closePath();
+  [[26,24],[94,22]].forEach(([a,b])=>{x.fillStyle=fur(a-10,b-10,a+10,b+10);x.beginPath();x.arc(a,b,11,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2.2;x.stroke();const ix=a+(a<60?2:-2);x.fillStyle=rg(x,ix,b+1,1,ix,b+1,5.5,[[0,'#fff2e2'],[.75,'#ffe4c8'],[1,'#f4cfa8']]);x.beginPath();x.arc(ix,b+1,5,0,7);x.fill();});
+  x.beginPath();x.ellipse(60,46,40,27,0,0,7);x.fillStyle=fur(20,20,100,72);x.fill();
+  x.save();x.clip();x.fillStyle=rg(x,60,52,10,60,46,46,[[0,'rgba(120,70,30,0)'],[.8,'rgba(120,70,30,0)'],[1,'rgba(120,70,30,.16)']]);x.fillRect(18,18,84,56);x.restore();
+  x.strokeStyle=L;x.lineWidth=2.2;x.stroke();
+  // 가로로 긴 밝은 얼굴 무늬 (매끈한 한 줄 곡선)
+  x.beginPath();x.moveTo(30.5,44);x.bezierCurveTo(30,35,37,31,48,30.6);x.bezierCurveTo(58,30,70,29.6,80,30.4);x.bezierCurveTo(89,31.2,92.5,37,92,44.5);x.bezierCurveTo(91.5,53,85,57.5,75,58.3);x.bezierCurveTo(68,58.9,64,60,58,60);x.bezierCurveTo(52,60,48,59.3,43,58.7);x.bezierCurveTo(35,57.7,31,52,30.5,44);x.closePath();
   x.fillStyle=lg(x,0,30,0,60,[[0,'#fffaf0'],[1,'#f6e2c8']]);x.fill();x.strokeStyle=L;x.lineWidth=1.8;x.stroke();
   x.fillStyle='#2a1a10';x.beginPath();x.arc(46,42,2.6,0,7);x.arc(74,40,2.6,0,7);x.fill();
-  x.strokeStyle=L;x.lineWidth=1.8;x.beginPath();x.moveTo(52,52);x.quadraticCurveTo(55,56,58,52);x.quadraticCurveTo(61,49,64,52);x.quadraticCurveTo(67,55,70,51);x.stroke();
+  x.fillStyle='rgba(255,255,255,.7)';x.beginPath();x.arc(46.9,41.1,.8,0,7);x.arc(74.9,39.1,.8,0,7);x.fill();
+  // 물결 입 (이음매 없이 한 줄)
+  x.strokeStyle=L;x.lineWidth=1.8;x.beginPath();x.moveTo(52,52);x.bezierCurveTo(53.5,55.2,56.5,55.2,58,52.3);x.bezierCurveTo(59.4,49.6,62.6,49.6,64,52.3);x.bezierCurveTo(65.5,55.2,68.6,55,70,51.2);x.stroke();
   x.fillStyle='rgba(255,255,255,.35)';x.beginPath();x.ellipse(42,27,10,4,-.3,0,7);x.fill();
   x.restore();
   x.restore();
@@ -3009,9 +3027,10 @@ window.FERRETPAINT=function(x,o){o=o||{};const shop=o.shop||'seed',tilt=o.tilt||
   if(shop==='seed'){x.strokeStyle='#8a6a40';x.lineWidth=.7;x.beginPath();x.moveTo(84,98);x.lineTo(86,103);x.stroke();
     x.save();x.translate(86,107);x.rotate(.12);x.fillStyle='#fffaf0';x.beginPath();x.moveTo(-6,-4);x.lineTo(5,-4);x.lineTo(7,0);x.lineTo(5,4);x.lineTo(-6,4);x.closePath();x.fill();x.strokeStyle='#c89a5a';x.lineWidth=.8;x.stroke();
     x.fillStyle='#e8402a';x.font='bold 5.5px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('5🪙',0,.3);x.textBaseline='alphabetic';x.restore();}
-  // 카운터 위에 얹은 오른손 (왼손은 선반 뒤)
-  x.fillStyle='#d8a874';x.beginPath();x.ellipse(113,92.5,8.5,5.5,0,0,7);x.fill();x.strokeStyle=L;x.lineWidth=2;x.stroke();
-  x.strokeStyle='rgba(74,48,32,.6)';x.lineWidth=1;x.beginPath();x.moveTo(111,91);x.lineTo(111,95);x.moveTo(115,91);x.lineTo(115,95);x.stroke();
+  // 카운터 위에 얹은 오른손: 팔과 같은 도형을 카운터 위쪽만 다시 그려서 팔에서 손까지 한 덩어리로
+  x.save();x.translate(15,0);x.beginPath();x.rect(60,88.5,60,14);x.clip();sil([armR]);taper(rev(RIN),.2,2.2);
+  x.strokeStyle='rgba(74,48,32,.55)';x.lineWidth=1;x.beginPath();x.moveTo(95,94.5);x.quadraticCurveTo(95.6,96.6,95.2,98);x.moveTo(99.5,94.3);x.quadraticCurveTo(100.3,96.5,99.9,98);x.stroke();
+  x.restore();
   x.restore();};
 
 /* ===================== 쇼핑몰 ===================== */
